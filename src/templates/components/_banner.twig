@@ -89,10 +89,15 @@
             </li>
         </ul>
 
+        <pre>
+            {{ dump(banner) }}
+        </pre>
+        {% exit %}
+
         <div data-detailed-settings class="ccb-cookie-banner-details">
             {% embed "cookie-banner/components/_cookiesCategory" with { 
-                title: "Essential cookies",
-                description: "Cookies that are necessary for the normal functioning of this website. These cannot be deactivated.",
+                title: essentialCookiesTitle,
+                description: essentialCookiesDefinition,
                 cookies: banner.essentialCookies
             } %}
                 {% block lightswitch %}
@@ -109,8 +114,8 @@
             {% endembed %}
 
             {% embed "cookie-banner/components/_cookiesCategory" with { 
-                title: "Functional cookies",
-                description: "Cookies that improve the user-friendliness of this website, such as storing language preferences.",
+                title: functionalCookiesTitle,
+                description: functionalCookiesDefinition,
                 cookies: banner.functionalCookies
             } %}
                 {% block lightswitch %}
@@ -125,8 +130,8 @@
             {% endembed %}
 
             {% embed "cookie-banner/components/_cookiesCategory" with { 
-                title: "Analytical cookies",
-                description: "Cookies used to enable analyses of surfing behaviour on this website so that the website can be improved.",
+                title: analyticalCookiesTitle,
+                description: analyticalCookiesDefinition,
                 cookies: banner.analyticalCookies
             } %}
                 {% block lightswitch %}
@@ -141,8 +146,8 @@
             {% endembed %}
 
             {% embed "cookie-banner/components/_cookiesCategory" with { 
-                title: "Marketing cookies",
-                description: "Cookies that make it possible to display personalized advertisements based on surfing behavior on this website.",
+                title: advertisementCookiesTitle,
+                description: advertisementCookiesDefinition,
                 cookies: banner.advertisementCookies
             } %}
                 {% block lightswitch %}
@@ -157,8 +162,8 @@
             {% endembed %}
 
             {% embed "cookie-banner/components/_cookiesCategory" with { 
-                title: "Social media cookies",
-                description: "Cookies that are necessary for the integration of social media plug-ins with this website, such as YouTube.",
+                title: personalizationCookiesTitle,
+                description: personalizationCookiesDefinition,
                 cookies: banner.personalizationCookies
             } %}
                 {% block lightswitch %}
