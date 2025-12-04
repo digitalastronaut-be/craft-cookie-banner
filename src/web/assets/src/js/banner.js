@@ -59,8 +59,6 @@ class CookieBanner extends HTMLElement {
 
 		const googleConsentV2Object = buildGoogleConsentV2Object(this.consent);
 		gtag("consent", "update", googleConsentV2Object);
-
-		this.logConsent("Accept all");
 	}
 
 	acceptSelected() {
@@ -70,8 +68,23 @@ class CookieBanner extends HTMLElement {
 
 		const googleConsentV2Object = buildGoogleConsentV2Object(this.consent);
 		gtag("consent", "update", googleConsentV2Object);
+	}
 
-		this.logConsent("Accept selected");
+	refuseAll() {
+		this.hideBanner();
+
+		this.consent = {
+			essentialCookies: true,
+			functionalCookies: false,
+			analyticalCookies: false,
+			advertisementCookies: false,
+			personalizationCookies: false,
+		};
+
+		document.cookie = `cookie_consent=${JSON.stringify(this.consent)}; path=/; max-age=31536000; SameSite=Lax`;
+
+		const googleConsentV2Object = buildGoogleConsentV2Object(this.consent);
+		gtag("consent", "update", googleConsentV2Object);
 	}
 
 	async logConsent(consentAction) {
@@ -165,7 +178,7 @@ class CookieBanner extends HTMLElement {
 	}
 
 	registerEventListeners() {
-		this.refuseAllButton.addEventListener("click", () => this.hideBanner());
+		this.refuseAllButton.addEventListener("click", () => this.refuseAll());
 		this.determinePreferencesButton.addEventListener("click", () => this.showDetailedSettings());
 		this.determinePreferencesLink.addEventListener("click", () => this.showDetailedSettings());
 		this.acceptSelectedButton.addEventListener("click", () => this.acceptSelected());
