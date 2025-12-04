@@ -45,8 +45,6 @@ class CookieBanner extends HTMLElement {
 	}
 
 	acceptAll() {
-		this.hideBanner();
-
 		this.consent = {
 			essentialCookies: true,
 			functionalCookies: true,
@@ -55,10 +53,15 @@ class CookieBanner extends HTMLElement {
 			personalizationCookies: true,
 		};
 
+		this.hideBanner();
+		this.updateConsentCheckboxes();
+
 		document.cookie = `cookie_consent=${JSON.stringify(this.consent)}; path=/; max-age=31536000; SameSite=Lax`;
 
 		const googleConsentV2Object = buildGoogleConsentV2Object(this.consent);
 		gtag("consent", "update", googleConsentV2Object);
+
+		this.logConsent("Accept all");
 	}
 
 	acceptSelected() {
@@ -68,11 +71,11 @@ class CookieBanner extends HTMLElement {
 
 		const googleConsentV2Object = buildGoogleConsentV2Object(this.consent);
 		gtag("consent", "update", googleConsentV2Object);
+
+		this.logConsent("Accept selected");
 	}
 
 	refuseAll() {
-		this.hideBanner();
-
 		this.consent = {
 			essentialCookies: true,
 			functionalCookies: false,
@@ -81,10 +84,15 @@ class CookieBanner extends HTMLElement {
 			personalizationCookies: false,
 		};
 
+		this.hideBanner();
+		this.updateConsentCheckboxes();
+
 		document.cookie = `cookie_consent=${JSON.stringify(this.consent)}; path=/; max-age=31536000; SameSite=Lax`;
 
 		const googleConsentV2Object = buildGoogleConsentV2Object(this.consent);
 		gtag("consent", "update", googleConsentV2Object);
+
+		this.logConsent("Refuse all");
 	}
 
 	async logConsent(consentAction) {
@@ -150,17 +158,17 @@ class CookieBanner extends HTMLElement {
 			checkbox.addEventListener("change", (event) => {
 				event.stopPropagation();
 				this.consent[property] = event.target.checked;
-				this.updateConsentCheckboxes(property);
+				this.updateConsentCheckboxes();
 			});
 		});
 	}
 
-	updateConsentCheckboxes(consentPropertyToUpdate) {
-		const selector = `input[type="checkbox"][data-model=${consentPropertyToUpdate}]`;
-		const consentCheckboxesToUpdate = this.querySelectorAll(selector);
+	updateConsentCheckboxes() {
+		const consentCheckboxesToUpdate = this.querySelectorAll('input[type="checkbox"]');
 
 		consentCheckboxesToUpdate.forEach((checkbox) => {
-			checkbox.checked = this.consent[consentPropertyToUpdate];
+			const property = checkbox.dataset.model;
+			checkbox.checked = this.consent[property];
 		});
 	}
 
