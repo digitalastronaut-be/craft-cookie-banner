@@ -2,18 +2,30 @@
 
 namespace digitalastronaut\craftcookiebanner\web\twig;
 
+use Craft;
 use Twig\Extension\AbstractExtension;
 use Twig\Extension\GlobalsInterface;
 use Twig\TwigFunction;
 
-class CookieBannerTwigExtension extends AbstractExtension implements GlobalsInterface {
+use digitalastronaut\craftcookiebanner\CookieBanner;
+use digitalastronaut\craftcookiebanner\records\Content;
+
+class CookieBannerTwigExtension extends AbstractExtension {
     public function getFunctions() {
         return [
-            // new TwigFunction('example', [$this, 'example']),
+            new TwigFunction('renderCookiesListHtml', [$this, 'renderCookiesListHtml']),
         ];
     }
 
-    public function getGlobals(): array {
-        return [];
+    public function renderCookiesListHtml() {
+        $currentSiteId = Craft::$app->getSites()->getCurrentSite()->id;
+        $content = Content::find()->where(['siteId' => $currentSiteId])->one();
+
+        $cookiesListHtml = Craft::$app->getView()->renderTemplate('cookie-banner/components/_cookiesList.twig', [
+            'banner' => $content
+        ]);
+
+        echo $cookiesListHtml;
     }
+
 }

@@ -51,6 +51,9 @@ class CookieBanner extends Plugin {
         $this->registerTwigExtension();
 
         // TODO: Cascade for content table fixen
+        // TODO: Cookie table rendering for cookie page with twig extension
+        // TODO: Loading animation when saving consent so it's more clear to the user
+        // TODO: Automatic cookie detection via php $_COOKIE global and maybe add automatic descriptions based on cookie names
         
         $this->setComponents([]);
 

@@ -1,0 +1,66 @@
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Purpose</th>
+            <th>Expiration</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% if banner.essentialCookies is not empty %}
+            {% for cookie in banner.essentialCookies %}
+                <tr>
+                    <td>{{ cookie.name }}</td>
+                    <td>Essential</td>
+                    <td>{{ cookie.purpose }}</td>
+                    <td>{{ cookie.expiration }}</td>
+                </tr>
+            {% endfor %}
+        {% endif %}
+        
+        {% if banner.functionalCookies is not empty %}
+            {% for cookie in banner.functionalCookies %}
+                <tr>
+                    <td>{{ cookie.name }}</td>
+                    <td>Functional</td>
+                    <td>{{ cookie.purpose }}</td>
+                    <td>{{ cookie.expiration }}</td>
+                </tr>
+            {% endfor %}
+        {% endif %}
+        
+        {% if banner.analyticalCookies is not empty %}
+            {% for cookie in banner.analyticalCookies %}
+                <tr>
+                    <td>{{ cookie.name }}</td>
+                    <td>Statistical</td>
+                    <td>{{ cookie.purpose }}</td>
+                    <td>{{ cookie.expiration }}</td>
+                </tr>
+            {% endfor %}
+        {% endif %}
+        
+        {% if banner.advertisementCookies is not empty %}
+            {% for cookie in banner.advertisementCookies %}
+                <tr>
+                    <td>{{ cookie.name }}</td>
+                    <td>Marketing</td>
+                    <td>{{ cookie.purpose }}</td>
+                    <td>{{ cookie.expiration }}</td>
+                </tr>
+            {% endfor %}
+        {% endif %}
+        
+        {% if banner.personalizationCookies is not empty %}
+            {% for cookie in banner.personalizationCookies %}
+                <tr>
+                    <td>{{ cookie.name }}</td>
+                    <td>Social Media</td>
+                    <td>{{ cookie.purpose }}</td>
+                    <td>{{ cookie.expiration }}</td>
+                </tr>
+            {% endfor %}
+        {% endif %}
+    </tbody>
+</table>
