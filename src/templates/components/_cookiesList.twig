@@ -9,21 +9,37 @@
     </thead>
     <tbody>
         {% if banner.essentialCookies is not empty %}
+            {% if settings.cookieListStyle == "grouped" %}
+                <h2>{{ banner.essentialCookiesTitle }}</h2>
+
+                <p>{{ banner.essentialCookiesDefinition }}</p>
+            {% endif %}
+
             {% for cookie in banner.essentialCookies %}
                 <tr>
                     <td>{{ cookie.name }}</td>
-                    <td>Essential</td>
+                    {% if settings.cookieListStyle != "grouped" %}
+                        <td>{{ banner.essentialCookiesLabel }}</td>
+                    {% endif %}
                     <td>{{ cookie.purpose }}</td>
                     <td>{{ cookie.expiration }}</td>
                 </tr>
             {% endfor %}
         {% endif %}
-        
+
         {% if banner.functionalCookies is not empty %}
+            {% if settings.cookieListStyle == "grouped" %}
+                <h2>{{ banner.functionalCookiesTitle }}</h2>
+
+                <p>{{ banner.functionalCookiesDefinition }}</p>
+            {% endif %}
+
             {% for cookie in banner.functionalCookies %}
                 <tr>
                     <td>{{ cookie.name }}</td>
-                    <td>Functional</td>
+                    {% if settings.cookieListStyle != "grouped" %}
+                        <td>{{ banner.functionalCookiesLabel }}</td>
+                    {% endif %}
                     <td>{{ cookie.purpose }}</td>
                     <td>{{ cookie.expiration }}</td>
                 </tr>
@@ -31,10 +47,18 @@
         {% endif %}
         
         {% if banner.analyticalCookies is not empty %}
+            {% if settings.cookieListStyle == "grouped" %}
+                <h2>{{ banner.analyticalCookiesTitle }}</h2>
+
+                <p>{{ banner.analyticalCookiesDefinition }}</p>
+            {% endif %}
+
             {% for cookie in banner.analyticalCookies %}
                 <tr>
                     <td>{{ cookie.name }}</td>
-                    <td>Statistical</td>
+                    {% if settings.cookieListStyle != "grouped" %}
+                        <td>{{ banner.analyticalCookiesLabel }}</td>
+                    {% endif %}
                     <td>{{ cookie.purpose }}</td>
                     <td>{{ cookie.expiration }}</td>
                 </tr>
@@ -42,21 +66,37 @@
         {% endif %}
         
         {% if banner.advertisementCookies is not empty %}
+            {% if settings.cookieListStyle == "grouped" %}
+                <h2>{{ banner.advertisementCookiesTitle }}</h2>
+
+                <p>{{ banner.advertisementCookiesDefinition }}</p>
+            {% endif %}
+
             {% for cookie in banner.advertisementCookies %}
                 <tr>
                     <td>{{ cookie.name }}</td>
-                    <td>Marketing</td>
+                    {% if settings.cookieListStyle != "grouped" %}
+                        <td>{{ banner.advertisementCookiesLabel }}</td>
+                    {% endif %}
                     <td>{{ cookie.purpose }}</td>
                     <td>{{ cookie.expiration }}</td>
                 </tr>
             {% endfor %}
         {% endif %}
-        
+
         {% if banner.personalizationCookies is not empty %}
+            {% if settings.cookieListStyle == "grouped" %}
+                <h2>{{ banner.personalizationCookiesTitle }}</h2>
+
+                <p>{{ banner.personalizationCookiesDefinition }}</p>
+            {% endif %}
+
             {% for cookie in banner.personalizationCookies %}
                 <tr>
                     <td>{{ cookie.name }}</td>
-                    <td>Social Media</td>
+                    {% if settings.cookieListStyle != "grouped" %}
+                        <td>{{ banner.personalizationCookiesLabel }}</td>
+                    {% endif %}
                     <td>{{ cookie.purpose }}</td>
                     <td>{{ cookie.expiration }}</td>
                 </tr>

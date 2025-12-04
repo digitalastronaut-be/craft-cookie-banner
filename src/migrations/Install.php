@@ -64,18 +64,23 @@ class Install extends Migration {
             'cookiePolicyLinkURL' => $this->string(255)->null(),
 
             'essentialCookiesTitle' => $this->string(255)->null(),
+            'essentialCookiesLabel' => $this->string(255)->null(),
             'essentialCookiesDefinition' => $this->string(255)->null(),
 
             'functionalCookiesTitle' => $this->string(255)->null(),
+            'functionalCookiesLabel' => $this->string(255)->null(),
             'functionalCookiesDefinition' => $this->string(255)->null(),
 
             'analyticalCookiesTitle' => $this->string(255)->null(),
+            'analyticalCookiesLabel' => $this->string(255)->null(),
             'analyticalCookiesDefinition' => $this->string(255)->null(),
 
             'advertisementCookiesTitle' => $this->string(255)->null(),
+            'advertisementCookiesLabel' => $this->string(255)->null(),
             'advertisementCookiesDefinition' => $this->string(255)->null(),
 
             'personalizationCookiesTitle' => $this->string(255)->null(),
+            'personalizationCookiesLabel' => $this->string(255)->null(),
             'personalizationCookiesDefinition' => $this->string(255)->null(),
 
             'acceptAllButtonLabel' => $this->string(255)->null(),

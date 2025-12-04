@@ -29,18 +29,23 @@ class Content extends ActiveRecord {
             'cookiePolicyLinkURL',
 
             'essentialCookiesTitle',
+            'essentialCookiesLabel',
             'essentialCookiesDefinition',
 
             'functionalCookiesTitle',
+            'functionalCookiesLabel',
             'functionalCookiesDefinition',
 
             'analyticalCookiesTitle',
+            'analyticalCookiesLabel',
             'analyticalCookiesDefinition',
 
             'advertisementCookiesTitle',
+            'advertisementCookiesLabel',
             'advertisementCookiesDefinition',
 
             'personalizationCookiesTitle',
+            'personalizationCookiesLabel',
             'personalizationCookiesDefinition',
 
             'acceptAllButtonLabel',
@@ -71,14 +76,19 @@ class Content extends ActiveRecord {
                     'cookiePolicyLinkLabel',
                     'cookiePolicyLinkURL',
                     'essentialCookiesTitle', 
+                    'essentialCookiesLabel',
                     'essentialCookiesDefinition', 
                     'functionalCookiesTitle', 
+                    'functionalCookiesLabel',
                     'functionalCookiesDefinition', 
                     'analyticalCookiesTitle', 
+                    'analyticalCookiesLabel',
                     'analyticalCookiesDefinition', 
                     'advertisementCookiesTitle', 
+                    'advertisementCookiesLabel',
                     'advertisementCookiesDefinition', 
                     'personalizationCookiesTitle', 
+                    'personalizationCookiesLabel',
                     'personalizationCookiesDefinition', 
                     'acceptAllButtonLabel', 
                     'acceptSelectedButtonLabel', 

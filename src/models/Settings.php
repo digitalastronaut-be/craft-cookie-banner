@@ -60,6 +60,5 @@ class Settings extends Model {
 
     public string $buttonSize = 'small';
     public string $bannerStyle = 'square';
-
-
+    public string $cookieListStyle = 'ungrouped';
 }

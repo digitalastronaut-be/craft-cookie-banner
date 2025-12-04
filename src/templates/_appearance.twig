@@ -103,6 +103,22 @@
             }) }}
         </div>
 
+        <hr>
+
+        <div class="field width-50">
+            {{ forms.buttonGroupField({
+                label: 'Cookie list style',
+                instructions: 'Determines the way the cookie list is rendered when using the `{{ renderCookieListHtml() }}`',
+                id: 'cookieListStyle',
+                name: 'settings[cookieListStyle]',
+                value: settings.cookieListStyle ?? 'grouped',
+                options: [
+                    { label: 'Ungrouped', value: 'ungrouped' },
+                    { label: 'Grouped', value: 'grouped' },
+                ]
+            }) }}
+        </div>
+
         <h2>Typography</h2>
 
         <div class="field width-25">
