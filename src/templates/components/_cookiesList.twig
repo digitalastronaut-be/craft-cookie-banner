@@ -2,7 +2,9 @@
     <thead>
         <tr>
             <th>Name</th>
-            <th>Type</th>
+            {% if settings.cookieListStyle != "grouped" %}
+                <th>Type</th>
+            {% endif %}
             <th>Purpose</th>
             <th>Expiration</th>
         </tr>
