@@ -14,7 +14,7 @@ class CookieBanner extends HTMLElement {
 		this.acceptSelectedButton = null;
 		this.acceptAllButton = null;
 
-		this.manageConsentButtonElements = [];
+		this.manageConsentElements = [];
 		this.consentCheckboxElements = [];
 
 		this.consent = {
@@ -161,7 +161,7 @@ class CookieBanner extends HTMLElement {
 		this.acceptSelectedButton = this.querySelector("[data-accept-selected-button]");
 		this.acceptAllButton = this.querySelector("[data-accept-all-button]");
 
-		this.manageConsentButtonElements = [...document.querySelectorAll("[data-manage-consent-button]")];
+		this.manageConsentElements = [...document.querySelectorAll("[data-manage-consent]")];
 	}
 
 	registerEventListeners() {
@@ -171,8 +171,11 @@ class CookieBanner extends HTMLElement {
 		this.acceptSelectedButton.addEventListener("click", () => this.acceptSelected());
 		this.acceptAllButton.addEventListener("click", () => this.acceptAll());
 
-		this.manageConsentButtonElements.forEach((button) => {
-			button.addEventListener("click", () => {
+		this.manageConsentElements.forEach((element) => {
+			element.addEventListener("click", (event) => {
+				event.preventDefault();
+				event.stopPropagation();
+
 				this.showDetailedSettings();
 				this.showBanner();
 			});
