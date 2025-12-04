@@ -1,0 +1,70 @@
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% extends "_layouts/cp.twig" %}
+
+{% import '_includes/forms.twig' as forms %}
+
+{% set settings = settings|default([]) %}
+{% set fullPageForm = true %}
+{% set title = "Settings"|t %}
+{% set selectedSubnavItem = 'settings' %}
+
+{% set crumbs = [
+    { label: 'Cookie banner'|t, url: url('cookie-banner') },
+    { label: 'Settings'|t, url: url('cookie-banner/settings') },
+] %}
+
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+{% block content %}
+    {{ actionInput('plugins/save-plugin-settings') }}
+    {{ hiddenInput('pluginHandle', 'author-toolbar') }}
+    {{ hiddenInput('siteId', ) }}
+{% endblock %}
+
+{% block details %}
+    <h3>{{ "Cookie banner"|t }}</h3>
+
+    <div class="meta">
+        {{ forms.lightswitchField({
+            label: 'Status'|t,
+            id: 'cookieBannerEnabled',
+            offLabel: 'Disabled',
+            onLabel: 'Enabled',
+            name: 'settings[cookieBannerEnabled]',
+            on: settings.cookieBannerEnabled,
+        }) }}
+    </div>
+
+    <h3>{{ "Versions"|t }}</h3>
+
+    <p>Update these version numbers everytime you update a policy or change the cookie banner in any way.</p>
+
+    <div class="meta">
+        {{ forms.textField({
+            label: 'Cookie banner',
+            id: 'cookieBannerVersion',
+            name: 'settings[cookieBannerVersion]',
+            value: settings.cookieBannerVersion,
+            placeholder: 'Version',
+        }) }}
+
+        {{ forms.textField({
+            label: 'Privacy policy',
+            id: 'privacyPolicyVersion',
+            name: 'settings[privacyPolicyVersion]',
+            value: settings.privacyPolicyVersion,
+            placeholder: 'Version',
+        }) }}
+
+        {{ forms.textField({
+            label: 'Cookie policy' ,
+            id: 'cookiePolicyVersion',
+            name: 'settings[cookiePolicyVersion]',
+            value: settings.cookiePolicyVersion,
+            placeholder: 'Version',
+        }) }}
+    </div>
+{% endblock %}

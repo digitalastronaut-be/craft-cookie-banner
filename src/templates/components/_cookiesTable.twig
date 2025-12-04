@@ -1,0 +1,21 @@
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% set cookies = cookies|default([]) %}
+
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+<div class="ccb-cookies-table">
+    <table class="ccb-cookies-table-main">
+        <tbody>
+            {% for cookie in cookies %}
+                <tr class="ccb-cookies-table-row">
+                    <td class="ccb-typo-body-sm ccb-semi-bold ccb-cookies-table-name">{{ cookie.name }}</td>
+                    <td class="ccb-typo-body-sm ccb-cookies-table-purpose">{{ cookie.purpose }}</td>
+                    <td class="ccb-typo-body-sm ccb-cookies-table-expiration">{{ cookie.expiration }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

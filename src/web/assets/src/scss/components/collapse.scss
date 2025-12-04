@@ -1,0 +1,18 @@
+@use "../breakpoints.scss" as *;
+
+.ccb-collapse {
+	&.open > [data-collapse-content] {
+		grid-template-rows: 1fr;
+	}
+
+	[data-collapse-content] {
+		display: grid;
+		grid-template-rows: 0fr;
+		transition: grid-template-rows 1s cubic-bezier(0.3, 0.7, 0.4, 1);
+
+		& > * {
+			overflow: hidden;
+			grid-row: 1 / span 2;
+		}
+	}
+}

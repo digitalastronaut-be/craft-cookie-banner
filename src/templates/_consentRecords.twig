@@ -1,0 +1,51 @@
+
+{% extends '_layouts/elementindex' %}
+
+{% set title = 'Consent records' %}
+{% set selectedSubnavItem = 'consentRecords' %}
+
+{% set crumbs = [
+    { label: 'Cookie banner'|t, url: url('cookie-banner') },
+    { label: 'Consent records'|t, url: url('cookie-banner/consent-records') },
+] %}
+
+{% set elementType = 'digitalastronaut\\craftcookiebanner\\elements\\ConsentRecord' %}
+
+{% set canHaveDrafts = true %}
+
+{% block content %}
+    <div class="ccb-consent-overview">
+        <h2>Consent statistics</h2>
+
+        <ul class="ccb-consent-overview-list">
+            <li class="ccb-consent-overview-list-item">
+                <h3>Essential</h3>
+                <p class="ccb-semi-bold">{{ consentStatistics.acceptedEssentialCookiesPercentage }}%</p>
+            </li>
+            <li class="ccb-consent-overview-list-item">
+                <h3>Functional</h3>
+                <p class="ccb-semi-bold">{{ consentStatistics.acceptedFunctionalCookiesPercentage }}%</p>
+            </li>
+            <li class="ccb-consent-overview-list-item">
+                <h3>Analytical</h3>
+                <p class="ccb-semi-bold">{{ consentStatistics.acceptedAnalyticsCookiesPercentage }}%</p>
+            </li>
+            <li class="ccb-consent-overview-list-item">
+                <h3>Advertisement</h3>
+                <p class="ccb-semi-bold">{{ consentStatistics.acceptedAdvertisementCookiesPercentage }}%</p>
+            </li>
+            <li class="ccb-consent-overview-list-item">
+                <h3>Personalization</h3>
+                <p class="ccb-semi-bold">{{ consentStatistics.acceptedPersonalizationCookiesPercentage }}%</p>
+            </li>
+        </ul>
+    </div>
+    
+    <div class="main element-index">
+        <span class="visually-hidden" role="status" data-status-message></span>
+        <a class="skip-link btn" href="#footer">{{ 'Skip to footer'|t('app') }}</a>
+        <div id="elements" class="elements busy">
+            <div class="update-spinner spinner spinner-absolute"></div>
+        </div>
+    </div>
+{% endblock %}

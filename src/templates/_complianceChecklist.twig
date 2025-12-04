@@ -1,0 +1,15 @@
+{% extends "_layouts/cp.twig" %}
+
+{% import '_includes/forms.twig' as forms %}
+
+{% set title = "Compliance checklist" %}
+{% set selectedSubnavItem = 'complianceChecklist' %}
+{% set fullPageForm = true %}
+
+{% set crumbs = [
+    { label: 'Cookie banner'|t, url: url('cookie-banner') },
+    { label: 'Compliance checklist'|t, url: url('cookie-banner/compliance-checklist') },
+] %}
+
+{% block content %}
+{% endblock %}

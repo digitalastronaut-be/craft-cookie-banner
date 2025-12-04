@@ -1,0 +1,79 @@
+{# ======================= #}
+{# PROPERTIES              #}
+{# ======================= #}
+{% set title = title|default("") %}
+{% set description = description|default("") %}
+{% set cookies = cookies|default([]) %}
+{% set groups = banner.cookieGroups|default([]) %}
+
+{% set groupedCookies = groups|map(group => {
+    'name': group.name,
+    'description': group.description,
+    'url': group.url,
+    'cookies': cookies|filter(cookie => cookie.group == (group.name|lower|replace({' ': '-'})))
+}) %}
+
+{# ======================= #}
+{# TEMPLATE                #}
+{# ======================= #}
+<collapsible-content class="ccb-cookies-category ccb-collapse">
+    <div data-collapse-toggle class="ccb-cookies-category-toggle">
+        <div class="ccb-cookies-category-toggle-label">
+            {{ svg("@digitalastronaut/craftcookiebanner/web/icons/chevron-down.svg") }}
+
+            <h3 class="ccb-typo-h3">{{ title }} ({{ cookies|length }})</h3>
+        </div>
+
+        {% block lightswitch %}{% endblock %}
+    </div>
+
+    <div data-collapse-content class="ccb-cookies-category-content">
+        <div class="ccb-cookies-category-content-inner">
+            <p class="ccb-typo-body-sm">{{ description }}</p>
+
+            {% if cookies|length and settings.showCookieTables %}
+                <ul class="ccb-cookies-category-groups-list">
+                    {% for group in groupedCookies %}
+                        {% set name = group.name|default("") %}
+                        {% set description = group.description|default("") %}
+                        {% set url = group.url|default("") %}
+                        {% set cookies = group.cookies|default([]) %}
+
+                        {% if cookies|length %}
+                            <li class="ccb-cookies-category-groups-list-item">
+                                <collapsible-content class="ccb-cookies-category-groups-list-item-collapse ccb-collapse">
+                                    <div data-collapse-toggle class="ccb-cookies-category-groups-list-item-toggle">
+                                        <div>
+                                            <h4 class="ccb-typo-h3">{{ name }} ({{ cookies|length }})</h4>
+                                        
+                                            {{ svg("@digitalastronaut/craftcookiebanner/web/icons/chevron-down.svg") }}
+                                        </div>
+
+                                        <p class="ccb-typo-body-sm">{{ description }}</p>
+
+                                        {% if url %}
+                                            <a 
+                                                href="{{ url }}" 
+                                                target="_blank"
+                                                ccb-on:click.stop 
+                                                class="ccb-typo-body-sm"
+                                            >
+                                                {{ "Learn more about this provider"|t }}
+                                            </a>
+                                        {% endif %}
+                                    </div>
+
+                                    <div data-collapse-content class="ccb-cookies-category-groups-list-item-content">
+                                        <div class="ccb-cookies-category-groups-list-item-content-inner">
+                                            {% include "cookie-banner/components/_cookiesTable" with { cookies } only %}
+                                        </div>
+                                    </div>
+                                </collapsible-content>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+    </div>
+</collapsible-content>

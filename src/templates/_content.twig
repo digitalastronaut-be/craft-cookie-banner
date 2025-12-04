@@ -1,0 +1,413 @@
+{% extends "_layouts/cp.twig" %}
+
+{% import '_includes/forms.twig' as forms %}
+
+{% set title = "Cookie banner content"|t('cookieBanner') %}
+{% set selectedSubnavItem = 'content' %}
+{% set fullPageForm = true %}
+
+{% if selectableSites is not defined %}
+    {% if siteIds is defined %}
+        {% set selectableSites = craft.app.sites.getEditableSites()|filter(s => s.id in siteIds) %}
+    {% else %}
+        {% set selectableSites = craft.app.sites.getEditableSites() %}
+    {% endif %}
+{% endif %}
+
+{% if selectedSite is not defined %}
+    {% if selectedSiteId is defined %}
+        {% set selectedSite = craft.app.sites.getSiteById(selectedSiteId) %}
+    {% elseif requestedSite and requestedSite in selectableSites %}
+        {% set selectedSite = requestedSite %}
+    {% else %}
+        {% set selectedSite = selectableSites|length ? selectableSites|first : craft.app.sites.getPrimarySite() %}
+    {% endif %}
+{% endif %}
+
+{% if selectableSites|length > 1 %}
+    {% set crumbs = [
+        {
+            id: 'site-crumb',
+            icon: 'world',
+            iconAltText: 'Site'|t('app'),
+            label: selectedSite.name|t('site'),
+            menu: {
+                items: siteMenuItems(selectableSites, selectedSite),
+                label: 'Select site'|t('app')
+            }
+        },
+        { label: 'Cookie banner'|t, url: url('cookie-banner') },
+        { label: 'Content'|t, url: url('cookie-banner/content') },
+    ] %}
+{% else %}
+    {% set crumbs = [
+        { label: 'Cookie banner'|t, url: url('cookie-banner') },
+        { label: 'Content'|t, url: url('cookie-banner/content') },
+    ] %}
+{% endif %}
+
+{% set cookieGroups = [{"label": "Default", "value": "default" }]|merge(
+    banner.cookieGroups|default([])|map(item => {
+        'label': item.name,
+        'value': item.name|kebab
+    })
+) %}
+
+{% block content %}
+    {{ actionInput('cookie-banner/content/save') }}
+    {{ hiddenInput('siteId', selectedSite.id) }}
+
+    <div class="flex-fields">
+        <h2>Introduction</h2>
+
+        <div class="field width-50">
+            {{ forms.textField({
+                label: 'Title',
+                id: 'title',
+                name: 'fields[title]',
+                value: banner.title,
+                placeholder: 'Title',
+            }) }}
+        </div>
+
+        <div class="field line-break"></div>
+
+        <div class="field width-75">
+            {{ forms.textareaField({
+                label: 'Text',
+                id: 'text',
+                name: 'fields[text]',
+                value: banner.text,
+                placeholder: 'Text',
+                rows: 4,
+            }) }}
+        </div>
+
+        <div class="line-break"></div>
+
+        <h3 class="ccb-h3-label">Privacy policy link</h3>
+
+        <div class="field width-25">
+            {{ forms.textField({
+                id: 'privacyPolicyLinkLabel',
+                name: 'fields[privacyPolicyLinkLabel]',
+                value: banner.privacyPolicyLinkLabel,
+                placeholder: 'Label',
+            }) }}
+        </div>
+
+        <div class="field width-50">
+            {{ forms.textField({
+                id: 'privacyPolicyLinkURL',
+                name: 'fields[privacyPolicyLinkURL]',
+                value: banner.privacyPolicyLinkURL,
+                placeholder: 'URL',
+            }) }}
+        </div>
+
+        <h3 class="ccb-h3-label">Cookie policy link</h3>
+
+        <div class="field width-25">
+            {{ forms.textField({
+                id: 'cookiePolicyLinkLabel',
+                name: 'fields[cookiePolicyLinkLabel]',
+                value: banner.cookiePolicyLinkLabel,
+                placeholder: 'Label',
+            }) }}
+        </div>
+
+        <div class="field width-50">
+            {{ forms.textField({
+                id: 'cookiePolicyLinkURL',
+                name: 'fields[cookiePolicyLinkURL]',
+                value: banner.cookiePolicyLinkURL,
+                placeholder: 'URL',
+            }) }}
+        </div>
+
+        <hr>
+
+        <div class="width-50">
+            <h2>Cookies</h2>
+
+            <p>If your use case requires grouping cookies even further by provider or other traits you can define them here. If you don't need this funcitonality just leave it blank.</p>
+        </div>
+
+        <div class="field width-75">
+            {{ forms.editableTableField({
+                label: 'Groups',
+                id: 'cookieGroups',
+                name: 'fields[cookieGroups]',
+                cols: {
+                    name: { heading: "Name", type: "singleline" },
+                    description: { heading: "Description", type: "multiline"},
+                    url: { heading: "URL", type: "url"},
+                },
+                rows: banner.cookieGroups ?? "",
+                allowAdd: true,
+                allowDelete: true,
+                allowReorder: true,
+            }) }}
+        </div>
+
+        <h2>Essential cookies</h2>
+
+        <div class="field width-50">
+            {{ forms.textField({
+                label: 'Title',
+                id: 'essentialCookiesTitle',
+                name: 'fields[essentialCookiesTitle]',
+                value: banner.essentialCookiesTitle,
+                placeholder: 'Title',
+            }) }}
+        </div>
+
+        <div class="field width-75">
+            {{ forms.textareaField({
+                label: 'Definition',
+                id: 'essentialCookiesDefinition',
+                name: 'fields[essentialCookiesDefinition]',
+                value: banner.essentialCookiesDefinition,
+                placeholder: 'Definition',
+                rows: 4,
+            }) }}
+        </div>
+
+        <div class="width-75">
+            {{ forms.editableTableField({
+                label: 'List',
+                id: 'essentialCookies',
+                name: 'fields[essentialCookies]',
+                cols: {
+                    name: { heading: "Name", type: "singleline" },
+                    group: { heading: "Group", type: "select", options: cookieGroups },
+                    purpose: { heading: "Purpose", type: "multiline" },
+                    expiration: { heading: "Expiration", type: "singleline" },
+                },
+                rows: banner.essentialCookies,
+                allowAdd: true,
+                allowDelete: true,
+                allowReorder: true,
+            }) }}
+        </div>
+
+        <h2>Functional cookies</h2>
+
+        <div class="field width-50">
+            {{ forms.textField({
+                label: 'Title',
+                id: 'functionalCookiesTitle',
+                name: 'fields[functionalCookiesTitle]',
+                value: banner.functionalCookiesTitle,
+                placeholder: 'Title',
+            }) }}
+        </div>
+
+        <div class="field width-75">
+            {{ forms.textareaField({
+                label: 'Definition',
+                id: 'functionalCookiesDefinition',
+                name: 'fields[functionalCookiesDefinition]',
+                value: banner.functionalCookiesDefinition,
+                placeholder: 'Definition',
+                rows: 4,
+            }) }}
+        </div>
+
+        <div class="field width-75">
+            {{ forms.editableTableField({
+                label: 'List',
+                id: 'functionalCookies',
+                name: 'fields[functionalCookies]',
+                cols: {
+                    name: { heading: "Name", type: "singleline" },
+                    group: { heading: "Group", type: "select", options: cookieGroups },
+                    purpose: { heading: "Purpose", type: "multiline" },
+                    expiration: { heading: "Expiration", type: "singleline" },
+                },
+                rows: banner.functionalCookies,
+                allowAdd: true,
+                allowDelete: true,
+                allowReorder: true,
+            }) }}
+        </div>
+
+        <h2>Analytical cookies</h2>
+
+        <div class="field width-50">
+            {{ forms.textField({
+                label: 'Title',
+                id: 'analyticalCookiesTitle',
+                name: 'fields[analyticalCookiesTitle]',
+                value: banner.analyticalCookiesTitle,
+                placeholder: 'Title',
+            }) }}
+        </div>
+
+        <div class="field width-75">
+            {{ forms.textareaField({
+                label: 'Definition',
+                id: 'analyticalCookiesDefinition',
+                name: 'fields[analyticalCookiesDefinition]',
+                value: banner.analyticalCookiesDefinition,
+                placeholder: 'Definition',
+                rows: 4,
+            }) }}
+        </div>
+
+        <div class="field width-75">
+            {{ forms.editableTableField({
+                label: 'List',
+                id: 'analyticalCookies',
+                name: 'fields[analyticalCookies]',
+                cols: {
+                    name: { heading: "Name", type: "singleline" },
+                    group: { heading: "Group", type: "select", options: cookieGroups },
+                    purpose: { heading: "Purpose", type: "multiline" },
+                    expiration: { heading: "Expiration", type: "singleline" },
+                },
+                rows: banner.analyticalCookies,
+                allowAdd: true,
+                allowDelete: true,
+                allowReorder: true,
+            }) }}
+        </div>
+
+        <h2>Advertisement cookies</h2>
+
+        <div class="field width-50">
+            {{ forms.textField({
+                label: 'Title',
+                id: 'advertisementCookiesTitle',
+                name: 'fields[advertisementCookiesTitle]',
+                value: banner.advertisementCookiesTitle,
+                placeholder: 'Title',
+            }) }}
+        </div>
+
+
+        <div class="field width-75">
+            {{ forms.textareaField({
+                label: 'Definition',
+                id: 'advertisementCookiesDefinition',
+                name: 'fields[advertisementCookiesDefinition]',
+                value: banner.advertisementCookiesDefinition,
+                placeholder: 'Definition',
+                rows: 4,
+            }) }}
+        </div>
+
+        <div class="field width-75">
+            {{ forms.editableTableField({
+                label: 'List',
+                id: 'advertisement',
+                name: 'fields[advertisementCookies]',
+                cols: {
+                    name: { heading: "Name", type: "singleline" },
+                    group: { heading: "Group", type: "select", options: cookieGroups },
+                    purpose: { heading: "Purpose", type: "multiline" },
+                    expiration: { heading: "Expiration", type: "singleline" },
+                },
+                rows: banner.advertisementCookies,
+                allowAdd: true,
+                allowDelete: true,
+                allowReorder: true,
+            }) }}
+        </div>
+
+        <h2>Personalization cookies</h2>
+
+        <div class="field width-50">
+            {{ forms.textField({
+                label: 'Title',
+                id: 'personalizationCookiesTitle',
+                name: 'fields[personalizationCookiesTitle]',
+                value: banner.personalizationCookiesTitle,
+                placeholder: 'Title',
+            }) }}
+        </div>
+
+        <div class="field width-75">
+            {{ forms.textareaField({
+                label: 'Definition',
+                id: 'socialMediaCookiesDefinition',
+                name: 'fields[personalizationCookiesDefinition]',
+                value: banner.personalizationCookiesDefinition,
+                placeholder: 'Definition',
+                rows: 4,
+            }) }}
+        </div>
+
+        <div class="field width-75">
+            {{ forms.editableTableField({
+                label: 'List',
+                id: 'personalizationCookies',
+                name: 'fields[personalizationCookies]',
+                cols: {
+                    name: { heading: "Name", type: "singleline" },
+                    group: { heading: "Group", type: "select", options: cookieGroups },
+                    purpose: { heading: "Purpose", type: "multiline" },
+                    expiration: { heading: "Expiration", type: "singleline" },
+                },
+                rows: banner.personalizationCookies,
+                allowAdd: true,
+                allowDelete: true,
+                allowReorder: true,
+            }) }}
+        </div>
+
+        <h2>Button labels</h2>
+
+        <div class="field width-25">
+            {{ forms.textField({
+                label: 'Refuse all',
+                id: 'refuseAllLabel',
+                name: 'fields[refuseAllButtonLabel]',
+                value: banner.refuseAllButtonLabel,
+                placeholder: 'Label',
+            }) }}
+        </div>
+
+        <div class="field width-25">
+            {{ forms.textField({
+                label: 'Accept selected',
+                id: 'acceptSelectedLabel',
+                name: 'fields[acceptSelectedButtonLabel]',
+                value: banner.acceptSelectedButtonLabel,
+                placeholder: 'Label',
+            }) }}
+        </div>
+
+        <div class="field width-25">
+            {{ forms.textField({
+                label: 'Accept all',
+                id: 'acceptAllLabel',
+                name: 'fields[acceptAllButtonLabel]',
+                value: banner.acceptAllButtonLabel,
+                placeholder: 'Label',
+            }) }}
+        </div>
+
+        <div class="line-break"></div>
+
+        <div class="field width-25">
+            {{ forms.textField({
+                label: 'Determine preferences',
+                id: 'determinePreferencesLabel',
+                name: 'fields[determinePreferencesButtonLabel]',
+                value: banner.determinePreferencesButtonLabel,
+                placeholder: 'Label',
+            }) }}
+        </div>
+
+        <div class="field width-25">
+            {{ forms.textField({
+                label: 'Detailed preferences',
+                id: 'detailedPreferencesLabel',
+                name: 'fields[detailedPreferencesButtonLabel]',
+                value: banner.detailedPreferencesButtonLabel,
+                placeholder: 'Label',
+            }) }}
+        </div>
+    </div>
+{% endblock %}

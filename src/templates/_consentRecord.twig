@@ -1,0 +1,103 @@
+{% extends "_layouts/cp.twig" %}
+
+{% set title = "Consent record" %}
+{% set selectedSubnavItem = 'consentRecords' %}
+
+{% set crumbs = [
+    { label: 'Cookie banner'|t, url: url('cookie-banner') },
+    { label: 'Consent records'|t, url: url('cookie-banner/consent-records') },
+    { label: element.id, url: url('cookie-banner/consent-records/:id') },
+] %}
+
+{% block content %}
+    <h2>Consent history</h2>
+
+    <table class="data">
+        <thead>
+            <th></th>
+            <th>{{ "Default"|t }}</th>
+            {% for consentRecord in matchingConsentRecords %}
+                <th>{{ consentRecord.consentTimestamp|date("d/m/Y") }}</th>
+            {% endfor %}
+            <th>{{ "Current"|t }}</th>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="ccb-semi-bold">{{ "Essential"|t }}</td>
+                <td><span class="status-chip granted">{{ "granted"|t }}</span></td>
+                {% for consentRecord in matchingConsentRecords %}
+                    {% set essentialCookiesConsent = consentRecord.essentialCookies ? 'granted' : 'denied' %}
+                    <td><span class="status-chip {{ essentialCookiesConsent }}">{{ essentialCookiesConsent }}</span></td>
+                    {% if loop.last %}
+                        <td><span class="status-chip {{ essentialCookiesConsent }}">{{ essentialCookiesConsent }}</span></td>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+            <tr>
+                <td class="ccb-semi-bold">{{ "Functional"|t }}</td>
+                <td><span class="status-chip denied">{{ "denied"|t }}</span></td>
+                {% for consentRecord in matchingConsentRecords %}
+                    {% set functionalCookiesConsent = consentRecord.functionalCookies ? 'granted' : 'denied' %}
+                    <td><span class="status-chip {{ functionalCookiesConsent }}">{{ functionalCookiesConsent }}</span></td>
+                    {% if loop.last %}
+                        <td><span class="status-chip {{ functionalCookiesConsent }}">{{ functionalCookiesConsent }}</span></td>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+            <tr>
+                <td class="ccb-semi-bold">{{ "Analytical"|t }}</td>
+                <td><span class="status-chip denied">{{ "denied"|t }}</span></td>
+                {% for consentRecord in matchingConsentRecords %}
+                    {% set analyticalCookiesConsent = consentRecord.analyticalCookies ? 'granted' : 'denied' %}
+                    <td><span class="status-chip {{ analyticalCookiesConsent }}">{{ analyticalCookiesConsent }}</span></td>
+                    {% if loop.last %}
+                        <td><span class="status-chip {{ analyticalCookiesConsent }}">{{ analyticalCookiesConsent }}</span></td>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+            <tr>
+                <td class="ccb-semi-bold">{{ "Marketing"|t }}</td>
+                <td><span class="status-chip denied">{{ "denied"|t }}</span></td>
+                {% for consentRecord in matchingConsentRecords %}
+                    {% set advertisementCookiesConsent = consentRecord.advertisementCookies ? 'granted' : 'denied' %}
+                    <td><span class="status-chip {{ advertisementCookiesConsent }}">{{ advertisementCookiesConsent }}</span></td>
+                    {% if loop.last %}
+                        <td><span class="status-chip {{ advertisementCookiesConsent }}">{{ advertisementCookiesConsent }}</span></td>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+            <tr>
+                <td class="ccb-semi-bold">{{ "Personalization"|t }}</td>
+                <td><span class="status-chip denied">{{ "denied"|t }}</span></td>
+                {% for consentRecord in matchingConsentRecords %}
+                    {% set personalizationCookiesConsent = consentRecord.personalizationCookies ? 'granted' : 'denied' %}
+                    <td><span class="status-chip {{ personalizationCookiesConsent }}">{{ personalizationCookiesConsent }}</span></td>
+                    {% if loop.last %}
+                        <td><span class="status-chip {{ personalizationCookiesConsent }}">{{ personalizationCookiesConsent }}</span></td>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+        </tbody>
+    </table>
+
+    <hr>
+
+    <h2>Additional info</h2>
+
+    <p><strong>IP Address Hash:</strong> {{ element.ipAddressHash }}</p>
+    <p><strong>Craft session ID:</strong> {{ element.sessionId }}</p>
+    <p><strong>User Agent:</strong> {{ element.userAgent }}</p>
+    <p><strong>Language:</strong> {{ element.language }}</p>
+    <p><strong>Consent Timestamp:</strong> {{ element.consentTimestamp ? element.consentTimestamp|date("d F Y H:i") }}</p>
+    <p><strong>Consent Expiry:</strong> {{ element.consentExpiry ? element.consentExpiry|date("d F Y H:i") }}</p>
+    <p><strong>Consent Action:</strong> {{ element.consentAction }}</p>
+    <p><strong>Consent Method:</strong> {{ element.consentMethod }}</p>
+
+    <hr>
+
+    <h2>Banner & Policies</h2>
+
+    <p><strong>Banner:</strong> {{ element.bannerVersion }}</p>
+    <p><strong>Privacy Policy:</strong> {{ element.privacyPolicyVersion }}</p>
+    <p><strong>Cookie Policy:</strong> {{ element.cookiePolicyVersion }}</p>
+{% endblock %}
