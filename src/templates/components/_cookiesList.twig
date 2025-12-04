@@ -12,7 +12,7 @@
     <tbody>
         {% if banner.essentialCookies is not empty %}
             {% if settings.cookieListStyle == "grouped" %}
-                <h2>{{ banner.essentialCookiesTitle }}</h2>
+                <h3>{{ banner.essentialCookiesTitle }}</h3>
 
                 <p>{{ banner.essentialCookiesDefinition }}</p>
             {% endif %}
@@ -31,7 +31,7 @@
 
         {% if banner.functionalCookies is not empty %}
             {% if settings.cookieListStyle == "grouped" %}
-                <h2>{{ banner.functionalCookiesTitle }}</h2>
+                <h3>{{ banner.functionalCookiesTitle }}</h3>
 
                 <p>{{ banner.functionalCookiesDefinition }}</p>
             {% endif %}
@@ -50,7 +50,7 @@
         
         {% if banner.analyticalCookies is not empty %}
             {% if settings.cookieListStyle == "grouped" %}
-                <h2>{{ banner.analyticalCookiesTitle }}</h2>
+                <h3>{{ banner.analyticalCookiesTitle }}</h3>
 
                 <p>{{ banner.analyticalCookiesDefinition }}</p>
             {% endif %}
@@ -69,7 +69,7 @@
         
         {% if banner.advertisementCookies is not empty %}
             {% if settings.cookieListStyle == "grouped" %}
-                <h2>{{ banner.advertisementCookiesTitle }}</h2>
+                <h3>{{ banner.advertisementCookiesTitle }}</h3>
 
                 <p>{{ banner.advertisementCookiesDefinition }}</p>
             {% endif %}
@@ -88,7 +88,7 @@
 
         {% if banner.personalizationCookies is not empty %}
             {% if settings.cookieListStyle == "grouped" %}
-                <h2>{{ banner.personalizationCookiesTitle }}</h2>
+                <h3>{{ banner.personalizationCookiesTitle }}</h3>
 
                 <p>{{ banner.personalizationCookiesDefinition }}</p>
             {% endif %}
