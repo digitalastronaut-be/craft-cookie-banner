@@ -91,8 +91,8 @@
 
         <div data-detailed-settings class="ccb-cookie-banner-details">
             {% embed "cookie-banner/components/_cookiesCategory" with { 
-                title: essentialCookiesTitle,
-                description: essentialCookiesDefinition,
+                title: banner.essentialCookiesTitle,
+                description: banner.essentialCookiesDefinition,
                 cookies: banner.essentialCookies
             } %}
                 {% block lightswitch %}
@@ -109,8 +109,8 @@
             {% endembed %}
 
             {% embed "cookie-banner/components/_cookiesCategory" with { 
-                title: functionalCookiesTitle,
-                description: functionalCookiesDefinition,
+                title: banner.functionalCookiesTitle,
+                description: banner.functionalCookiesDefinition,
                 cookies: banner.functionalCookies
             } %}
                 {% block lightswitch %}
@@ -125,8 +125,8 @@
             {% endembed %}
 
             {% embed "cookie-banner/components/_cookiesCategory" with { 
-                title: analyticalCookiesTitle,
-                description: analyticalCookiesDefinition,
+                title: banner.analyticalCookiesTitle,
+                description: banner.analyticalCookiesDefinition,
                 cookies: banner.analyticalCookies
             } %}
                 {% block lightswitch %}
@@ -141,8 +141,8 @@
             {% endembed %}
 
             {% embed "cookie-banner/components/_cookiesCategory" with { 
-                title: advertisementCookiesTitle,
-                description: advertisementCookiesDefinition,
+                title: banner.advertisementCookiesTitle,
+                description: banner.advertisementCookiesDefinition,
                 cookies: banner.advertisementCookies
             } %}
                 {% block lightswitch %}
@@ -157,8 +157,8 @@
             {% endembed %}
 
             {% embed "cookie-banner/components/_cookiesCategory" with { 
-                title: personalizationCookiesTitle,
-                description: personalizationCookiesDefinition,
+                title: banner.personalizationCookiesTitle,
+                description: banner.personalizationCookiesDefinition,
                 cookies: banner.personalizationCookies
             } %}
                 {% block lightswitch %}
