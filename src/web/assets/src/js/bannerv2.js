@@ -93,7 +93,6 @@ class CookieBanner extends HTMLElement {
 
 	showBanner() {
 		this.classList.add("visible");
-		this.showDetailedSettings();
 	}
 
 	hideBanner() {
@@ -173,7 +172,10 @@ class CookieBanner extends HTMLElement {
 		this.acceptAllButton.addEventListener("click", () => this.acceptAll());
 
 		this.manageConsentButtonElements.forEach((button) => {
-			button.addEventListener("click", () => this.showBanner());
+			button.addEventListener("click", () => {
+				this.showDetailedSettings();
+				this.showBanner();
+			});
 		});
 	}
 }
