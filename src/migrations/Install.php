@@ -96,6 +96,11 @@ class Install extends Migration {
             'advertisementCookies' => $this->json()->null(),
             'personalizationCookies' => $this->json()->null(),
         ]); 
+
+        $this->createTable(Table::COOKIE_BANNER_DETECTED_COOKIES, [
+            'id' => $this->primaryKey(),
+            'name' => $this->string(255)->null(),
+        ]);
     }
 
     public function createForeignKeys(): void {

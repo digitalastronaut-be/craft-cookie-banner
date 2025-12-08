@@ -57,6 +57,39 @@ class CookieBanner extends Plugin {
         
         $this->setComponents([]);
 
+        // dd($this->categorizeCookies($cookieMetadata = [
+        //     'PHPSESSID' => [
+        //         'category' => 'essentialCookies',
+        //         'description' => 'Maintains session state for the current visit.',
+        //         'expiration' => 'session'
+        //     ],
+        //     '_ga' => [
+        //         'category' => 'analyticalCookies',
+        //         'description' => 'Used by Google Analytics to distinguish users.',
+        //         'expiration' => '2 years'
+        //     ],
+        //     '_gid' => [
+        //         'category' => 'analyticalCookies',
+        //         'description' => 'Used by Google Analytics to track page views.',
+        //         'expiration' => '24 hours'
+        //     ],
+        //     'cookie_consent' => [
+        //         'category' => 'functionalCookies',
+        //         'description' => 'Stores user consent preferences.',
+        //         'expiration' => '1 year'
+        //     ],
+        //     'ad_id' => [
+        //         'category' => 'advertisementCookies',
+        //         'description' => 'Used for measuring ad click performance.',
+        //         'expiration' => '90 days'
+        //     ],
+        //     'user_theme' => [
+        //         'category' => 'personalizationCookies',
+        //         'description' => 'Stores the user\'s theme/layout preferences.',
+        //         'expiration' => '1 year'
+        //     ],
+        // ]));
+
         if (Craft::$app->getRequest()->getIsCpRequest()) {
             $this->registerCpRoutes();
             $this->registerCpEvents();
@@ -67,6 +100,39 @@ class CookieBanner extends Plugin {
             $this->registerCookieBanner();
         }
     }
+
+    // function categorizeCookies(array $cookieMetadata): array {
+    //     $result = [
+    //         'essentialCookies' => [],
+    //         'functionalCookies' => [],
+    //         'analyticalCookies' => [],
+    //         'advertisementCookies' => [],
+    //         'personalizationCookies' => [],
+    //         'uncategorized' => []
+    //     ];
+
+    //     foreach ($_COOKIE as $name => $value) {
+    //         if (isset($cookieMetadata[$name])) {
+    //             $meta = $cookieMetadata[$name];
+    //             $result[$meta['category']][] = [
+    //                 'name' => $name,
+    //                 'value' => $value,
+    //                 'description' => $meta['description'],
+    //                 'expiration' => $meta['expiration']
+    //             ];
+    //         } else {
+    //             // Unknown cookie → category empty, description blank
+    //             $result['uncategorized'][] = [
+    //                 'name' => $name,
+    //                 'value' => $value,
+    //                 'description' => '',
+    //                 'expiration' => ''
+    //             ];
+    //         }
+    //     }
+
+    //     return $result;
+    // }
 
     protected function createSettingsModel(): ?Model {
         return Craft::createObject(Settings::class);

@@ -7,4 +7,5 @@ use craft\db\Table as CraftTable;
 abstract class Table extends CraftTable {
     public const COOKIE_BANNER_CONSENT_RECORDS = '{{%cookie_banner_consent_records}}';
     public const COOKIE_BANNER_CONTENT = '{{%cookie_banner_content}}';
+    public const COOKIE_BANNER_DETECTED_COOKIES = '{{%cookie_banner_detected_cookies}}';
 }
