@@ -61,6 +61,7 @@ class CookieBanner extends HTMLElement {
 		const googleConsentV2Object = buildGoogleConsentV2Object(this.consent);
 		gtag("consent", "update", googleConsentV2Object);
 
+		this.dispatchConsentUpdate();
 		this.logConsent("Accept all");
 	}
 
@@ -72,6 +73,7 @@ class CookieBanner extends HTMLElement {
 		const googleConsentV2Object = buildGoogleConsentV2Object(this.consent);
 		gtag("consent", "update", googleConsentV2Object);
 
+		this.dispatchConsentUpdate();
 		this.logConsent("Accept selected");
 	}
 
@@ -92,6 +94,7 @@ class CookieBanner extends HTMLElement {
 		const googleConsentV2Object = buildGoogleConsentV2Object(this.consent);
 		gtag("consent", "update", googleConsentV2Object);
 
+		this.dispatchConsentUpdate();
 		this.logConsent("Refuse all");
 	}
 
@@ -110,6 +113,16 @@ class CookieBanner extends HTMLElement {
 		});
 
 		const data = await response.json();
+	}
+
+	dispatchConsentUpdate() {
+		this.dispatchEvent(
+			new CustomEvent("consentupdate", {
+				bubbles: true,
+				composed: true,
+				detail: { consent: this.consent },
+			})
+		);
 	}
 
 	showBanner() {

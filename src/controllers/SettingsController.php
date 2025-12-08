@@ -10,7 +10,7 @@ use digitalastronaut\craftcookiebanner\records\Content;
 
 class SettingsController extends Controller{
     public $defaultAction = 'index';
-    protected array|int|bool $allowAnonymous = self::ALLOW_ANONYMOUS_NEVER;
+    protected array|int|bool $allowAnonymous = true;
 
     public function actionIndex(): Response {
         $settings = CookieBanner::getInstance()->getSettings();
