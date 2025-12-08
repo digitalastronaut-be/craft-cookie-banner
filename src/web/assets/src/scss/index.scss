@@ -201,7 +201,7 @@
 		cursor: pointer;
 		background-color: var(--ccb-button-hover-background);
 		color: var(--ccb-button-hover-color);
-		border: var(--ccb-button-border-thickness) solid var(--ccb-button-hover-border-color);
+		border-color: var(--ccb-button-hover-border-color);
 	}
 
 	&:focus-visible {
