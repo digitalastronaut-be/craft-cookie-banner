@@ -13,7 +13,7 @@
                 <tr class="ccb-cookies-table-row">
                     <td class="ccb-typo-body-sm ccb-semi-bold ccb-cookies-table-name">{{ cookie.name }}</td>
                     <td class="ccb-typo-body-sm ccb-cookies-table-purpose">{{ cookie.purpose }}</td>
-                    <td class="ccb-typo-body-sm ccb-cookies-table-expiration">{{ cookie.expiration }}</td>
+                    <td class="ccb-typo-body-sm ccb-cookies-table-expiration"><span>{{ "Expiration"|t("cookie-banner") }}:</span> {{ cookie.expiration }}</td>
                 </tr>
             {% endfor %}
         </tbody>

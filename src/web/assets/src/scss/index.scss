@@ -1,14 +1,13 @@
 @use "reset";
 @use "variables";
 @use "typography";
-@use "breakpoints";
+@use "breakpoints" as *;
 @use "components";
 
 .ccb-cookie-banner {
 	padding: 1.5em;
-	width: 40.625em;
-	max-height: 70vh;
 	overflow-y: scroll;
+	max-height: 70vh;
 
 	position: fixed;
 	z-index: 99999;
@@ -21,6 +20,18 @@
 	pointer-events: none;
 	transform: translateY(50%);
 	transition: all 0.5s cubic-bezier(0.3, 0.7, 0.4, 1);
+
+	@include styles-above(tablet) {
+		max-width: 40.625em;
+		width: 100%;
+	}
+
+	@include styles-below(tablet) {
+		position: fixed;
+		bottom: 0.75em;
+		left: 0.75em;
+		right: 0.75rem;
+	}
 
 	&.visible {
 		opacity: 1;
@@ -165,9 +176,22 @@
 
 	&-action-buttons {
 		display: flex;
-		flex-wrap: wrap;
-		align-items: center;
+		flex-direction: column;
 		gap: 0.75em;
+
+		button {
+			width: 100%;
+
+			@include styles-above(tabletS) {
+				width: fit-content;
+			}
+		}
+
+		@include styles-above(tabletS) {
+			flex-direction: row;
+			align-items: center;
+			flex-wrap: wrap;
+		}
 
 		[data-accept-selected-button],
 		[data-determine-preferences-button] {
@@ -187,6 +211,7 @@
 	color: var(--ccb-button-color);
 	display: flex;
 	align-items: center;
+	justify-content: center;
 	gap: 0.5em;
 	padding: var(--ccb-button-padding);
 	border: var(--ccb-button-border-thickness) solid var(--ccb-button-border-color);
@@ -349,6 +374,7 @@
 				a {
 					color: var(--ccb-cookie-group-link-color);
 					transition: all ease-out 0.15s;
+					width: fit-content;
 
 					&:hover {
 						color: var(--ccb-cookie-group-link-hover-color);
@@ -380,6 +406,19 @@
 	td {
 		padding: 0.75em;
 		color: var(--ccb-cookie-table-title-color);
+
+		@include styles-below(tablet) {
+			display: block;
+		}
+
+		span {
+			display: none;
+			font-weight: 600;
+
+			@include styles-below(tablet) {
+				display: inline;
+			}
+		}
 	}
 
 	&-expiration {

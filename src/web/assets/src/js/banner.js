@@ -116,7 +116,7 @@ class CookieBanner extends HTMLElement {
 	}
 
 	dispatchConsentUpdate() {
-		this.dispatchEvent(
+		document.dispatchEvent(
 			new CustomEvent("consentupdate", {
 				bubbles: true,
 				composed: true,
