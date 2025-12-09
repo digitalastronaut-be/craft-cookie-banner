@@ -42,6 +42,14 @@ class CookieBanner extends HTMLElement {
 			const googleConsentV2Object = buildGoogleConsentV2Object(this.consent);
 			gtag("consent", "update", googleConsentV2Object);
 		}
+
+		document.dispatchEvent(
+			new CustomEvent("consent-onload", {
+				bubbles: true,
+				composed: true,
+				detail: { consent: this.consent },
+			})
+		);
 	}
 
 	acceptAll() {
@@ -117,7 +125,7 @@ class CookieBanner extends HTMLElement {
 
 	dispatchConsentUpdate() {
 		document.dispatchEvent(
-			new CustomEvent("consentupdate", {
+			new CustomEvent("consent-update", {
 				bubbles: true,
 				composed: true,
 				detail: { consent: this.consent },
