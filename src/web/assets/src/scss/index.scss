@@ -57,8 +57,10 @@
 	}
 
 	ul,
-	ol {
+	ol,
+	li {
 		list-style: none;
+		font-size: unset;
 	}
 
 	&::-webkit-scrollbar {
@@ -222,6 +224,7 @@
 		position: relative;
 		cursor: pointer;
 		transition: all ease-out 0.15s;
+		font-size: 16px;
 
 		&:hover {
 			filter: brightness(0.9);
@@ -256,6 +259,8 @@
 }
 
 .ccb-cookies-category {
+	font-size: 16px;
+
 	&.open .ccb-cookies-category-toggle svg {
 		transform: rotate(0);
 	}
@@ -309,7 +314,11 @@
 			&-collapse.open .ccb-cookies-category-groups-list-item-toggle svg {
 				transform: scaleY(-1);
 			}
+
 			&-toggle {
+				display: flex;
+				flex-direction: column;
+				gap: 0.2em;
 				padding: 0.75em 1em;
 				border: var(--ccb-cookie-group-border-thickness) solid var(--ccb-cookie-group-border-color);
 				background-color: var(--ccb-cookie-group-background);
