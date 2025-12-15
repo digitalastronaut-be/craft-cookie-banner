@@ -1,0 +1,10 @@
+.ccb-content-status {
+	padding: 16px;
+	background-color: var(--gray-050);
+	border-radius: var(--radius-lg);
+	box-shadow: var(--pane-shadow);
+}
+
+.details:has(.ccb-content-status) {
+	padding: 0;
+}

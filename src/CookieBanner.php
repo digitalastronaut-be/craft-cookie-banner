@@ -23,6 +23,7 @@ use digitalastronaut\craftcookiebanner\elements\ConsentRecord;
 use digitalastronaut\craftcookiebanner\helpers\CookieBanner as CookieBannerHelper;
 use digitalastronaut\craftcookiebanner\models\Settings;
 use digitalastronaut\craftcookiebanner\records\Content;
+use digitalastronaut\craftcookiebanner\services\ServicesTrait;
 use digitalastronaut\craftcookiebanner\variables\CookieBannerVariable;
 use digitalastronaut\craftcookiebanner\web\assets\CookieBannerAssets;
 use digitalastronaut\craftcookiebanner\web\twig\CookieBannerTwigExtension;
@@ -37,6 +38,8 @@ use digitalastronaut\craftcookiebanner\web\twig\CookieBannerTwigExtension;
  * @license https://craftcms.github.io/license/ Craft License
  */
 class CookieBanner extends Plugin {
+    use ServicesTrait;
+
     public string $schemaVersion = '1.0.0';
     public bool $hasCpSettings = true;
     public bool $hasCpSection = true;
@@ -44,51 +47,17 @@ class CookieBanner extends Plugin {
     public function init(): void {
         parent::init();
 
+        // dd($this->getCookieDetection()->categorizeCookies());
+
         $this->registerVariables();
         $this->registerTemplateRoots();
         $this->registerElementTypes();
         $this->registerAssetBundles();
         $this->registerTwigExtension();
 
-        // TODO: Cascade for content table fixen
-        // TODO: Cookie table rendering for cookie page with twig extension
-        // TODO: Loading animation when saving consent so it's more clear to the user
-        // TODO: Automatic cookie detection via php $_COOKIE global and maybe add automatic descriptions based on cookie names
-        
-        $this->setComponents([]);
-
-        // dd($this->categorizeCookies($cookieMetadata = [
-        //     'PHPSESSID' => [
-        //         'category' => 'essentialCookies',
-        //         'description' => 'Maintains session state for the current visit.',
-        //         'expiration' => 'session'
-        //     ],
-        //     '_ga' => [
-        //         'category' => 'analyticalCookies',
-        //         'description' => 'Used by Google Analytics to distinguish users.',
-        //         'expiration' => '2 years'
-        //     ],
-        //     '_gid' => [
-        //         'category' => 'analyticalCookies',
-        //         'description' => 'Used by Google Analytics to track page views.',
-        //         'expiration' => '24 hours'
-        //     ],
-        //     'cookie_consent' => [
-        //         'category' => 'functionalCookies',
-        //         'description' => 'Stores user consent preferences.',
-        //         'expiration' => '1 year'
-        //     ],
-        //     'ad_id' => [
-        //         'category' => 'advertisementCookies',
-        //         'description' => 'Used for measuring ad click performance.',
-        //         'expiration' => '90 days'
-        //     ],
-        //     'user_theme' => [
-        //         'category' => 'personalizationCookies',
-        //         'description' => 'Stores the user\'s theme/layout preferences.',
-        //         'expiration' => '1 year'
-        //     ],
-        // ]));
+        // TODO: Cascade for content table fixen.
+        // TODO: Loading animation when saving consent so it's more clear to the user.
+        // TODO: Provide a way to insert the detected cookies in to all languages.
 
         if (Craft::$app->getRequest()->getIsCpRequest()) {
             $this->registerCpRoutes();
@@ -100,39 +69,6 @@ class CookieBanner extends Plugin {
             $this->registerCookieBanner();
         }
     }
-
-    // function categorizeCookies(array $cookieMetadata): array {
-    //     $result = [
-    //         'essentialCookies' => [],
-    //         'functionalCookies' => [],
-    //         'analyticalCookies' => [],
-    //         'advertisementCookies' => [],
-    //         'personalizationCookies' => [],
-    //         'uncategorized' => []
-    //     ];
-
-    //     foreach ($_COOKIE as $name => $value) {
-    //         if (isset($cookieMetadata[$name])) {
-    //             $meta = $cookieMetadata[$name];
-    //             $result[$meta['category']][] = [
-    //                 'name' => $name,
-    //                 'value' => $value,
-    //                 'description' => $meta['description'],
-    //                 'expiration' => $meta['expiration']
-    //             ];
-    //         } else {
-    //             // Unknown cookie → category empty, description blank
-    //             $result['uncategorized'][] = [
-    //                 'name' => $name,
-    //                 'value' => $value,
-    //                 'description' => '',
-    //                 'expiration' => ''
-    //             ];
-    //         }
-    //     }
-
-    //     return $result;
-    // }
 
     protected function createSettingsModel(): ?Model {
         return Craft::createObject(Settings::class);
@@ -168,7 +104,7 @@ class CookieBanner extends Plugin {
         $item['icon'] = "@digitalastronaut/craftcookiebanner/web/icons/shield.svg";
         $item['url'] = 'cookie-banner';
         $item['subnav'] = [
-            'complianceChecklist' => ['label' => 'Compliance checklist', 'url' => 'cookie-banner/compliance-checklist'],
+            'compliancyChecklist' => ['label' => 'Compliancy checklist', 'url' => 'cookie-banner/compliancy-checklist'],
             'consentRecords' => ['label' => 'Consent records', 'url' => 'cookie-banner/consent-records'],
             'content' => ['label' => 'Content', 'url' => 'cookie-banner/content'],
             'appearance' => ['label' => 'Appearance', 'url' => 'cookie-banner/appearance'],
@@ -184,8 +120,9 @@ class CookieBanner extends Plugin {
             UrlManager::EVENT_REGISTER_CP_URL_RULES,
             function (RegisterUrlRulesEvent $event) {
                 $event->rules['cookie-banner'] = 'cookie-banner/consent-records/index';
-                $event->rules['cookie-banner/compliance-checklist'] = 'cookie-banner/compliance-checklist/index';
+                $event->rules['cookie-banner/compliancy-checklist'] = 'cookie-banner/compliancy-checklist/index';
                 $event->rules['cookie-banner/content'] = 'cookie-banner/content/index';
+                $event->rules['cookie-banner/content/add-cookie'] = 'cookie-banner/content/add-cookie';
                 $event->rules['cookie-banner/appearance'] = 'cookie-banner/appearance/index';
                 $event->rules['cookie-banner/consent-records'] = 'cookie-banner/consent-records/view';
                 $event->rules['cookie-banner/consent-records/create'] = 'cookie-banner/consent-records/create';

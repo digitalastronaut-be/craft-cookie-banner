@@ -133,7 +133,7 @@
             <p>If your use case requires grouping cookies even further by provider or other traits you can define them here. If you don't need this funcitonality just leave it blank.</p>
         </div>
 
-        <div class="field width-75">
+        <div class="field width-100">
             {{ forms.editableTableField({
                 label: 'Groups',
                 id: 'cookieGroups',
@@ -183,7 +183,7 @@
             }) }}
         </div>
 
-        <div class="width-75">
+        <div class="width-100">
             {{ forms.editableTableField({
                 label: 'List',
                 id: 'essentialCookies',
@@ -234,7 +234,7 @@
             }) }}
         </div>
 
-        <div class="field width-75">
+        <div class="field width-100">
             {{ forms.editableTableField({
                 label: 'List',
                 id: 'functionalCookies',
@@ -285,7 +285,7 @@
             }) }}
         </div>
 
-        <div class="field width-75">
+        <div class="field width-100">
             {{ forms.editableTableField({
                 label: 'List',
                 id: 'analyticalCookies',
@@ -336,7 +336,7 @@
             }) }}
         </div>
 
-        <div class="field width-75">
+        <div class="field width-100">
             {{ forms.editableTableField({
                 label: 'List',
                 id: 'advertisement',
@@ -387,7 +387,7 @@
             }) }}
         </div>
 
-        <div class="field width-75">
+        <div class="field width-100">
             {{ forms.editableTableField({
                 label: 'List',
                 id: 'personalizationCookies',
@@ -399,6 +399,57 @@
                     expiration: { heading: "Expiration", type: "singleline" },
                 },
                 rows: banner.personalizationCookies,
+                allowAdd: true,
+                allowDelete: true,
+                allowReorder: true,
+            }) }}
+        </div>
+        
+        <h2>Uncategorized cookies</h2>
+
+        <div class="field width-50">
+            {{ forms.textField({
+                label: 'Title',
+                id: 'uncategorizedCookiesTitle',
+                name: 'fields[uncategorizedCookiesTitle]',
+                value: banner.uncategorizedCookiesTitle,
+                placeholder: 'Title',
+            }) }}
+        </div>
+
+        <div class="field width-25">
+            {{ forms.textField({
+                label: 'Label',
+                id: 'uncategorizedCookiesLabel',
+                name: 'fields[uncategorizedCookiesLabel]',
+                value: banner.uncategorizedCookiesLabel,
+                placeholder: 'Label',
+            }) }}
+        </div>
+
+        <div class="field width-75">
+            {{ forms.textareaField({
+                label: 'Definition',
+                id: 'uncategorizedCookiesDefinition',
+                name: 'fields[uncategorizedCookiesDefinition]',
+                value: banner.uncategorizedCookiesDefinition,
+                placeholder: 'Definition',
+                rows: 4,
+            }) }}
+        </div>
+
+        <div class="field width-100">
+            {{ forms.editableTableField({
+                label: 'List',
+                id: 'uncategorizedCookies',
+                name: 'fields[uncategorizedCookies]',
+                cols: {
+                    name: { heading: "Name", type: "singleline" },
+                    group: { heading: "Group", type: "select", options: cookieGroups },
+                    purpose: { heading: "Purpose", type: "multiline" },
+                    expiration: { heading: "Expiration", type: "singleline" },
+                },
+                rows: banner.uncategorizedCookies,
                 allowAdd: true,
                 allowDelete: true,
                 allowReorder: true,
@@ -458,5 +509,11 @@
                 placeholder: 'Label',
             }) }}
         </div>
+    </div>
+{% endblock %}
+
+{% block details %}
+    <div class="ccb-content-status">
+        <h2>Content status</h2>
     </div>
 {% endblock %}

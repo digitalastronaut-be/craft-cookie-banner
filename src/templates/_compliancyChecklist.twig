@@ -1,0 +1,85 @@
+{% extends "_layouts/cp.twig" %}
+
+{% import '_includes/forms.twig' as forms %}
+
+{% set title = "Compliancy checklist" %}
+{% set selectedSubnavItem = 'compliancyChecklist' %}
+
+{% set crumbs = [
+    { label: 'Cookie banner'|t, url: url('cookie-banner') },
+    { label: 'Compliance checklist'|t, url: url('cookie-banner/compliance-checklist') },
+] %}
+
+{% block content %}
+    <div class="ccb-compliancy-checklist">
+        <h2>Detected cookies for this site</h2>
+
+        <div class="ccb-detected-cookies-legend">
+            <p>{{ "Status of each cookie per site for the cookie banner"|t("cookie-banner") }}</p>
+
+            <div>
+                <div class="status-chip not-defined">{{ "Not defined"|t("cookie-banner") }}</div>
+                <div class="status-chip defined-incomplete">{{ "Defined but incomplete"|t("cookie-banner") }}</div>
+                <div class="status-chip defined">{{ "Defined completely"|t("cookie-banner") }}</div>
+            </div>
+        </div>
+
+        <detected-cookies-table class="ccb-detected-cookies-table">
+            <table class="data">
+                <thead>
+                    <th>{{ "Cookie name"|t }}</th>
+                    <th>{{ "Current value"|t }}</th>
+                    <th>{{ "Added to cookie banner content"|t }}</th>
+                    <th>{{ "Automated"|t }}</th>
+                    <th>{{ "Action"|t }}</th>
+                </thead>
+
+                <tbody>
+                    {% for cookie in getCookieDetectionOverviewData() %}
+                        <tr 
+                            data-table-row
+                            data-cookie-name="{{ cookie.name }}"
+                            class="{{ cookie.isControlPanelCookie ? "disabled" : "" }}"
+                        >
+                            <td class="ccb-semi-bold">{{ cookie.name|truncate(30) }}</td>
+
+                            <td>{{ cookie.currentValue|truncate(20) }}</td>
+
+                            {% if not cookie.isControlPanelCookie %}
+                                <td>
+                                    <div class="inline-chips">
+                                        {% for language, isDefined in checkCookiesDefenitionForLanguages(cookie.name) %}
+                                            <div class="status-chip {{ isDefined }}">{{ language }}</div>
+                                        {% endfor %}
+                                    </div>
+                                </td>
+                            {% else %}
+                                <td>
+                                    <div class="status-chip">Used by the control panel internally</div>
+                                </td>
+                            {% endif %}
+
+                            <td class="centered">
+                                {% if cookie.isAutomated %}
+                                    <span class="checkbox-icon" title="Enabled" role="img" aria-label="Enabled"></span>
+                                {% endif %}
+                            </td>
+
+                            <td>
+                                <form method="post">
+                                    {{ csrfInput() }}
+                                    {{ actionInput("cookie-banner/content/add-cookie") }}
+                                    {{ hiddenInput('cookieName', cookie.name) }}
+
+                                    <button class="btn btn-submit">
+                                        Add to missing sites
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </detected-cookies-table>
+    </div>
+{% endblock %}

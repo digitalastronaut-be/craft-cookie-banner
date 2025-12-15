@@ -82,6 +82,10 @@ class Install extends Migration {
             'personalizationCookiesTitle' => $this->string(255)->null(),
             'personalizationCookiesLabel' => $this->string(255)->null(),
             'personalizationCookiesDefinition' => $this->string(255)->null(),
+            
+            'uncategorizedCookiesTitle' => $this->string(255)->null(),
+            'uncategorizedCookiesLabel' => $this->string(255)->null(),
+            'uncategorizedCookiesDefinition' => $this->string(255)->null(),
 
             'acceptAllButtonLabel' => $this->string(255)->null(),
             'acceptSelectedButtonLabel' => $this->string(255)->null(),
@@ -95,12 +99,8 @@ class Install extends Migration {
             'analyticalCookies' => $this->json()->null(),
             'advertisementCookies' => $this->json()->null(),
             'personalizationCookies' => $this->json()->null(),
+            'uncategorizedCookies' => $this->json()->null(),
         ]); 
-
-        $this->createTable(Table::COOKIE_BANNER_DETECTED_COOKIES, [
-            'id' => $this->primaryKey(),
-            'name' => $this->string(255)->null(),
-        ]);
     }
 
     public function createForeignKeys(): void {

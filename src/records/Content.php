@@ -48,6 +48,10 @@ class Content extends ActiveRecord {
             'personalizationCookiesLabel',
             'personalizationCookiesDefinition',
 
+            'uncategorizedCookiesTitle',
+            'uncategorizedCookiesLabel',
+            'uncategorizedCookiesDefinition',
+
             'acceptAllButtonLabel',
             'acceptSelectedButtonLabel',
             'refuseAllButtonLabel',
@@ -60,6 +64,7 @@ class Content extends ActiveRecord {
             'analyticalCookies',
             'advertisementCookies',
             'personalizationCookies',
+            'uncategorizedCookies',
         ];
 
         return array_merge($fields, parent::fields());
@@ -90,6 +95,9 @@ class Content extends ActiveRecord {
                     'personalizationCookiesTitle', 
                     'personalizationCookiesLabel',
                     'personalizationCookiesDefinition', 
+                    'uncategorizedCookiesTitle',
+                    'uncategorizedCookiesLabel',
+                    'uncategorizedCookiesDefinition',
                     'acceptAllButtonLabel', 
                     'acceptSelectedButtonLabel', 
                     'refuseAllButtonLabel', 
@@ -100,7 +108,8 @@ class Content extends ActiveRecord {
                     'functionalCookies', 
                     'analyticalCookies', 
                     'advertisementCookies', 
-                    'personalizationCookies'
+                    'personalizationCookies',
+                    'uncategorizedCookies',
                 ], 
                 'safe'
             ],
