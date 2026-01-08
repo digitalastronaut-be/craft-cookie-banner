@@ -4,7 +4,7 @@ namespace digitalastronaut\craftcookiebanner\migrations;
 
 use craft\db\Migration;
 use craft\records\Site;
-use digitalastronaut\craftcookiebanner\helpers\CookieBanner;
+use digitalastronaut\craftcookiebanner\CookieBanner;
 use digitalastronaut\craftcookiebanner\helpers\Table;
 
 class Install extends Migration {
@@ -58,48 +58,43 @@ class Install extends Migration {
             'title' => $this->string(255)->null(),
             'text' => $this->text()->null(),
 
+            'cookieGroups' => $this->json()->null(),
+
             'privacyPolicyLinkLabel' => $this->string(255)->null(),
             'privacyPolicyLinkURL' => $this->string(255)->null(),
             'cookiePolicyLinkLabel' => $this->string(255)->null(),
             'cookiePolicyLinkURL' => $this->string(255)->null(),
 
-            'essentialCookiesTitle' => $this->string(255)->null(),
-            'essentialCookiesLabel' => $this->string(255)->null(),
-            'essentialCookiesDefinition' => $this->string(255)->null(),
+            'necessaryCookiesTitle' => $this->string(255)->null(),
+            'necessaryCookiesLabel' => $this->string(255)->null(),
+            'necessaryCookiesDefinition' => $this->text()->null(),
+            'necessaryCookies' => $this->json()->null(),
 
-            'functionalCookiesTitle' => $this->string(255)->null(),
-            'functionalCookiesLabel' => $this->string(255)->null(),
-            'functionalCookiesDefinition' => $this->string(255)->null(),
+            'preferenceCookiesTitle' => $this->string(255)->null(),
+            'preferenceCookiesLabel' => $this->string(255)->null(),
+            'preferenceCookiesDefinition' => $this->text()->null(),
+            'preferenceCookies' => $this->json()->null(),
 
             'analyticalCookiesTitle' => $this->string(255)->null(),
             'analyticalCookiesLabel' => $this->string(255)->null(),
-            'analyticalCookiesDefinition' => $this->string(255)->null(),
+            'analyticalCookiesDefinition' => $this->text()->null(),
+            'analyticalCookies' => $this->json()->null(),
 
-            'advertisementCookiesTitle' => $this->string(255)->null(),
-            'advertisementCookiesLabel' => $this->string(255)->null(),
-            'advertisementCookiesDefinition' => $this->string(255)->null(),
+            'marketingCookiesTitle' => $this->string(255)->null(),
+            'marketingCookiesLabel' => $this->string(255)->null(),
+            'marketingCookiesDefinition' => $this->text()->null(),
+            'marketingCookies' => $this->json()->null(),
 
-            'personalizationCookiesTitle' => $this->string(255)->null(),
-            'personalizationCookiesLabel' => $this->string(255)->null(),
-            'personalizationCookiesDefinition' => $this->string(255)->null(),
-            
             'uncategorizedCookiesTitle' => $this->string(255)->null(),
             'uncategorizedCookiesLabel' => $this->string(255)->null(),
-            'uncategorizedCookiesDefinition' => $this->string(255)->null(),
+            'uncategorizedCookiesDefinition' => $this->text()->null(),
+            'uncategorizedCookies' => $this->json()->null(),
 
             'acceptAllButtonLabel' => $this->string(255)->null(),
             'acceptSelectedButtonLabel' => $this->string(255)->null(),
             'refuseAllButtonLabel' => $this->string(255)->null(),
             'determinePreferencesButtonLabel' => $this->string(255)->null(),
             'detailedPreferencesButtonLabel' => $this->string(255)->null(),
-
-            'cookieGroups' => $this->json()->null(),
-            'essentialCookies' => $this->json()->null(),
-            'functionalCookies' => $this->json()->null(),
-            'analyticalCookies' => $this->json()->null(),
-            'advertisementCookies' => $this->json()->null(),
-            'personalizationCookies' => $this->json()->null(),
-            'uncategorizedCookies' => $this->json()->null(),
         ]); 
     }
 
@@ -124,11 +119,17 @@ class Install extends Migration {
 
     public function seedCookieBannerContentTable() {
         $sites = Site::find()->all();
+        $basePath = CookieBanner::getInstance()->getBasePath() . '/static/content';
 
         foreach ($sites as $site) {
+            $languageCode = strtolower(explode('-', $site->language)[0]);
+            $filePath = "{$basePath}/{$languageCode}.json";
+
+            if (!file_exists($filePath)) $filePath = "{$basePath}/en.json";
+            
             $this->insert(Table::COOKIE_BANNER_CONTENT, array_merge(
                 ['siteId' => $site->id],
-                CookieBanner::BASE_CONTENT
+                json_decode(file_get_contents($filePath), true)
             ));
         }
     }

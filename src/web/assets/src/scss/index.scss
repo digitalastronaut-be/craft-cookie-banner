@@ -325,7 +325,7 @@
 		gap: 1em;
 
 		& > p {
-			max-width: 28.125em;
+			padding-right: 5em;
 			color: var(--ccb-text-color);
 		}
 	}
@@ -523,6 +523,15 @@
 
 	table th:last-child {
 		background-color: var(--gray-050);
+	}
+}
+
+.ccb-compliancy-checklist {
+	.btngroup .menu {
+		display: flex;
+		position: absolute;
+		top: 0;
+		right: 0;
 	}
 }
 

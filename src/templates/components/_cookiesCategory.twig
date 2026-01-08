@@ -13,6 +13,10 @@
     'cookies': cookies|filter(cookie => cookie.group == (group.name|lower|replace({' ': '-'})))
 }) %}
 
+<pre>
+    {{ dump(groupedCookies) }}
+</pre>
+
 {# ======================= #}
 {# TEMPLATE                #}
 {# ======================= #}

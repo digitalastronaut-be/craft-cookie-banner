@@ -45,14 +45,7 @@ class CookieBannerTwigExtension extends AbstractExtension {
             $site = Craft::$app->getSites()->getSiteById($content->siteId);
             $siteKey = $site->handle . " (" . $site->language . ")";
             
-            $allCookies = array_merge(
-                is_array($content["essentialCookies"]) ? $content["essentialCookies"] : [],
-                is_array($content["functionalCookies"]) ? $content["functionalCookies"] : [],
-                is_array($content["analyticalCookies"]) ? $content["analyticalCookies"] : [],
-                is_array($content["advertisementCookies"]) ? $content["advertisementCookies"] : [],
-                is_array($content["personalizationCookies"]) ? $content["personalizationCookies"] : [],
-                is_array($content["uncategorizedCookies"]) ? $content["uncategorizedCookies"] : []
-            );
+            $allCookies = CookieBanner::getInstance()->getCookieDetection()->getBannerCookies($content);
 
             $matchedCookie = null;
             foreach ($allCookies as $cookie) {

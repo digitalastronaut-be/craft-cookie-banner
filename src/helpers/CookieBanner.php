@@ -5,29 +5,11 @@ namespace digitalastronaut\craftcookiebanner\helpers;
 abstract class CookieBanner {
     public const BASE_CONTENT = [
         'title' => 'This website uses cookies',
-        'text' => 'This websites uses cookies to provide you with the most optimal user experience. Want to know more? Read our cookie policy via the "Learn more" button or determine your own preferences below.',
+        'text' => 'We use cookies to support the basic operation of the site, understand how it is used, and enable certain features. Some information about site usage may be shared with third-party services that help with analytics, advertising, and social media functionality, in accordance with their respective policies.',
         'privacyPolicyLinkLabel' => 'Privacy policy',
+        'privacyPolicyLinkURL' => '',
         'cookiePolicyLinkLabel' => 'Cookie policy',
-        'essentialCookiesTitle' => 'Essential cookies',
-        'essentialCookiesLabel' => 'Essential',
-        'essentialCookiesDefinition' => 'Cookies that are necessary for the normal functioning of this website. These cannot be deactivated.',
-        'functionalCookiesTitle' => 'Functional cookies',
-        'functionalCookiesLabel' => 'Functional',
-        'functionalCookiesDefinition' => 'Cookies that improve the user-friendliness of this website, such as storing language preferences.',
-        'analyticalCookiesTitle' => 'Statistical cookies',
-        'analyticalCookiesLabel' => 'Statistical',
-        'analyticalCookiesDefinition' => 'Cookies used to enable analyses of surfing behaviour on this website so that the website can be improved.',
-        'advertisementCookiesTitle' => 'Marketing cookies',
-        'advertisementCookiesLabel' => 'Marketing',
-        'advertisementCookiesDefinition' => 'Cookies that make it possible to display personalized advertisements based on surfing behavior on this website.',
-        'personalizationCookiesTitle' => 'Social media cookies',
-        'personalizationCookiesLabel' => 'Social media',
-        'personalizationCookiesDefinition' => 'Cookies that are necessary for the integration of social media plug-ins with this website, such as YouTube.',
-        'acceptAllButtonLabel' => 'Accept all',
-        'acceptSelectedButtonLabel' => 'Accept selected',
-        'refuseAllButtonLabel' => 'Refuse all',
-        'determinePreferencesButtonLabel' => 'Determine preferences',
-        'detailedPreferencesButtonLabel' => 'Detailed preferences',
+        'cookiePolicyLinkURL' => '',
         'cookieGroups' => [
             [
                 'name' => 'Craft CMS',
@@ -40,7 +22,10 @@ abstract class CookieBanner {
                 'url' => 'https://craftcms.com/',
             ],
         ],
-        'essentialCookies' => [
+        'necessaryCookiesTitle' => 'Necessary cookies',
+        'necessaryCookiesLabel' => 'Necessary',
+        'necessaryCookiesDefinition' => 'Necessary cookies help make a website usable by enabling basic functions like page navigation and access to secure areas of the website. The website cannot function properly without these cookies.',
+        'necessaryCookies' => [
             [
                 'name' => 'CRAFT_CSRF_TOKEN',
                 'group' => 'craft-cms',
@@ -53,6 +38,11 @@ abstract class CookieBanner {
                 'purpose' => 'Identifies a unique session between the browser and the server. Required for basic site functionality such as logins and form submissions.',
                 'expiration' => 'Session',
             ],
+        ],
+        'preferenceCookiesTitle' => 'Preference cookies',
+        'preferenceCookiesLabel' => 'Preference',
+        'preferenceCookiesDefinition' => 'Preference cookies enable a website to remember information that changes the way the website behaves or looks, like your preferred language or the region that you are in.',
+        'preferenceCookies' => [
             [
                 'name' => 'cookie_consent',
                 'group' => 'cookie-banner',
@@ -60,5 +50,22 @@ abstract class CookieBanner {
                 'expiration' => '1 year',
             ]
         ],
+        'analyticalCookiesTitle' => 'Analytical cookies',
+        'analyticalCookiesLabel' => 'Analytical',
+        'analyticalCookiesDefinition' => 'Statistic cookies help website owners to understand how visitors interact with websites by collecting and reporting information anonymously.',
+        'analyticalCookies' => [],
+        'marketingCookiesTitle' => 'Marketing cookies',
+        'marketingCookiesLabel' => 'Marketing',
+        'marketingCookiesDefinition' => 'Marketing cookies are used to track visitors across websites. The intention is to display ads that are relevant and engaging for the individual user and thereby more valuable for publishers and third party advertisers.',
+        'marketingCookies' => [],
+        'uncategorizedCookiesTitle' => 'Uncategorized cookies',
+        'uncategorizedCookiesLabel' => 'Uncategorized',
+        'uncategorizedCookiesDefinition' => 'Uncategorized cookies are cookies that we are in the process of classifying, together with the providers of individual cookies.',
+        'uncategorizedCookies' => [],
+        'acceptAllButtonLabel' => 'Accept all',
+        'acceptSelectedButtonLabel' => 'Accept selected',
+        'refuseAllButtonLabel' => 'Refuse all',
+        'determinePreferencesButtonLabel' => 'Determine preferences',
+        'detailedPreferencesButtonLabel' => 'Detailed preferences',
     ];
 }

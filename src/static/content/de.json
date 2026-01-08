@@ -1,0 +1,65 @@
+{
+	"title": "Diese Website verwendet Cookies",
+	"text": "Wir verwenden Cookies, um den grundlegenden Betrieb der Website zu unterstützen, ihre Nutzung zu verstehen und bestimmte Funktionen zu ermöglichen. Einige Informationen über die Websitenutzung können mit Drittanbieterdiensten geteilt werden, die bei Analyse, Werbung und Social-Media-Funktionalität helfen, gemäß ihren jeweiligen Richtlinien.",
+	"privacyPolicyLinkLabel": "Datenschutzerklärung",
+	"privacyPolicyLinkURL": "",
+	"cookiePolicyLinkLabel": "Cookie-Richtlinie",
+	"cookiePolicyLinkURL": "",
+	"cookieGroups": [
+		{
+			"name": "Craft CMS",
+			"description": "Ein maßgeschneidertes Content-Management-System für Entwickler und Autoren",
+			"url": "https://craftcms.com/"
+		},
+		{
+			"name": "Cookie Banner",
+			"description": "Dieses Banner verwaltet Ihre Cookie-Präferenzen und entspricht den neuesten DSGVO-Vorschriften.",
+			"url": "https://craftcms.com/"
+		}
+	],
+	"necessaryCookiesTitle": "Notwendige Cookies",
+	"necessaryCookiesLabel": "Notwendig",
+	"necessaryCookiesDefinition": "Notwendige Cookies helfen dabei, eine Website nutzbar zu machen, indem sie Grundfunktionen wie Seitennavigation und Zugriff auf sichere Bereiche der Website ermöglichen. Die Website kann ohne diese Cookies nicht ordnungsgemäß funktionieren.",
+	"necessaryCookies": [
+		{
+			"name": "CRAFT_CSRF_TOKEN",
+			"group": "craft-cms",
+			"purpose": "Sicherheitstoken zum Schutz vor Cross-Site-Request-Forgery-(CSRF)-Angriffen. Stellt sicher, dass Formularübermittlungen und Anfragen von vertrauenswürdigen Quellen stammen.",
+			"expiration": "Sitzung"
+		},
+		{
+			"name": "CraftSessionId",
+			"group": "craft-cms",
+			"purpose": "Identifiziert eine eindeutige Sitzung zwischen Browser und Server. Erforderlich für grundlegende Website-Funktionen wie Anmeldungen und Formularübermittlungen.",
+			"expiration": "Sitzung"
+		}
+	],
+	"preferenceCookiesTitle": "Präferenz-Cookies",
+	"preferenceCookiesLabel": "Präferenz",
+	"preferenceCookiesDefinition": "Präferenz-Cookies ermöglichen es einer Website, sich Informationen zu merken, die die Art und Weise ändern, wie sich die Website verhält oder aussieht, wie Ihre bevorzugte Sprache oder die Region, in der Sie sich befinden.",
+	"preferenceCookies": [
+		{
+			"name": "cookie_consent",
+			"group": "cookie-banner",
+			"purpose": "Speichert die Cookie-Präferenzen des Benutzers (z. B. akzeptierte oder abgelehnte Kategorien), damit das Banner nicht bei jedem Besuch erneut angezeigt wird.",
+			"expiration": "1 Jahr"
+		}
+	],
+	"analyticalCookiesTitle": "Analyse-Cookies",
+	"analyticalCookiesLabel": "Analyse",
+	"analyticalCookiesDefinition": "Statistik-Cookies helfen Website-Betreibern zu verstehen, wie Besucher mit Websites interagieren, indem Informationen anonym gesammelt und gemeldet werden.",
+	"analyticalCookies": [],
+	"marketingCookiesTitle": "Marketing-Cookies",
+	"marketingCookiesLabel": "Marketing",
+	"marketingCookiesDefinition": "Marketing-Cookies werden verwendet, um Besucher über Websites hinweg zu verfolgen. Die Absicht besteht darin, Anzeigen anzuzeigen, die für den einzelnen Benutzer relevant und ansprechend sind und dadurch für Publisher und Drittanbieter wertvoller sind.",
+	"marketingCookies": [],
+	"uncategorizedCookiesTitle": "Nicht kategorisierte Cookies",
+	"uncategorizedCookiesLabel": "Nicht kategorisiert",
+	"uncategorizedCookiesDefinition": "Nicht kategorisierte Cookies sind Cookies, die wir gerade klassifizieren, zusammen mit den Anbietern einzelner Cookies.",
+	"uncategorizedCookies": [],
+	"acceptAllButtonLabel": "Alle akzeptieren",
+	"acceptSelectedButtonLabel": "Ausgewählte akzeptieren",
+	"refuseAllButtonLabel": "Alle ablehnen",
+	"determinePreferencesButtonLabel": "Präferenzen festlegen",
+	"detailedPreferencesButtonLabel": "Detaillierte Einstellungen"
+}

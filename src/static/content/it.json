@@ -1,0 +1,65 @@
+{
+	"title": "Questo sito web utilizza i cookie",
+	"text": "Utilizziamo i cookie per supportare il funzionamento di base del sito, comprendere come viene utilizzato e abilitare determinate funzionalità. Alcune informazioni sull'utilizzo del sito potrebbero essere condivise con servizi di terze parti che aiutano con analisi, pubblicità e funzionalità dei social media, in conformità con le rispettive politiche.",
+	"privacyPolicyLinkLabel": "Informativa sulla privacy",
+	"privacyPolicyLinkURL": "",
+	"cookiePolicyLinkLabel": "Politica sui cookie",
+	"cookiePolicyLinkURL": "",
+	"cookieGroups": [
+		{
+			"name": "Craft CMS",
+			"description": "Un sistema di gestione dei contenuti personalizzato realizzato per sviluppatori e autori",
+			"url": "https://craftcms.com/"
+		},
+		{
+			"name": "Cookie banner",
+			"description": "Questo banner gestisce le tue preferenze sui cookie ed è conforme alle ultime normative GDPR.",
+			"url": "https://craftcms.com/"
+		}
+	],
+	"necessaryCookiesTitle": "Cookie necessari",
+	"necessaryCookiesLabel": "Necessari",
+	"necessaryCookiesDefinition": "I cookie necessari aiutano a rendere utilizzabile un sito web abilitando funzioni di base come la navigazione della pagina e l'accesso alle aree protette del sito web. Il sito web non può funzionare correttamente senza questi cookie.",
+	"necessaryCookies": [
+		{
+			"name": "CRAFT_CSRF_TOKEN",
+			"group": "craft-cms",
+			"purpose": "Token di sicurezza utilizzato per prevenire attacchi di tipo cross-site request forgery (CSRF). Garantisce che gli invii di moduli e le richieste provengano da fonti affidabili.",
+			"expiration": "Sessione"
+		},
+		{
+			"name": "CraftSessionId",
+			"group": "craft-cms",
+			"purpose": "Identifica una sessione univoca tra il browser e il server. Necessario per le funzionalità di base del sito come accessi e invii di moduli.",
+			"expiration": "Sessione"
+		}
+	],
+	"preferenceCookiesTitle": "Cookie di preferenza",
+	"preferenceCookiesLabel": "Preferenza",
+	"preferenceCookiesDefinition": "I cookie di preferenza consentono a un sito web di ricordare informazioni che modificano il modo in cui il sito web si comporta o appare, come la lingua preferita o la regione in cui ti trovi.",
+	"preferenceCookies": [
+		{
+			"name": "cookie_consent",
+			"group": "cookie-banner",
+			"purpose": "Memorizza le preferenze sui cookie dell'utente (ad esempio categorie accettate o rifiutate) in modo che il banner non riappaia ad ogni visita.",
+			"expiration": "1 anno"
+		}
+	],
+	"analyticalCookiesTitle": "Cookie analitici",
+	"analyticalCookiesLabel": "Analitici",
+	"analyticalCookiesDefinition": "I cookie statistici aiutano i proprietari di siti web a capire come i visitatori interagiscono con i siti web raccogliendo e segnalando informazioni in modo anonimo.",
+	"analyticalCookies": [],
+	"marketingCookiesTitle": "Cookie di marketing",
+	"marketingCookiesLabel": "Marketing",
+	"marketingCookiesDefinition": "I cookie di marketing vengono utilizzati per tracciare i visitatori attraverso i siti web. L'intento è quello di visualizzare annunci pertinenti e coinvolgenti per il singolo utente e quindi più preziosi per editori e inserzionisti di terze parti.",
+	"marketingCookies": [],
+	"uncategorizedCookiesTitle": "Cookie non categorizzati",
+	"uncategorizedCookiesLabel": "Non categorizzati",
+	"uncategorizedCookiesDefinition": "I cookie non categorizzati sono cookie che stiamo classificando, insieme ai fornitori di singoli cookie.",
+	"uncategorizedCookies": [],
+	"acceptAllButtonLabel": "Accetta tutti",
+	"acceptSelectedButtonLabel": "Accetta selezionati",
+	"refuseAllButtonLabel": "Rifiuta tutti",
+	"determinePreferencesButtonLabel": "Determina preferenze",
+	"detailedPreferencesButtonLabel": "Preferenze dettagliate"
+}

@@ -65,7 +65,7 @@
                 label: 'Title',
                 id: 'title',
                 name: 'fields[title]',
-                value: banner.title,
+                value: banner.title ?? '',
                 placeholder: 'Title',
             }) }}
         </div>
@@ -77,7 +77,7 @@
                 label: 'Text',
                 id: 'text',
                 name: 'fields[text]',
-                value: banner.text,
+                value: banner.text ?? '',
                 placeholder: 'Text',
                 rows: 4,
             }) }}
@@ -91,7 +91,7 @@
             {{ forms.textField({
                 id: 'privacyPolicyLinkLabel',
                 name: 'fields[privacyPolicyLinkLabel]',
-                value: banner.privacyPolicyLinkLabel,
+                value: banner.privacyPolicyLinkLabel ?? '',
                 placeholder: 'Label',
             }) }}
         </div>
@@ -100,7 +100,7 @@
             {{ forms.textField({
                 id: 'privacyPolicyLinkURL',
                 name: 'fields[privacyPolicyLinkURL]',
-                value: banner.privacyPolicyLinkURL,
+                value: banner.privacyPolicyLinkURL ?? '',
                 placeholder: 'URL',
             }) }}
         </div>
@@ -111,7 +111,7 @@
             {{ forms.textField({
                 id: 'cookiePolicyLinkLabel',
                 name: 'fields[cookiePolicyLinkLabel]',
-                value: banner.cookiePolicyLinkLabel,
+                value: banner.cookiePolicyLinkLabel ?? '',
                 placeholder: 'Label',
             }) }}
         </div>
@@ -120,7 +120,7 @@
             {{ forms.textField({
                 id: 'cookiePolicyLinkURL',
                 name: 'fields[cookiePolicyLinkURL]',
-                value: banner.cookiePolicyLinkURL,
+                value: banner.cookiePolicyLinkURL ?? '',
                 placeholder: 'URL',
             }) }}
         </div>
@@ -133,7 +133,7 @@
             <p>If your use case requires grouping cookies even further by provider or other traits you can define them here. If you don't need this funcitonality just leave it blank.</p>
         </div>
 
-        <div class="field width-100">
+        <div class="field width-75">
             {{ forms.editableTableField({
                 label: 'Groups',
                 id: 'cookieGroups',
@@ -143,21 +143,21 @@
                     description: { heading: "Description", type: "multiline"},
                     url: { heading: "URL", type: "url"},
                 },
-                rows: banner.cookieGroups ?? "",
+                rows: banner.cookieGroups ?? [],
                 allowAdd: true,
                 allowDelete: true,
                 allowReorder: true,
             }) }}
         </div>
 
-        <h2>Essential cookies</h2>
+        <h2>Necessary cookies</h2>
 
         <div class="field width-50">
             {{ forms.textField({
                 label: 'Title',
-                id: 'essentialCookiesTitle',
-                name: 'fields[essentialCookiesTitle]',
-                value: banner.essentialCookiesTitle,
+                id: 'necessaryCookiesTitle',
+                name: 'fields[necessaryCookiesTitle]',
+                value: banner.necessaryCookiesTitle ?? '',
                 placeholder: 'Title',
             }) }}
         </div>
@@ -165,9 +165,9 @@
         <div class="field width-25">
             {{ forms.textField({
                 label: 'Label',
-                id: 'essentialCookiesLabel',
-                name: 'fields[essentialCookiesLabel]',
-                value: banner.essentialCookiesLabel,
+                id: 'necessaryCookiesLabel',
+                name: 'fields[necessaryCookiesLabel]',
+                value: banner.necessaryCookiesLabel ?? '',
                 placeholder: 'Label',
             }) }}
         </div>
@@ -175,40 +175,40 @@
         <div class="field width-75">
             {{ forms.textareaField({
                 label: 'Definition',
-                id: 'essentialCookiesDefinition',
-                name: 'fields[essentialCookiesDefinition]',
-                value: banner.essentialCookiesDefinition,
+                id: 'necessaryCookiesDefinition',
+                name: 'fields[necessaryCookiesDefinition]',
+                value: banner.necessaryCookiesDefinition ?? '',
                 placeholder: 'Definition',
                 rows: 4,
             }) }}
         </div>
 
-        <div class="width-100">
+        <div class="width-75">
             {{ forms.editableTableField({
                 label: 'List',
-                id: 'essentialCookies',
-                name: 'fields[essentialCookies]',
+                id: 'necessaryCookies',
+                name: 'fields[necessaryCookies]',
                 cols: {
                     name: { heading: "Name", type: "singleline" },
                     group: { heading: "Group", type: "select", options: cookieGroups },
                     purpose: { heading: "Purpose", type: "multiline" },
                     expiration: { heading: "Expiration", type: "singleline" },
                 },
-                rows: banner.essentialCookies,
+                rows: banner.necessaryCookies ?? [],
                 allowAdd: true,
                 allowDelete: true,
                 allowReorder: true,
             }) }}
         </div>
 
-        <h2>Functional cookies</h2>
+        <h2>Preference cookies</h2>
 
         <div class="field width-50">
             {{ forms.textField({
                 label: 'Title',
-                id: 'functionalCookiesTitle',
-                name: 'fields[functionalCookiesTitle]',
-                value: banner.functionalCookiesTitle,
+                id: 'preferenceCookiesTitle',
+                name: 'fields[preferenceCookiesTitle]',
+                value: banner.preferenceCookiesTitle ?? '',
                 placeholder: 'Title',
             }) }}
         </div>
@@ -216,9 +216,9 @@
         <div class="field width-25">
             {{ forms.textField({
                 label: 'Label',
-                id: 'functionalCookiesLabel',
-                name: 'fields[functionalCookiesLabel]',
-                value: banner.functionalCookiesLabel,
+                id: 'preferenceCookiesLabel',
+                name: 'fields[preferenceCookiesLabel]',
+                value: banner.preferenceCookiesLabel ?? '',
                 placeholder: 'Label',
             }) }}
         </div>
@@ -226,26 +226,26 @@
         <div class="field width-75">
             {{ forms.textareaField({
                 label: 'Definition',
-                id: 'functionalCookiesDefinition',
-                name: 'fields[functionalCookiesDefinition]',
-                value: banner.functionalCookiesDefinition,
+                id: 'preferenceCookiesDefinition',
+                name: 'fields[preferenceCookiesDefinition]',
+                value: banner.preferenceCookiesDefinition ?? '',
                 placeholder: 'Definition',
                 rows: 4,
             }) }}
         </div>
 
-        <div class="field width-100">
+        <div class="field width-75">
             {{ forms.editableTableField({
                 label: 'List',
-                id: 'functionalCookies',
-                name: 'fields[functionalCookies]',
+                id: 'preferenceCookies',
+                name: 'fields[preferenceCookies]',
                 cols: {
                     name: { heading: "Name", type: "singleline" },
                     group: { heading: "Group", type: "select", options: cookieGroups },
                     purpose: { heading: "Purpose", type: "multiline" },
                     expiration: { heading: "Expiration", type: "singleline" },
                 },
-                rows: banner.functionalCookies,
+                rows: banner.preferenceCookies ?? [],
                 allowAdd: true,
                 allowDelete: true,
                 allowReorder: true,
@@ -259,7 +259,7 @@
                 label: 'Title',
                 id: 'analyticalCookiesTitle',
                 name: 'fields[analyticalCookiesTitle]',
-                value: banner.analyticalCookiesTitle,
+                value: banner.analyticalCookiesTitle ?? '',
                 placeholder: 'Title',
             }) }}
         </div>
@@ -269,7 +269,7 @@
                 label: 'Label',
                 id: 'analyticalCookiesLabel',
                 name: 'fields[analyticalCookiesLabel]',
-                value: banner.analyticalCookiesLabel,
+                value: banner.analyticalCookiesLabel ?? '',
                 placeholder: 'Label',
             }) }}
         </div>
@@ -279,13 +279,13 @@
                 label: 'Definition',
                 id: 'analyticalCookiesDefinition',
                 name: 'fields[analyticalCookiesDefinition]',
-                value: banner.analyticalCookiesDefinition,
+                value: banner.analyticalCookiesDefinition ?? '',
                 placeholder: 'Definition',
                 rows: 4,
             }) }}
         </div>
 
-        <div class="field width-100">
+        <div class="field width-75">
             {{ forms.editableTableField({
                 label: 'List',
                 id: 'analyticalCookies',
@@ -296,21 +296,21 @@
                     purpose: { heading: "Purpose", type: "multiline" },
                     expiration: { heading: "Expiration", type: "singleline" },
                 },
-                rows: banner.analyticalCookies,
+                rows: banner.analyticalCookies ?? [],
                 allowAdd: true,
                 allowDelete: true,
                 allowReorder: true,
             }) }}
         </div>
 
-        <h2>Advertisement cookies</h2>
+        <h2>Marketing cookies</h2>
 
         <div class="field width-50">
             {{ forms.textField({
                 label: 'Title',
-                id: 'advertisementCookiesTitle',
-                name: 'fields[advertisementCookiesTitle]',
-                value: banner.advertisementCookiesTitle,
+                id: 'marketingCookiesTitle',
+                name: 'fields[marketingCookiesTitle]',
+                value: banner.marketingCookiesTitle ?? '',
                 placeholder: 'Title',
             }) }}
         </div>
@@ -318,9 +318,9 @@
         <div class="field width-25">
             {{ forms.textField({
                 label: 'Label',
-                id: 'advertisementCookiesLabel',
-                name: 'fields[advertisementCookiesLabel]',
-                value: banner.advertisementCookiesLabel,
+                id: 'marketingCookiesLabel',
+                name: 'fields[marketingCookiesLabel]',
+                value: banner.marketingCookiesLabel ?? '',
                 placeholder: 'Label',
             }) }}
         </div>
@@ -328,83 +328,32 @@
         <div class="field width-75">
             {{ forms.textareaField({
                 label: 'Definition',
-                id: 'advertisementCookiesDefinition',
-                name: 'fields[advertisementCookiesDefinition]',
-                value: banner.advertisementCookiesDefinition,
+                id: 'marketingCookiesDefinition',
+                name: 'fields[marketingCookiesDefinition]',
+                value: banner.marketingCookiesDefinition ?? '',
                 placeholder: 'Definition',
                 rows: 4,
-            }) }}
-        </div>
-
-        <div class="field width-100">
-            {{ forms.editableTableField({
-                label: 'List',
-                id: 'advertisement',
-                name: 'fields[advertisementCookies]',
-                cols: {
-                    name: { heading: "Name", type: "singleline" },
-                    group: { heading: "Group", type: "select", options: cookieGroups },
-                    purpose: { heading: "Purpose", type: "multiline" },
-                    expiration: { heading: "Expiration", type: "singleline" },
-                },
-                rows: banner.advertisementCookies,
-                allowAdd: true,
-                allowDelete: true,
-                allowReorder: true,
-            }) }}
-        </div>
-
-        <h2>Personalization cookies</h2>
-
-        <div class="field width-50">
-            {{ forms.textField({
-                label: 'Title',
-                id: 'personalizationCookiesTitle',
-                name: 'fields[personalizationCookiesTitle]',
-                value: banner.personalizationCookiesTitle,
-                placeholder: 'Title',
-            }) }}
-        </div>
-
-        <div class="field width-25">
-            {{ forms.textField({
-                label: 'Label',
-                id: 'personalizationCookiesLabel',
-                name: 'fields[personalizationCookiesLabel]',
-                value: banner.personalizationCookiesLabel,
-                placeholder: 'Label',
             }) }}
         </div>
 
         <div class="field width-75">
-            {{ forms.textareaField({
-                label: 'Definition',
-                id: 'socialMediaCookiesDefinition',
-                name: 'fields[personalizationCookiesDefinition]',
-                value: banner.personalizationCookiesDefinition,
-                placeholder: 'Definition',
-                rows: 4,
-            }) }}
-        </div>
-
-        <div class="field width-100">
             {{ forms.editableTableField({
                 label: 'List',
-                id: 'personalizationCookies',
-                name: 'fields[personalizationCookies]',
+                id: 'marketingCookies',
+                name: 'fields[marketingCookies]',
                 cols: {
                     name: { heading: "Name", type: "singleline" },
                     group: { heading: "Group", type: "select", options: cookieGroups },
                     purpose: { heading: "Purpose", type: "multiline" },
                     expiration: { heading: "Expiration", type: "singleline" },
                 },
-                rows: banner.personalizationCookies,
+                rows: banner.marketingCookies ?? [],
                 allowAdd: true,
                 allowDelete: true,
                 allowReorder: true,
             }) }}
         </div>
-        
+
         <h2>Uncategorized cookies</h2>
 
         <div class="field width-50">
@@ -412,7 +361,7 @@
                 label: 'Title',
                 id: 'uncategorizedCookiesTitle',
                 name: 'fields[uncategorizedCookiesTitle]',
-                value: banner.uncategorizedCookiesTitle,
+                value: banner.uncategorizedCookiesTitle ?? '',
                 placeholder: 'Title',
             }) }}
         </div>
@@ -422,7 +371,7 @@
                 label: 'Label',
                 id: 'uncategorizedCookiesLabel',
                 name: 'fields[uncategorizedCookiesLabel]',
-                value: banner.uncategorizedCookiesLabel,
+                value: banner.uncategorizedCookiesLabel ?? '',
                 placeholder: 'Label',
             }) }}
         </div>
@@ -432,13 +381,13 @@
                 label: 'Definition',
                 id: 'uncategorizedCookiesDefinition',
                 name: 'fields[uncategorizedCookiesDefinition]',
-                value: banner.uncategorizedCookiesDefinition,
+                value: banner.uncategorizedCookiesDefinition ?? '',
                 placeholder: 'Definition',
                 rows: 4,
             }) }}
         </div>
 
-        <div class="field width-100">
+        <div class="field width-75">
             {{ forms.editableTableField({
                 label: 'List',
                 id: 'uncategorizedCookies',
@@ -449,7 +398,7 @@
                     purpose: { heading: "Purpose", type: "multiline" },
                     expiration: { heading: "Expiration", type: "singleline" },
                 },
-                rows: banner.uncategorizedCookies,
+                rows: banner.uncategorizedCookies ?? [],
                 allowAdd: true,
                 allowDelete: true,
                 allowReorder: true,
@@ -463,7 +412,7 @@
                 label: 'Refuse all',
                 id: 'refuseAllLabel',
                 name: 'fields[refuseAllButtonLabel]',
-                value: banner.refuseAllButtonLabel,
+                value: banner.refuseAllButtonLabel ?? '',
                 placeholder: 'Label',
             }) }}
         </div>
@@ -473,7 +422,7 @@
                 label: 'Accept selected',
                 id: 'acceptSelectedLabel',
                 name: 'fields[acceptSelectedButtonLabel]',
-                value: banner.acceptSelectedButtonLabel,
+                value: banner.acceptSelectedButtonLabel ?? '',
                 placeholder: 'Label',
             }) }}
         </div>
@@ -483,7 +432,7 @@
                 label: 'Accept all',
                 id: 'acceptAllLabel',
                 name: 'fields[acceptAllButtonLabel]',
-                value: banner.acceptAllButtonLabel,
+                value: banner.acceptAllButtonLabel ?? '',
                 placeholder: 'Label',
             }) }}
         </div>
@@ -495,7 +444,7 @@
                 label: 'Determine preferences',
                 id: 'determinePreferencesLabel',
                 name: 'fields[determinePreferencesButtonLabel]',
-                value: banner.determinePreferencesButtonLabel,
+                value: banner.determinePreferencesButtonLabel ?? '',
                 placeholder: 'Label',
             }) }}
         </div>
@@ -505,15 +454,9 @@
                 label: 'Detailed preferences',
                 id: 'detailedPreferencesLabel',
                 name: 'fields[detailedPreferencesButtonLabel]',
-                value: banner.detailedPreferencesButtonLabel,
+                value: banner.detailedPreferencesButtonLabel ?? '',
                 placeholder: 'Label',
             }) }}
         </div>
-    </div>
-{% endblock %}
-
-{% block details %}
-    <div class="ccb-content-status">
-        <h2>Content status</h2>
     </div>
 {% endblock %}

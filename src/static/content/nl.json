@@ -1,0 +1,65 @@
+{
+	"title": "Deze website gebruikt cookies",
+	"text": "We gebruiken cookies om de basiswerking van de site te ondersteunen, te begrijpen hoe deze wordt gebruikt en bepaalde functies mogelijk te maken. Sommige informatie over het sitegebruik kan worden gedeeld met diensten van derden die helpen met analyse, advertenties en sociale mediafunctionaliteit, in overeenstemming met hun respectieve beleid.",
+	"privacyPolicyLinkLabel": "Privacybeleid",
+	"privacyPolicyLinkURL": "",
+	"cookiePolicyLinkLabel": "Cookiebeleid",
+	"cookiePolicyLinkURL": "",
+	"cookieGroups": [
+		{
+			"name": "Craft CMS",
+			"description": "Een op maat gemaakt contentmanagementsysteem gebouwd voor ontwikkelaars en auteurs",
+			"url": "https://craftcms.com/"
+		},
+		{
+			"name": "Cookie banner",
+			"description": "Deze banner beheert uw cookievoorkeuren en voldoet aan de nieuwste AVG-regelgeving.",
+			"url": "https://craftcms.com/"
+		}
+	],
+	"necessaryCookiesTitle": "Noodzakelijke cookies",
+	"necessaryCookiesLabel": "Noodzakelijk",
+	"necessaryCookiesDefinition": "Noodzakelijke cookies helpen een website bruikbaar te maken door basisfuncties zoals paginanavigatie en toegang tot beveiligde gebieden van de website mogelijk te maken. De website kan niet goed functioneren zonder deze cookies.",
+	"necessaryCookies": [
+		{
+			"name": "CRAFT_CSRF_TOKEN",
+			"group": "craft-cms",
+			"purpose": "Beveiligingstoken gebruikt om cross-site request forgery (CSRF) aanvallen te voorkomen. Zorgt ervoor dat formulierinzendingen en verzoeken afkomstig zijn van vertrouwde bronnen.",
+			"expiration": "Sessie"
+		},
+		{
+			"name": "CraftSessionId",
+			"group": "craft-cms",
+			"purpose": "Identificeert een unieke sessie tussen de browser en de server. Vereist voor basisfunctionaliteit van de site zoals inloggen en formulierinzendingen.",
+			"expiration": "Sessie"
+		}
+	],
+	"preferenceCookiesTitle": "Voorkeurscookies",
+	"preferenceCookiesLabel": "Voorkeur",
+	"preferenceCookiesDefinition": "Voorkeurscookies stellen een website in staat om informatie te onthouden die de manier waarop de website zich gedraagt of eruitziet verandert, zoals uw voorkeurstaal of de regio waarin u zich bevindt.",
+	"preferenceCookies": [
+		{
+			"name": "cookie_consent",
+			"group": "cookie-banner",
+			"purpose": "Slaat de cookievoorkeuren van de gebruiker op (bijvoorbeeld geaccepteerde of geweigerde categorieën) zodat de banner niet bij elk bezoek opnieuw verschijnt.",
+			"expiration": "1 jaar"
+		}
+	],
+	"analyticalCookiesTitle": "Analytische cookies",
+	"analyticalCookiesLabel": "Analytisch",
+	"analyticalCookiesDefinition": "Statistische cookies helpen website-eigenaren te begrijpen hoe bezoekers omgaan met websites door anoniem informatie te verzamelen en te rapporteren.",
+	"analyticalCookies": [],
+	"marketingCookiesTitle": "Marketingcookies",
+	"marketingCookiesLabel": "Marketing",
+	"marketingCookiesDefinition": "Marketingcookies worden gebruikt om bezoekers op websites te volgen. De bedoeling is om advertenties weer te geven die relevant en aantrekkelijk zijn voor de individuele gebruiker en daardoor waardevoller voor uitgevers en externe adverteerders.",
+	"marketingCookies": [],
+	"uncategorizedCookiesTitle": "Niet-gecategoriseerde cookies",
+	"uncategorizedCookiesLabel": "Niet-gecategoriseerd",
+	"uncategorizedCookiesDefinition": "Niet-gecategoriseerde cookies zijn cookies die we in het proces van classificeren zijn, samen met de aanbieders van individuele cookies.",
+	"uncategorizedCookies": [],
+	"acceptAllButtonLabel": "Alles accepteren",
+	"acceptSelectedButtonLabel": "Geselecteerde accepteren",
+	"refuseAllButtonLabel": "Alles weigeren",
+	"determinePreferencesButtonLabel": "Voorkeuren bepalen",
+	"detailedPreferencesButtonLabel": "Gedetailleerde voorkeuren"
+}

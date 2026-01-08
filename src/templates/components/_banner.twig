@@ -49,7 +49,7 @@
 
         <ul data-cookie-categories class="ccb-cookie-banner-categories-list">
             <li class="ccb-cookie-banner-categories-list-item">
-                <p class="ccb-typo-h3">{{ banner.essentialCookiesLabel }}</p>
+                <p class="ccb-typo-h3">{{ banner.necessaryCookiesLabel }}</p>
 
                 <label class="ccb-lightswitch">
                     <input type="checkbox" data-model="essentialCookies" disabled checked>
@@ -57,7 +57,7 @@
             </li>
 
             <li class="ccb-cookie-banner-categories-list-item">
-                <p class="ccb-typo-h3">{{ banner.functionalCookiesLabel }}</p>
+                <p class="ccb-typo-h3">{{ banner.preferenceCookiesLabel }}</p>
 
                 <label class="ccb-lightswitch">
                     <input type="checkbox" data-model="functionalCookies">
@@ -73,7 +73,7 @@
             </li>
 
             <li class="ccb-cookie-banner-categories-list-item">
-                <p class="ccb-typo-h3">{{ banner.advertisementCookiesLabel }}</p>
+                <p class="ccb-typo-h3">{{ banner.marketingCookiesLabel }}</p>
 
                 <label class="ccb-lightswitch">
                     <input type="checkbox" data-model="advertisementCookies">
@@ -81,7 +81,7 @@
             </li>
 
             <li class="ccb-cookie-banner-categories-list-item">
-                <p class="ccb-typo-h3">{{ banner.personalizationCookiesLabel }}</p>
+                <p class="ccb-typo-h3">{{ banner.uncategorizedCookiesLabel }}</p>
 
                 <label class="ccb-lightswitch">
                     <input type="checkbox" data-model="personalizationCookies">
@@ -91,9 +91,9 @@
 
         <div data-detailed-settings class="ccb-cookie-banner-details">
             {% embed "cookie-banner/components/_cookiesCategory" with { 
-                title: banner.essentialCookiesTitle,
-                description: banner.essentialCookiesDefinition,
-                cookies: banner.essentialCookies
+                title: banner.necessaryCookiesTitle,
+                description: banner.necessaryCookiesDefinition,
+                cookies: banner.necessaryCookies
             } %}
                 {% block lightswitch %}
                     <label class="ccb-lightswitch">
@@ -109,9 +109,9 @@
             {% endembed %}
 
             {% embed "cookie-banner/components/_cookiesCategory" with { 
-                title: banner.functionalCookiesTitle,
-                description: banner.functionalCookiesDefinition,
-                cookies: banner.functionalCookies
+                title: banner.preferenceCookiesTitle,
+                description: banner.preferenceCookiesDefinition,
+                cookies: banner.preferenceCookies
             } %}
                 {% block lightswitch %}
                     <label class="ccb-lightswitch">
@@ -141,9 +141,9 @@
             {% endembed %}
 
             {% embed "cookie-banner/components/_cookiesCategory" with { 
-                title: banner.advertisementCookiesTitle,
-                description: banner.advertisementCookiesDefinition,
-                cookies: banner.advertisementCookies
+                title: banner.marketingCookiesTitle,
+                description: banner.marketingCookiesDefinition,
+                cookies: banner.marketingCookies
             } %}
                 {% block lightswitch %}
                     <label class="ccb-lightswitch">
@@ -157,9 +157,9 @@
             {% endembed %}
 
             {% embed "cookie-banner/components/_cookiesCategory" with { 
-                title: banner.personalizationCookiesTitle,
-                description: banner.personalizationCookiesDefinition,
-                cookies: banner.personalizationCookies
+                title: banner.uncategorizedCookiesTitle,
+                description: banner.uncategorizedCookiesDefinition,
+                cookies: banner.uncategorizedCookies
             } %}
                 {% block lightswitch %}
                     <label class="ccb-lightswitch">

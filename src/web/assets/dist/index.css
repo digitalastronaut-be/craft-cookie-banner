@@ -370,7 +370,7 @@
   gap: 1em;
 }
 .ccb-cookies-category-content-inner > p {
-  max-width: 28.125em;
+  padding-right: 5em;
   color: var(--ccb-text-color);
 }
 .ccb-cookies-category-groups-list {
@@ -539,6 +539,13 @@
 }
 .ccb-compliancy-checklist table th:last-child {
   background-color: var(--gray-050);
+}
+
+.ccb-compliancy-checklist .btngroup .menu {
+  display: flex;
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 
 .ccb-detected-cookies-legend {

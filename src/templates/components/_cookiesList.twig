@@ -1,35 +1,36 @@
 {% set cookieGroups = [
     {
-        'cookies': banner.essentialCookies,
-        'label': banner.essentialCookiesLabel,
-        'title': banner.essentialCookiesTitle,
-        'definition': banner.essentialCookiesDefinition
+        title: banner.necessaryCookiesTitle,
+        label: banner.necessaryCookiesLabel,
+        definition: banner.necessaryCookiesDefinition,
+        cookies: banner.necessaryCookies
     },
     {
-        'cookies': banner.functionalCookies,
-        'label': banner.functionalCookiesLabel,
-        'title': banner.functionalCookiesTitle,
-        'definition': banner.functionalCookiesDefinition
+        title: banner.preferenceCookiesTitle,
+        label: banner.preferenceCookiesLabel,
+        definition: banner.preferenceCookiesDefinition,
+        cookies: banner.preferenceCookies
     },
     {
-        'cookies': banner.analyticalCookies,
-        'label': banner.analyticalCookiesLabel,
-        'title': banner.analyticalCookiesTitle,
-        'definition': banner.analyticalCookiesDefinition
+        title: banner.analyticalCookiesTitle,
+        label: banner.analyticalCookiesLabel,
+        definition: banner.analyticalCookiesDefinition,
+        cookies: banner.analyticalCookies
     },
     {
-        'cookies': banner.advertisementCookies,
-        'label': banner.advertisementCookiesLabel,
-        'title': banner.advertisementCookiesTitle,
-        'definition': banner.advertisementCookiesDefinition
+        title: banner.marketingCookiesTitle,
+        label: banner.marketingCookiesLabel,
+        definition: banner.marketingCookiesDefinition,
+        cookies: banner.marketingCookies
     },
     {
-        'cookies': banner.personalizationCookies,
-        'label': banner.personalizationCookiesLabel,
-        'title': banner.personalizationCookiesTitle,
-        'definition': banner.personalizationCookiesDefinition
+        title: banner.uncategorizedCookiesTitle,
+        label: banner.uncategorizedCookiesLabel,
+        definition: banner.uncategorizedCookiesDefinition,
+        cookies: banner.uncategorizedCookies
     }
 ] %}
+
 
 {% if settings.cookieListStyle == "grouped" %}
     {# Grouped style: One table with cookie type column #}

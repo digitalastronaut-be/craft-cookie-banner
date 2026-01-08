@@ -76,11 +76,10 @@ class CookieDetectionService extends Component {
 
     public function getBannerCookies($content) {
         return array_merge(
-            is_array($content["essentialCookies"]) ? $content["essentialCookies"] : [],
-            is_array($content["functionalCookies"]) ? $content["functionalCookies"] : [],
+            is_array($content["necessaryCookies"]) ? $content["necessaryCookies"] : [],
+            is_array($content["preferenceCookies"]) ? $content["preferenceCookies"] : [],
             is_array($content["analyticalCookies"]) ? $content["analyticalCookies"] : [],
-            is_array($content["advertisementCookies"]) ? $content["advertisementCookies"] : [],
-            is_array($content["personalizationCookies"]) ? $content["personalizationCookies"] : [],
+            is_array($content["marketingCookies"]) ? $content["marketingCookies"] : [],
             is_array($content["uncategorizedCookies"]) ? $content["uncategorizedCookies"] : []
         );
     }

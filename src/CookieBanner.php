@@ -194,8 +194,13 @@ class CookieBanner extends Plugin {
                 if ($event->isNew) {
                     $content = new Content();
 
+                    $languageCode = strtolower(explode('-', $event->site->language)[0]);
+
+                    $baseContent = file_get_contents(CookieBanner::getInstance()->getBasePath() . "/static/content/{$languageCode}.json");
+                    if (!$baseContent) $baseContent = file_get_contents(CookieBanner::getInstance()->getBasePath() . "/static/content/en.json");
+
                     $content->siteId = $event->site->id;
-                    $content->attributes = CookieBannerHelper::BASE_CONTENT;
+                    $content->attributes = json_decode($baseContent, true);
                     $content->save(false); 
                 }
             }

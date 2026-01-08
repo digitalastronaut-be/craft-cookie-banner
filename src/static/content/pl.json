@@ -1,0 +1,65 @@
+{
+	"title": "Ta strona korzysta z plików cookie",
+	"text": "Używamy plików cookie w celu zapewnienia podstawowego działania strony, zrozumienia sposobu jej użytkowania oraz umożliwienia określonych funkcji. Niektóre informacje o korzystaniu ze strony mogą być udostępniane usługom stron trzecich, które wspierają analitykę, reklamy oraz funkcje mediów społecznościowych, zgodnie z ich odpowiednimi politykami.",
+	"privacyPolicyLinkLabel": "Polityka prywatności",
+	"privacyPolicyLinkURL": "",
+	"cookiePolicyLinkLabel": "Polityka plików cookie",
+	"cookiePolicyLinkURL": "",
+	"cookieGroups": [
+		{
+			"name": "Craft CMS",
+			"description": "System zarządzania treścią tworzony na miarę, zaprojektowany dla programistów i autorów",
+			"url": "https://craftcms.com/"
+		},
+		{
+			"name": "Cookie banner",
+			"description": "Ten baner zarządza preferencjami dotyczącymi plików cookie i jest zgodny z najnowszymi przepisami RODO.",
+			"url": "https://craftcms.com/"
+		}
+	],
+	"necessaryCookiesTitle": "Niezbędne pliki cookie",
+	"necessaryCookiesLabel": "Niezbędne",
+	"necessaryCookiesDefinition": "Niezbędne pliki cookie pomagają zapewnić prawidłowe działanie strony internetowej, umożliwiając podstawowe funkcje, takie jak nawigacja po stronach oraz dostęp do zabezpieczonych obszarów witryny. Bez tych plików cookie strona nie może działać poprawnie.",
+	"necessaryCookies": [
+		{
+			"name": "CRAFT_CSRF_TOKEN",
+			"group": "craft-cms",
+			"purpose": "Token zabezpieczający używany do zapobiegania atakom typu cross-site request forgery (CSRF). Zapewnia, że wysyłane formularze i żądania pochodzą z zaufanych źródeł.",
+			"expiration": "Sesja"
+		},
+		{
+			"name": "CraftSessionId",
+			"group": "craft-cms",
+			"purpose": "Identyfikuje unikalną sesję pomiędzy przeglądarką a serwerem. Wymagany do podstawowych funkcji strony, takich jak logowanie i wysyłanie formularzy.",
+			"expiration": "Sesja"
+		}
+	],
+	"preferenceCookiesTitle": "Pliki cookie preferencji",
+	"preferenceCookiesLabel": "Preferencje",
+	"preferenceCookiesDefinition": "Pliki cookie preferencji umożliwiają stronie zapamiętywanie informacji, które wpływają na jej zachowanie lub wygląd, takich jak preferowany język lub region użytkownika.",
+	"preferenceCookies": [
+		{
+			"name": "cookie_consent",
+			"group": "cookie-banner",
+			"purpose": "Przechowuje preferencje użytkownika dotyczące plików cookie (np. zaakceptowane lub odrzucone kategorie), aby baner nie był wyświetlany przy każdej wizycie.",
+			"expiration": "1 rok"
+		}
+	],
+	"analyticalCookiesTitle": "Analityczne pliki cookie",
+	"analyticalCookiesLabel": "Analityczne",
+	"analyticalCookiesDefinition": "Pliki cookie statystyczne pomagają właścicielom stron internetowych zrozumieć, w jaki sposób odwiedzający korzystają z witryn, poprzez anonimowe zbieranie i raportowanie informacji.",
+	"analyticalCookies": [],
+	"marketingCookiesTitle": "Marketingowe pliki cookie",
+	"marketingCookiesLabel": "Marketingowe",
+	"marketingCookiesDefinition": "Marketingowe pliki cookie są używane do śledzenia użytkowników na stronach internetowych. Ich celem jest wyświetlanie reklam, które są istotne i atrakcyjne dla poszczególnych użytkowników, a tym samym bardziej wartościowe dla wydawców i zewnętrznych reklamodawców.",
+	"marketingCookies": [],
+	"uncategorizedCookiesTitle": "Niesklasyfikowane pliki cookie",
+	"uncategorizedCookiesLabel": "Niesklasyfikowane",
+	"uncategorizedCookiesDefinition": "Niesklasyfikowane pliki cookie to pliki, które są obecnie w trakcie klasyfikacji we współpracy z dostawcami poszczególnych plików cookie.",
+	"uncategorizedCookies": [],
+	"acceptAllButtonLabel": "Akceptuj wszystkie",
+	"acceptSelectedButtonLabel": "Akceptuj wybrane",
+	"refuseAllButtonLabel": "Odrzuć wszystkie",
+	"determinePreferencesButtonLabel": "Ustal preferencje",
+	"detailedPreferencesButtonLabel": "Szczegółowe preferencje"
+}

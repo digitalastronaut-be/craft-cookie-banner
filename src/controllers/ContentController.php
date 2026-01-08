@@ -31,7 +31,6 @@ class ContentController extends Controller {
 
         if (!$content->save()) {
             Craft::$app->getSession()->setError(Craft::t('cookie-banner', 'Could not save content.'));
-            dd($content->getErrors());
         }
 
         Craft::$app->getSession()->setNotice(Craft::t('cookie-banner', 'Content saved successfully.'));
@@ -62,9 +61,6 @@ class ContentController extends Controller {
         $cookieBannerContentAllLanguages = Content::find()->all();
 
         foreach ($cookieBannerContentAllLanguages as $content) {
-            $site = Craft::$app->getSites()->getSiteById($content->siteId);
-            $siteHandle = $site->handle;
-
             $existingCookies = CookieBanner::getInstance()->getCookieDetection()->getBannerCookies($content);
 
             $alreadyExists = false;
@@ -81,7 +77,7 @@ class ContentController extends Controller {
                 return null; 
             } else {
                 if ($cookieData['category']) {
-                    $cookiesForCategory = $content['uncategorizedCookies'] ?? [];
+                    $cookiesForCategory = $content[$cookieData['category'] . 'Cookies'] ?? [];
 
                     $cookiesForCategory[] = [
                         "name" => $cookieData['name'],
@@ -90,13 +86,11 @@ class ContentController extends Controller {
                         "expiration" => $cookieData['retention'],
                     ];
 
-                    $content->setAttribute('uncategorizedCookies', $cookiesForCategory);
-                    dd($content);
-                    $content->save();   
+                    $content->setAttribute($cookieData['category'] . 'Cookies', $cookiesForCategory);
+                    $content->save();
                 }
 
-
-                Craft::$app->getSession()->setNotice("Cookie '{$cookieData['name']}' added to {$siteHandle} successfully.");
+                Craft::$app->getSession()->setNotice("Cookie '{$cookieData['name']}' added successfully.");
             }
         }
 
