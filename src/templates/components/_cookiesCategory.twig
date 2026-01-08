@@ -13,9 +13,9 @@
     'cookies': cookies|filter(cookie => cookie.group == (group.name|lower|replace({' ': '-'})))
 }) %}
 
-<pre>
+{# <pre>
     {{ dump(groupedCookies) }}
-</pre>
+</pre> #}
 
 {# ======================= #}
 {# TEMPLATE                #}

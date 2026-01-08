@@ -7,7 +7,6 @@
 .ccb-cookie-banner {
 	padding: 1.5em;
 	overflow-y: scroll;
-	max-height: 70vh;
 
 	position: fixed;
 	z-index: 99999;
@@ -21,38 +20,36 @@
 	transform: translateY(50%);
 	transition: all 0.5s cubic-bezier(0.3, 0.7, 0.4, 1);
 
+	@include styles-below(tablet) {
+		position: fixed;
+		inset: 1.5em;
+	}
+
 	@include styles-above(tablet) {
 		max-width: 40.625em;
 		width: 100%;
-	}
 
-	@include styles-below(tablet) {
-		position: fixed;
-		bottom: 0.75em;
-		left: 0.75em;
-		right: 0.75rem;
+		&.bottom-left {
+			bottom: 0.75em;
+			left: 0.75em;
+		}
+
+		&.centered {
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+		}
+
+		&.bottom-right {
+			right: 0.75em;
+			bottom: 0.75em;
+		}
 	}
 
 	&.visible {
 		opacity: 1;
 		pointer-events: all;
 		transform: translateY(0);
-	}
-
-	&.bottom-left {
-		bottom: 0.75em;
-		left: 0.75em;
-	}
-
-	&.centered {
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-	}
-
-	&.bottom-right {
-		right: 0.75em;
-		bottom: 0.75em;
 	}
 
 	*,
