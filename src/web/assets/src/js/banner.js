@@ -27,10 +27,20 @@ class CookieBanner extends HTMLElement {
 	}
 
 	connectedCallback() {
+		if (!window.dataLayer) {
+			console.warn(
+				"%cCraft CMS plugin warning - Cookie banner\n%cThe dataLayer is not initialized.\nPlease load Google tag manager script first.",
+				"font-weight: bold;",
+				"font-weight: normal;",
+			);
+
+			return;
+		}
+
 		this.registerElements();
 		this.registerEventListeners();
 
-		const existingCookieConsent = JSON.parse(getCookie("cookie_consent"));
+		const existingCookieConsent = JSON.parse(getCookie("craft-cookie-banner"));
 
 		if (existingCookieConsent) this.consent = existingCookieConsent;
 		if (!existingCookieConsent) this.showBanner();
@@ -41,14 +51,15 @@ class CookieBanner extends HTMLElement {
 		if (existingCookieConsent) {
 			const googleConsentV2Object = buildGoogleConsentV2Object(this.consent);
 			gtag("consent", "update", googleConsentV2Object);
+			gtag("event", "cookie-banner", this.consent);
 		}
 
 		document.dispatchEvent(
-			new CustomEvent("consent-onload", {
+			new CustomEvent("cookie-banner:consent-onload", {
 				bubbles: true,
 				composed: true,
 				detail: { consent: this.consent },
-			})
+			}),
 		);
 	}
 
@@ -64,10 +75,11 @@ class CookieBanner extends HTMLElement {
 		this.hideBanner();
 		this.updateConsentCheckboxes();
 
-		document.cookie = `cookie_consent=${JSON.stringify(this.consent)}; path=/; max-age=31536000; SameSite=Lax`;
+		document.cookie = `craft-cookie-banner=${JSON.stringify(this.consent)}; path=/; max-age=31536000; SameSite=Lax`;
 
 		const googleConsentV2Object = buildGoogleConsentV2Object(this.consent);
 		gtag("consent", "update", googleConsentV2Object);
+		gtag("event", "cookie-banner", this.consent);
 
 		this.dispatchConsentUpdate();
 		this.logConsent("Accept all");
@@ -76,10 +88,11 @@ class CookieBanner extends HTMLElement {
 	acceptSelected() {
 		this.hideBanner();
 
-		document.cookie = `cookie_consent=${JSON.stringify(this.consent)}; path=/; max-age=31536000; SameSite=Lax`;
+		document.cookie = `craft-cookie-banner=${JSON.stringify(this.consent)}; path=/; max-age=31536000; SameSite=Lax`;
 
 		const googleConsentV2Object = buildGoogleConsentV2Object(this.consent);
 		gtag("consent", "update", googleConsentV2Object);
+		gtag("event", "cookie-banner", this.consent);
 
 		this.dispatchConsentUpdate();
 		this.logConsent("Accept selected");
@@ -97,10 +110,11 @@ class CookieBanner extends HTMLElement {
 		this.hideBanner();
 		this.updateConsentCheckboxes();
 
-		document.cookie = `cookie_consent=${JSON.stringify(this.consent)}; path=/; max-age=31536000; SameSite=Lax`;
+		document.cookie = `craft-cookie-banner=${JSON.stringify(this.consent)}; path=/; max-age=31536000; SameSite=Lax`;
 
 		const googleConsentV2Object = buildGoogleConsentV2Object(this.consent);
 		gtag("consent", "update", googleConsentV2Object);
+		gtag("event", "cookie-banner", this.consent);
 
 		this.dispatchConsentUpdate();
 		this.logConsent("Refuse all");
@@ -125,11 +139,11 @@ class CookieBanner extends HTMLElement {
 
 	dispatchConsentUpdate() {
 		document.dispatchEvent(
-			new CustomEvent("consent-update", {
+			new CustomEvent("cookie-banner:consent-update", {
 				bubbles: true,
 				composed: true,
 				detail: { consent: this.consent },
-			})
+			}),
 		);
 	}
 

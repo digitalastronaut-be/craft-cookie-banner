@@ -7763,6 +7763,13 @@
 		"category": "uncategorized"
 	},
 	{
+		"name": "craft-cookie-banner",
+		"description": "Memorizza le preferenze sui cookie dell'utente (ad esempio categorie accettate o rifiutate) in modo che il banner non riappaia ad ogni visita.",
+		"vendor": "CraftCMS",
+		"retention": "1 anno",
+		"category": "preference"
+	},
+	{
 		"name": "cookie-consent-io",
 		"description": "Registra le preferenze sui cookie di un utente",
 		"vendor": "CookieConsent.io",

@@ -20,51 +20,80 @@
 {# ======================= #}
 {% block content %}
     {{ actionInput('plugins/save-plugin-settings') }}
-    {{ hiddenInput('pluginHandle', 'author-toolbar') }}
+    {{ hiddenInput('pluginHandle', 'cookie-banner') }}
     {{ hiddenInput('siteId', ) }}
-{% endblock %}
 
-{% block details %}
-    <h3>{{ "Cookie banner"|t }}</h3>
+    <div class="flex-fields">
+        <h2>General</h2>
 
-    <div class="meta">
-        {{ forms.lightswitchField({
-            label: 'Status'|t,
-            id: 'cookieBannerEnabled',
-            offLabel: 'Disabled',
-            onLabel: 'Enabled',
-            name: 'settings[cookieBannerEnabled]',
-            on: settings.cookieBannerEnabled,
-        }) }}
-    </div>
+        <div class="field width-25">
+            {{ forms.lightswitchField({
+                label: 'Cookie banner'|t,
+                instructions: 'Show the banner on the frontend'|t,
+                id: 'cookieBannerEnabled',
+                offLabel: 'Disabled',
+                onLabel: 'Enabled',
+                name: 'settings[cookieBannerEnabled]',
+                on: settings.cookieBannerEnabled,
+            }) }}
+        </div>
 
-    <h3>{{ "Versions"|t }}</h3>
+        <div class="field width-50">
+            {{ forms.buttonGroupField({
+                label: 'Consent records retention'|t,
+                instructions: 'This determines how long consent records are kept before being hard deleted'|t,
+                warning: 'If you set this to a lower value than the current value you risk losing consent records',
+                id: 'consentRecordRetention',
+                name: 'settings[consentRecordRetention]',
+                value: settings.consentRecordRetention,
+                options: [
+                    { label: '1 Week', value: 'oneWeek' },
+                    { label: '1 Month', value: 'oneMonth' },
+                    { label: '6 Months', value: 'sixMonths' },
+                    { label: '1 Year', value: 'oneYear' },
+                    { label: '5 Years', value: 'fiveYears' }
+                ]
+            }) }}
+        </div>
 
-    <p>Update these version numbers everytime you update a policy or change the cookie banner in any way.</p>
+        <hr>
 
-    <div class="meta">
-        {{ forms.textField({
-            label: 'Cookie banner',
-            id: 'cookieBannerVersion',
-            name: 'settings[cookieBannerVersion]',
-            value: settings.cookieBannerVersion,
-            placeholder: 'Version',
-        }) }}
+        <div class="width-50">
+            <h2>{{ "Versioning"|t }}</h2>
 
-        {{ forms.textField({
-            label: 'Privacy policy',
-            id: 'privacyPolicyVersion',
-            name: 'settings[privacyPolicyVersion]',
-            value: settings.privacyPolicyVersion,
-            placeholder: 'Version',
-        }) }}
+            <p>{{ "Versions get saved to consent records so you can see what version of banner an legal pages where active at the time of consent"|t }}</p>
+        </div>
 
-        {{ forms.textField({
-            label: 'Cookie policy' ,
-            id: 'cookiePolicyVersion',
-            name: 'settings[cookiePolicyVersion]',
-            value: settings.cookiePolicyVersion,
-            placeholder: 'Version',
-        }) }}
+        <div class="line-break"></div>
+
+        <div class="field width-25">
+            {{ forms.textField({
+                label: 'Cookie banner',
+                id: 'cookieBannerVersion',
+                name: 'settings[cookieBannerVersion]',
+                value: settings.cookieBannerVersion,
+                placeholder: 'Version',
+            }) }}
+        </div>
+
+        <div class="field width-25">
+            {{ forms.textField({
+                label: 'Privacy policy',
+                id: 'privacyPolicyVersion',
+                name: 'settings[privacyPolicyVersion]',
+                value: settings.privacyPolicyVersion,
+                placeholder: 'Version',
+            }) }}
+        </div>
+
+        <div class="field width-25">
+            {{ forms.textField({
+                label: 'Cookie policy' ,
+                id: 'cookiePolicyVersion',
+                name: 'settings[cookiePolicyVersion]',
+                value: settings.cookiePolicyVersion,
+                placeholder: 'Version',
+            }) }}
+        </div>
     </div>
 {% endblock %}

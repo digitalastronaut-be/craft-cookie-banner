@@ -7,6 +7,8 @@ use Twig\Extension\AbstractExtension;
 use Twig\Extension\GlobalsInterface;
 use Twig\TwigFunction;
 
+use Carbon\Carbon;
+
 use digitalastronaut\craftcookiebanner\CookieBanner;
 use digitalastronaut\craftcookiebanner\records\Content;
 
@@ -40,13 +42,15 @@ class CookieBannerTwigExtension extends AbstractExtension {
         $cookieBannerContentAllLanguages = Content::find()->all();
 
         $result = [];
+
         
         foreach ($cookieBannerContentAllLanguages as $content) {
             $site = Craft::$app->getSites()->getSiteById($content->siteId);
-            $siteKey = $site->handle . " (" . $site->language . ")";
+            $siteKey = $site->name . " (" . $site->language . ")";
+
             
             $allCookies = CookieBanner::getInstance()->getCookieDetection()->getBannerCookies($content);
-
+            
             $matchedCookie = null;
             foreach ($allCookies as $cookie) {
                 if (isset($cookie['name']) && $this->cookieNameMatches($cookieName, $cookie['name'])) {

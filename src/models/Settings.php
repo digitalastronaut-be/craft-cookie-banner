@@ -5,6 +5,8 @@ namespace digitalastronaut\craftcookiebanner\models;
 use Craft;
 use craft\base\Model;
 
+use Carbon\Carbon;
+
 /**
  * Cookie banner settings
  */
@@ -13,6 +15,7 @@ class Settings extends Model {
     public string $cookieBannerVersion = 'v1.0.0';
     public string $privacyPolicyVersion = 'v1.4.7';
     public string $cookiePolicyVersion = 'v1.3.1';
+    public string $consentRecordRetention = 'sixMonths';
 
     public string $cookieBannerPosition = 'bottom-left';
     public string $preferencesAction = 'button';

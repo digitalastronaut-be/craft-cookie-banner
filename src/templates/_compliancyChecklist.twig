@@ -7,7 +7,7 @@
 
 {% set crumbs = [
     { label: 'Cookie banner'|t, url: url('cookie-banner') },
-    { label: 'Compliance checklist'|t, url: url('cookie-banner/compliance-checklist') },
+    { label: 'Compliancy checklist'|t, url: url('cookie-banner/compliance-checklist') },
 ] %}
 
 {% block content %}
@@ -27,11 +27,11 @@
         <detected-cookies-table class="ccb-detected-cookies-table">
             <table class="data">
                 <thead>
+                    <th>{{ "Actions"|t }}</th>
+                    <th>{{ "Automated"|t }}</th>
                     <th>{{ "Cookie name"|t }}</th>
                     <th>{{ "Current value"|t }}</th>
-                    <th>{{ "Added to cookie banner content"|t }}</th>
-                    <th>{{ "Automated"|t }}</th>
-                    <th>{{ "Action"|t }}</th>
+                    <th>{{ "Cookie definition status"|t }}</th>
                 </thead>
 
                 <tbody>
@@ -41,6 +41,59 @@
                             data-cookie-name="{{ cookie.name }}"
                             class="{{ cookie.isControlPanelCookie ? "disabled" : "" }}"
                         >
+                            <td>
+                                <div class="ccb-compliancy-checklist-item-actions">
+                                    <div class="ccb-actions-menu">
+                                        <button class="btn btn-submit">
+                                            {{ "Actions"|t }}
+
+                                            {{ svg("@digitalastronaut/craftcookiebanner/web/icons/chevron-down.svg") }}
+                                        </button>
+
+                                        <div class="ccb-actions-menu-content visible">
+                                            <ul>
+                                                {% if cookie.isAutomated %}
+                                                    <li class="ccb-actions-menu-option">
+                                                        <form method="post">
+                                                            {{ csrfInput() }}
+                                                            {{ actionInput("cookie-banner/content/add-cookie") }}
+                                                            {{ hiddenInput('cookieName', cookie.name) }}
+
+                                                            <button>Automatically add to sites missing this cookie</button>
+                                                        </form>
+                                                    </li>
+                                                {% endif %}
+
+                                                <li class="ccb-actions-menu-option">
+                                                    <a 
+                                                        title="Manually edit this cookie for all sites"
+                                                        href="{{ cpUrl('cookie-banner/compliancy-checklist/edit/' ~ cookie.name )}}"
+                                                    >
+                                                        Manually edit this cookie for all sites
+                                                    </a>
+                                                </li>
+                                                
+                                                <li class="ccb-actions-menu-option danger">
+                                                    <form method="post">
+                                                        {{ csrfInput() }}
+                                                        {{ actionInput("cookie-banner/content/delete-cookie-for-all-sites") }}
+                                                        {{ hiddenInput('cookieName', cookie.name) }}
+
+                                                        <button>Remove this cookie for all sites</button>
+                                                    </form>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td class="centered">
+                                {% if cookie.isAutomated %}
+                                    <span class="checkbox-icon" title="Enabled" role="img" aria-label="Enabled"></span>
+                                {% endif %}
+                            </td>
+
                             <td class="ccb-semi-bold">{{ cookie.name|truncate(30) }}</td>
 
                             <td>{{ cookie.currentValue|truncate(20) }}</td>
@@ -58,24 +111,6 @@
                                     <div class="status-chip">Used by the control panel internally</div>
                                 </td>
                             {% endif %}
-
-                            <td class="centered">
-                                {% if cookie.isAutomated %}
-                                    <span class="checkbox-icon" title="Enabled" role="img" aria-label="Enabled"></span>
-                                {% endif %}
-                            </td>
-
-                            <td>
-                                <form method="post">
-                                    {{ csrfInput() }}
-                                    {{ actionInput("cookie-banner/content/add-cookie") }}
-                                    {{ hiddenInput('cookieName', cookie.name) }}
-
-                                    <button class="btn btn-submit">
-                                        Add to missing sites
-                                    </button>
-                                </form>
-                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>

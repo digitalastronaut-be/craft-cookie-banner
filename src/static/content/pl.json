@@ -39,8 +39,8 @@
 	"preferenceCookiesDefinition": "Pliki cookie preferencji umożliwiają stronie zapamiętywanie informacji, które wpływają na jej zachowanie lub wygląd, takich jak preferowany język lub region użytkownika.",
 	"preferenceCookies": [
 		{
-			"name": "cookie_consent",
-			"group": "cookie-banner",
+			"name": "craft-cookie-banner",
+			"group": "craft-cms",
 			"purpose": "Przechowuje preferencje użytkownika dotyczące plików cookie (np. zaakceptowane lub odrzucone kategorie), aby baner nie był wyświetlany przy każdej wizycie.",
 			"expiration": "1 rok"
 		}

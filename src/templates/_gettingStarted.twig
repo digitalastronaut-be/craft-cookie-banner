@@ -1,0 +1,192 @@
+{% extends "_layouts/cp.twig" %}
+
+{% import '_includes/forms.twig' as forms %}
+
+{% set title = "Getting started" %}
+{% set selectedSubnavItem = 'gettingStarted' %}
+
+{% set crumbs = [
+    { label: 'Cookie banner'|t, url: url('cookie-banner') },
+    { label: 'Getting started'|t, url: url('cookie-banner/getting-started') },
+] %}
+
+{% block content %}
+    <div class="ccb-getting-started">
+        <div class="ccb-getting-started-main">
+            <div class="ccb-getting-started-welcome">
+                {{ svg("@digitalastronaut/craftcookiebanner/web/icons/plugin-icon.svg") }}
+
+                <h2>{{ "Thanks for installing this cookie banner plugin!"|t }}</h2>
+
+                <p>{{ "Being compliant is unfortunatly way more work than installing a banner for your website. Luckily with this plugin you are halfway there already. Follow this getting started guide to make your site compliant in no time!"|t }}</p>
+
+                <div>
+                    <a href="#" class="btn">{{ "Visit the documentation"|t }}</a>
+                    <a href="#" class="btn">{{ "Skip this guide"|t }}</a>
+                </div>
+            </div>
+
+            <ul class="ccb-getting-started-checklist">
+                <li class="ccb-getting-started-checklist-item">
+                    <article class="ccb-getting-started-goal">
+                        <div class="ccb-getting-started-goal-main">
+                            <div class="ccb-getting-started-goal-title">
+                                {{ svg("@digitalastronaut/craftcookiebanner/web/icons/circle-check.svg") }}
+
+                                <h2>{{ "Correctly setup your legal pages"|t }}</h2>
+                            </div>
+
+                            <ol>
+                                <li>
+                                    <p>
+                                        {{ "Create the mandatory privacy and cookie policy pages (can be one page)"|t }}
+                                    </p>
+                                </li>
+                                <li>
+                                    <p>
+                                        {{ 'Link them correctly in <a href="{url}">the cookie banner content tab</a> for each site/language.'|t('cookie-banner', {
+                                            url: cpUrl('cookie-banner/content')
+                                        })|raw }}
+                                    </p>
+                                </li>
+                                <li>
+                                    <p>
+                                        {{ "Render a table of all cookies and their purpose on the cookie page. You can easily achieve this using the build in <code>{{ getCookiesTableHtml() }}</code> twig extension"|t|raw }}
+                                    </p>
+                                </li>
+                            </ol>
+                        </div>
+
+
+                        <div class="ccb-getting-started-goal-action">
+                            <a href="#" class="btn">Complete this step</a>
+                        </div>
+                    </article>
+                </li>
+
+                <li class="ccb-getting-started-checklist-item">
+                    <article class="ccb-getting-started-goal">
+                        <div class="ccb-getting-started-goal-main">
+                            <div class="ccb-getting-started-goal-title">
+                                {{ svg("@digitalastronaut/craftcookiebanner/web/icons/circle-check.svg") }}
+
+                                <h2>{{ "Defer third party scripts/embeds on the website until consent is given"|t }}</h2>
+                            </div>
+
+                            <ol>
+                                <li>
+                                    <p>
+                                        {{ 'Make sure to respect cookie banner consent when using third party tools such as Google Analytics.'|t('cookie-banner')|raw }}
+                                    </p>
+                                </li>
+                                <li>
+                                    <p>
+                                        {{ 'Only load embeds/iframe consent if consent is given'|t('cookie-banner')|raw }}
+                                    </p>
+                                </li>
+                                <li>
+                                    <p>
+                                        {{ 'When using forms make sure users are aware of what their data is used for and where and how long it stored'|t('cookie-banner')|raw }}
+                                    </p>
+                                </li>
+                            </ol>
+
+                            <p>{{ 'Read the guide and most common pitfalls in <a href="{url}">the documentation</a>'|t('cookie-banner', {
+                                url: "#"
+                            })|raw }}</p>
+                        </div>
+
+
+                        <div class="ccb-getting-started-goal-action">
+                            <a href="#" class="btn">Complete this step</a>
+                        </div>
+                    </article>
+                </li>
+
+                <li class="ccb-getting-started-checklist-item">
+                    <article class="ccb-getting-started-goal">
+                        <div class="ccb-getting-started-goal-main">
+                            <div class="ccb-getting-started-goal-title">
+                                {{ svg("@digitalastronaut/craftcookiebanner/web/icons/circle-check.svg") }}
+
+                                <h2>{{ "Complete (and translate) the cookie banner content"|t }}</h2>
+                            </div>
+
+                            <ol>
+                                <li>
+                                    <p>{{ "Fill out basic content fields: title, description, definitions and button labels"|t }}</p>
+                                </li>
+                                <li>
+                                    <p>{{ 'Use <a href="{url}">the compliancy checklist</a> to easily add all your cookies to the banner in multiple languages'|t('cookie-banner', {
+                                        url: cpUrl('cookie-banner/compliancy-checklist')
+                                    })|raw }}</p>
+                                </li>
+                                <li>
+                                    <p>{{ "Assign vendors/groups to your cookies if you wish"|t('cookie-banner') }}</p>
+                                </li>
+                            </ol>
+                        </div>
+
+
+                        <div class="ccb-getting-started-goal-action">
+                            <a href="#" class="btn">Complete this step</a>
+                        </div>
+                    </article>
+                </li>
+
+                <li class="ccb-getting-started-checklist-item">
+                    <article class="ccb-getting-started-goal">
+                        <div class="ccb-getting-started-goal-main">
+                            <div class="ccb-getting-started-goal-title">
+                                {{ svg("@digitalastronaut/craftcookiebanner/web/icons/circle-check.svg") }}
+
+                                <h2>{{ "Personalise the cookie banner"|t }}</h2>
+                            </div>
+
+                            <ol>
+                                <li>
+                                    <p>{{ 'Use <a href="{url}">the appearance tab</a> to customize the look and functionality of the banner'|t('cookie-banner', {
+                                        url: cpUrl('cookie-banner/appearance')
+                                    })|raw }}</p>
+                                </li>
+                            </ol>
+                        </div>
+
+
+                        <div class="ccb-getting-started-goal-action">
+                            <a href="#" class="btn">Complete this step</a>
+                        </div>
+                    </article>
+                </li>
+
+                <li class="ccb-getting-started-checklist-item">
+                    <article class="ccb-getting-started-goal">
+                        <div class="ccb-getting-started-goal-main">
+                            <div class="ccb-getting-started-goal-title">
+                                {{ svg("@digitalastronaut/craftcookiebanner/web/icons/circle-check.svg") }}
+
+                                <h2>{{ "Configure some final settings"|t }}</h2>
+                            </div>
+
+                            <ol>
+                                <li>
+                                    <p>{{ '<a href="{url}">Configure</a> a retention policy for your consent records'|t('cookie-banner', {
+                                        url: cpUrl('cookie-banner/settings')
+                                    })|raw }}</p>
+                                </li>
+                                <li>
+                                    <p>{{ "Make sure the banner is enabled and your are done!"|t('cookie-banner') }}</p>
+                                </li>
+                            </ol>
+                        </div>
+
+
+                        <div class="ccb-getting-started-goal-action">
+                            <a href="#" class="btn">Complete this step</a>
+                        </div>
+                    </article>
+                </li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}

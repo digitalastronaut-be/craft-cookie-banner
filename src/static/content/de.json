@@ -39,8 +39,8 @@
 	"preferenceCookiesDefinition": "Präferenz-Cookies ermöglichen es einer Website, sich Informationen zu merken, die die Art und Weise ändern, wie sich die Website verhält oder aussieht, wie Ihre bevorzugte Sprache oder die Region, in der Sie sich befinden.",
 	"preferenceCookies": [
 		{
-			"name": "cookie_consent",
-			"group": "cookie-banner",
+			"name": "craft-cookie-banner",
+			"group": "craft-cms",
 			"purpose": "Speichert die Cookie-Präferenzen des Benutzers (z. B. akzeptierte oder abgelehnte Kategorien), damit das Banner nicht bei jedem Besuch erneut angezeigt wird.",
 			"expiration": "1 Jahr"
 		}

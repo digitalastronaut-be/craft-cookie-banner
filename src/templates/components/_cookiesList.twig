@@ -31,35 +31,8 @@
     }
 ] %}
 
-
 {% if settings.cookieListStyle == "grouped" %}
-    {# Grouped style: One table with cookie type column #}
-    <table>
-        <thead>
-            <tr>
-                <th>{{ "Name"|t('cookie-banner') }}</th>
-                <th>{{ "Type"|t('cookie-banner') }}</th>
-                <th>{{ "Purpose"|t('cookie-banner') }}</th>
-                <th>{{ "Expiration"|t('cookie-banner') }}</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for group in cookieGroups %}
-                {% if group.cookies is not empty %}
-                    {% for cookie in group.cookies %}
-                        <tr>
-                            <td>{{ cookie.name }}</td>
-                            <td>{{ group.label }}</td>
-                            <td>{{ cookie.purpose }}</td>
-                            <td>{{ cookie.expiration }}</td>
-                        </tr>
-                    {% endfor %}
-                {% endif %}
-            {% endfor %}
-        </tbody>
-    </table>
-{% else %}
-    {# Separated style: Multiple tables with headers #}
+    {# One table with cookie type column #}
     {% for group in cookieGroups %}
         {% if group.cookies is not empty %}
             <h3>{{ group.title }}</h3>
@@ -84,4 +57,30 @@
             </table>
         {% endif %}
     {% endfor %}
+{% else %}
+    {# Multiple tables with headers #}
+    <table>
+        <thead>
+            <tr>
+                <th>{{ "Name"|t('cookie-banner') }}</th>
+                <th>{{ "Type"|t('cookie-banner') }}</th>
+                <th>{{ "Purpose"|t('cookie-banner') }}</th>
+                <th>{{ "Expiration"|t('cookie-banner') }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for group in cookieGroups %}
+                {% if group.cookies is not empty %}
+                    {% for cookie in group.cookies %}
+                        <tr>
+                            <td>{{ cookie.name }}</td>
+                            <td>{{ group.label }}</td>
+                            <td>{{ cookie.purpose }}</td>
+                            <td>{{ cookie.expiration }}</td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
 {% endif %}

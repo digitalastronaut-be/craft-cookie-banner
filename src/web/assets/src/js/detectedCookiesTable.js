@@ -10,24 +10,24 @@ class DetectedCookiesTable extends HTMLElement {
 		// this.initTableRows();
 	}
 
-	initTableRows() {
-		this.tableRows = [...this.querySelectorAll("[data-table-row]")];
+	// initTableRows() {
+	// 	this.tableRows = [...this.querySelectorAll("[data-table-row]")];
 
-		this.tableRows.forEach((row) => {
-			const addButton = row.querySelector("[data-add-button]");
+	// 	this.tableRows.forEach((row) => {
+	// 		const addButton = row.querySelector("[data-add-cookie-button]");
 
-			addButton.addEventListener("click", async () => {
-				await this.addCookie(row.dataset.cookieName);
-			});
-		});
-	}
+	// 		addButton.addEventListener("click", async () => {
+	// 			await this.addCookie(row.dataset.cookieName);
+	// 		});
+	// 	});
+	// }
 
-	async addCookie(cookieName) {
-		const response = await fetch(``);
-		const data = await response.json();
+	// async addCookie(cookieName) {
+	// 	const response = await fetch(`cookie-banner/content/add-cookie?cookieName=${cookieName}`);
+	// 	const data = await response.json();
 
-		console.log(data);
-	}
+	// 	console.log(data);
+	// }
 }
 
 window.customElements.define("detected-cookies-table", DetectedCookiesTable);

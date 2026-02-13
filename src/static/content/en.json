@@ -39,8 +39,8 @@
 	"preferenceCookiesDefinition": "Preference cookies enable a website to remember information that changes the way the website behaves or looks, like your preferred language or the region that you are in.",
 	"preferenceCookies": [
 		{
-			"name": "cookie_consent",
-			"group": "cookie-banner",
+			"name": "craft-cookie-banner",
+			"group": "craft-cms",
 			"purpose": "Stores the user's cookie preferences (e.g. accepted or refused categories) so that the banner does not reappear on every visit.",
 			"expiration": "1 year"
 		}

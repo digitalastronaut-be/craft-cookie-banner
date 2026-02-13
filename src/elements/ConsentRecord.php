@@ -10,7 +10,7 @@ use craft\elements\db\ElementQueryInterface;
 use craft\enums\Color;
 use craft\helpers\Db;
 use craft\helpers\UrlHelper;
-
+use craft\models\FieldLayout;
 use yii\web\Response;
 
 use digitalastronaut\craftcookiebanner\elements\conditions\ConsentRecordCondition;
@@ -20,6 +20,7 @@ use digitalastronaut\craftcookiebanner\helpers\Table;
 use DateTime;
 
 class ConsentRecord extends Element {
+    private ?FieldLayout $fieldLayout = null;
     public ?string $ipAddressHash = null;
     public ?string $sessionId = null;
     public ?string $userAgent = null;
@@ -75,47 +76,47 @@ class ConsentRecord extends Element {
     }
 
     protected static function defineSources(string $context): array {
-        $years = [];
-        $yearSources = [];
+        // $years = [];
+        // $yearSources = [];
 
-        foreach (ConsentRecord::find()->all() as $consentRecord) {
-            $years[] = $consentRecord->consentTimestamp->format('Y');
-        }
+        // foreach (ConsentRecord::find()->all() as $consentRecord) {
+        //     $years[] = $consentRecord->consentTimestamp->format('Y');
+        // }
 
-        $years = array_unique($years);
-        rsort($years, SORT_NUMERIC);
+        // $years = array_unique($years);
+        // rsort($years, SORT_NUMERIC);
 
-        foreach ($years as $year) {
-            $nextYear = $year + 1;
+        // foreach ($years as $year) {
+        //     $nextYear = $year + 1;
 
-            $yearSources[] = [
-                'key' => "year:{$year}",
-                'label' => $year,
-                'criteria' => [
-                    'consentTimestampFrom' => "{$year}-01-01",
-                    'consentTimestampTo' => "{$nextYear}-01-01",
-                ],
-            ];
-        }
+        //     $yearSources[] = [
+        //         'key' => "year:{$year}",
+        //         'label' => $year,
+        //         'criteria' => [
+        //             'consentTimestampFrom' => "{$year}-01-01",
+        //             'consentTimestampTo' => "{$nextYear}-01-01",
+        //         ],
+        //     ];
+        // }
 
         $sources = [
             [
                 'key' => 'all',
                 'label' => Craft::t('cookie-banner', 'All consent records'),
-                'nested' => $yearSources,
+                // 'nested' => $yearSources,
             ],
-            [
-                'key' => 'statusValid',
-                'label' => Craft::t('cookie-banner', 'Active records'),
-                'criteria' => ['isExpired' => false],
-                'status' => 'teal',
-            ],
-            [
-                'key' => 'statusExpired',
-                'label' => Craft::t('cookie-banner', 'Expired records'),
-                'criteria' => ['isExpired' => true],
-                'status' => 'red',
-            ],
+            // [
+            //     'key' => 'statusValid',
+            //     'label' => Craft::t('cookie-banner', 'Active records'),
+            //     'criteria' => ['isExpired' => false],
+            //     'status' => 'teal',
+            // ],
+            // [
+            //     'key' => 'statusExpired',
+            //     'label' => Craft::t('cookie-banner', 'Expired records'),
+            //     'criteria' => ['isExpired' => true],
+            //     'status' => 'red',
+            // ],
         ];
 
         return $sources;
@@ -155,7 +156,7 @@ class ConsentRecord extends Element {
 
     protected static function defineDefaultTableAttributes(string $source): array {
         return [
-            'status', 
+            'status',
             'consentTimestamp', 
             'essentialCookies', 
             'functionalCookies', 
@@ -214,12 +215,22 @@ class ConsentRecord extends Element {
         return "cookie-banner/consent-records/{$this->id}";
     }
 
-
     protected function route(): array|string|null {
         return ['templates/render', [
             'template' => 'site/template/path',
             'variables' => ['consentRecord' => $this],
         ]];
+    }
+
+    public function getFieldLayout(): ?FieldLayout
+    {
+        if ($this->fieldLayout !== null) {
+            return $this->fieldLayout;
+        }
+
+        $this->fieldLayout = Craft::$app->getFields()->getLayoutByType(self::class);
+
+        return $this->fieldLayout;
     }
 
     public function canView(User $user): bool { return true; }
@@ -232,7 +243,7 @@ class ConsentRecord extends Element {
         $response->crumbs([
             [
                 'label' => self::pluralDisplayName(),
-                'url' => UrlHelper::cpUrl('consent-records'),
+                'url' => UrlHelper::cpUrl('cookie-banner/consent-records'),
             ],
         ]);
     }

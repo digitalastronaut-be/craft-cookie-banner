@@ -39,8 +39,8 @@
 	"preferenceCookiesDefinition": "Voorkeurscookies stellen een website in staat om informatie te onthouden die de manier waarop de website zich gedraagt of eruitziet verandert, zoals uw voorkeurstaal of de regio waarin u zich bevindt.",
 	"preferenceCookies": [
 		{
-			"name": "cookie_consent",
-			"group": "cookie-banner",
+			"name": "craft-cookie-banner",
+			"group": "craft-cms",
 			"purpose": "Slaat de cookievoorkeuren van de gebruiker op (bijvoorbeeld geaccepteerde of geweigerde categorieën) zodat de banner niet bij elk bezoek opnieuw verschijnt.",
 			"expiration": "1 jaar"
 		}

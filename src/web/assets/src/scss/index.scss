@@ -22,7 +22,8 @@
 
 	@include styles-below(tablet) {
 		position: fixed;
-		inset: 1.5em;
+		inset: 0.75em;
+		padding: 0.75em;
 	}
 
 	@include styles-above(tablet) {
@@ -291,6 +292,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
+		gap: 8px;
 		margin-bottom: 0.5em;
 
 		&-label {
@@ -503,11 +505,14 @@
 		width: 100%;
 		max-width: 100%;
 		overflow-x: auto;
-		display: block;
 
 		td.centered {
 			text-align: center;
 		}
+	}
+
+	tr.disabled {
+		pointer-events: none;
 	}
 
 	table th:last-child,
@@ -524,11 +529,69 @@
 }
 
 .ccb-compliancy-checklist {
-	.btngroup .menu {
+	&-item-actions {
 		display: flex;
+		flex-direction: column;
+		gap: 8px;
+	}
+}
+
+.ccb-actions-menu {
+	width: fit-content;
+
+	& > button {
+		gap: 12px;
+	}
+
+	&:hover .ccb-actions-menu-content {
+		pointer-events: all;
+		opacity: 1;
+	}
+
+	&-content {
+		pointer-events: none;
+		opacity: 0;
 		position: absolute;
-		top: 0;
-		right: 0;
+		background: #fff;
+		border-radius: 4px;
+		box-shadow:
+			0 0 0 1px rgba(31, 41, 51, 0.1),
+			0 5px 20px rgba(31, 41, 51, 0.25);
+		overflow: auto;
+		padding: 0 14px;
+		user-select: none;
+		z-index: 100;
+	}
+
+	&-option.danger button,
+	&-option.danger a {
+		color: rgb(216, 31, 35);
+	}
+
+	&-option > form,
+	&-option > button,
+	&-option > a {
+		display: block;
+		text-align: start;
+		appearance: none;
+		font-size: 14px;
+		margin-block: 0;
+		margin-inline: -14px;
+		padding-block: 10px;
+		padding-inline: 14px;
+		white-space: nowrap;
+		color: #3f4d5a;
+
+		&:hover {
+			color: var(--white) !important;
+			background-color: var(--bg-selection-dark);
+			text-decoration: none;
+			cursor: pointer;
+
+			& > * {
+				color: var(--white) !important;
+			}
+		}
 	}
 }
 
@@ -547,4 +610,125 @@
 
 .details:has(.ccb-detected-cookies-legend) {
 	padding: 0;
+}
+
+.ccb-edit-cookie {
+	table {
+		tr {
+			td:nth-child(1),
+			td:nth-child(2) {
+				position: relative;
+				opacity: 1 !important;
+				cursor: not-allowed !important;
+
+				&::after {
+					background-color: hsla(212, 60%, 97%, 0.75);
+					content: "";
+					font-size: 0;
+					height: 100%;
+					inset-block-start: 0;
+					inset-inline-start: 0;
+					position: absolute;
+					user-select: none;
+					width: 100%;
+				}
+			}
+		}
+	}
+}
+
+.ccb-getting-started {
+	display: flex;
+
+	&-main {
+		max-width: 650px;
+		width: 100%;
+		height: 100%;
+
+		svg {
+			height: 72px;
+			width: 72px;
+		}
+	}
+
+	&-welcome {
+		padding: 32px;
+		width: 100%;
+		border-radius: 5px;
+		background-color: var(--gray-050);
+
+		& > * {
+			margin-inline: auto;
+			text-align: center;
+		}
+	}
+
+	&-checklist {
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+		margin-top: 16px;
+	}
+
+	&-goal {
+		display: flex;
+		flex-direction: column;
+		background-color: transparent;
+		border: 1px solid rgba(96, 125, 159, 0.25) !important;
+		box-shadow: none;
+		border-radius: 5px;
+
+		&-title {
+			display: flex;
+			align-items: center;
+			gap: 16px;
+
+			h2 {
+				margin-top: 0;
+			}
+
+			svg {
+				height: 28px;
+				width: 28px;
+				display: none;
+			}
+		}
+
+		&.completed {
+			background-color: #009c8c;
+			color: white;
+			border: none !important;
+
+			.ccb-getting-started-goal-action {
+				display: none;
+			}
+
+			.ccb-getting-started-goal-main {
+				& > p,
+				& > ol {
+					display: none;
+				}
+			}
+
+			svg {
+				display: flex;
+			}
+		}
+
+		&-main {
+			width: 100%;
+			padding: 0.875rem;
+
+			& > ol {
+				margin-top: 14px;
+			}
+		}
+
+		&-action {
+			display: flex;
+			width: 100%;
+			padding: 0.875rem;
+			border-top: 1px solid rgba(96, 125, 159, 0.25) !important;
+		}
+	}
 }

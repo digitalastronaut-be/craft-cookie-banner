@@ -63,15 +63,30 @@ class CookieDetectionService extends Component {
     }
 
     public function getCookieDataFromDatabase(string $cookieName, string $language) {
-        $databaseFile = file_get_contents(CookieBanner::getInstance()->getBasePath() . "/static/cookies/{$language}.json");
+        $languageMatch = true;
+        $path = CookieBanner::getInstance()->getBasePath() . "/static/cookies/{$language}.json";
+        
+        if (!is_file($path)) {
+            $path = CookieBanner::getInstance()->getBasePath() . "/static/cookies/en.json";
+            $languageMatch = false;
+        }
+
+        $databaseFile = file_get_contents($path);
 
         if (!$databaseFile) return null;
 
         $cookieDatabase = json_decode($databaseFile, true);
 
         foreach ($cookieDatabase as $cookie) {
-            if ($this->cookieNameMatches($cookieName, $cookie['name'])) return $cookie;
+            if ($this->cookieNameMatches($cookieName, $cookie['name'])) {
+                return [
+                    "cookie" => $cookie,
+                    "languageMatch" => $languageMatch,
+                ];
+            };
         }
+
+        return null;
     }
 
     public function getBannerCookies($content) {

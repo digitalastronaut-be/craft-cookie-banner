@@ -6,21 +6,25 @@ use Craft;
 use craft\base\Event;
 use craft\base\Model;
 use craft\base\Plugin;
+
 use craft\events\DefineBehaviorsEvent;
 use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterTemplateRootsEvent;
 use craft\events\RegisterUrlRulesEvent;
+use craft\events\RegisterUserPermissionsEvent;
 use craft\events\SiteEvent;
 use craft\events\TemplateEvent;
+
 use craft\helpers\UrlHelper;
 use craft\services\Elements;
 use craft\services\Sites;
+use craft\services\UserPermissions;
+
 use craft\web\twig\variables\CraftVariable;
 use craft\web\UrlManager;
 use craft\web\View;
 
 use digitalastronaut\craftcookiebanner\elements\ConsentRecord;
-use digitalastronaut\craftcookiebanner\helpers\CookieBanner as CookieBannerHelper;
 use digitalastronaut\craftcookiebanner\models\Settings;
 use digitalastronaut\craftcookiebanner\records\Content;
 use digitalastronaut\craftcookiebanner\services\ServicesTrait;
@@ -55,19 +59,31 @@ class CookieBanner extends Plugin {
         $this->registerAssetBundles();
         $this->registerTwigExtension();
 
+        $this->getConsentRecords()->cleanup();
+
+        // TODO: Figure out hoe we consent records kunnen deleten zonder elke site/cp request cleanup te triggeren zonder persee een cron job...
+        // TODO: Permissions overal toepassen
+        // TODO: Badge met aantal cookies die nog niet in orde zijn tonen in sidenav
+        // TODO: Error handling in controllers verbetern
+        // TODO: All business logic veranderen naar services
+        // TODO: Styling en templates mooier opsplitsen
         // TODO: Cascade for content table fixen.
         // TODO: Loading animation when saving consent so it's more clear to the user.
         // TODO: Provide a way to insert the detected cookies in to all languages.
+        // TODO: rename consent records controller action view -> index and  edit -> view
 
         if (Craft::$app->getRequest()->getIsCpRequest()) {
+            $this->_registerPermissions();
             $this->registerCpRoutes();
             $this->registerCpEvents();
         }
-        
+
         if (Craft::$app->getRequest()->getIsSiteRequest()) {
             $this->registerSiteRoutes();
             $this->registerCookieBanner();
         }
+
+        Craft::info(Craft::t('cookie-banner', '{name} plugin loaded', ['name' => $this->name]));
     }
 
     protected function createSettingsModel(): ?Model {
@@ -98,12 +114,38 @@ class CookieBanner extends Plugin {
         );
     }
 
+    private function _registerPermissions(): void {
+        Event::on(UserPermissions::class, UserPermissions::EVENT_REGISTER_PERMISSIONS, function(RegisterUserPermissionsEvent $event) {
+            $event->permissions[] = [
+                'heading' => 'Cookie banner',
+                'permissions' => [
+                    'cookie-banner:access-settings' => [
+                        'label' => Craft::t('cookie-banner', 'Access settings'),
+                    ],
+                    'cookie-banner:access-compliancy-checklist' => [
+                        'label' => Craft::t('cookie-banner', 'Access compliancy checklist')
+                    ],
+                    'cookie-banner:access-content' => [
+                        'label' => Craft::t('cookie-banner', 'Access content')
+                    ],
+                    'cookie-banner:access-appearance' => [
+                        'label' => Craft::t('cookie-banner', 'Access appearance')
+                    ],
+                    'cookie-banner:access-consent-records' => [
+                        'label' => Craft::t('cookie-banner', 'Access consent records')
+                    ],
+                ],
+            ];
+        });
+    }
+
     public function getCpNavItem(): ?array {
         $item = parent::getCpNavItem();
 
         $item['icon'] = "@digitalastronaut/craftcookiebanner/web/icons/shield.svg";
         $item['url'] = 'cookie-banner';
         $item['subnav'] = [
+            'gettingStarted' => ['label' => 'Getting started', 'url' => 'cookie-banner/getting-started'],
             'compliancyChecklist' => ['label' => 'Compliancy checklist', 'url' => 'cookie-banner/compliancy-checklist'],
             'consentRecords' => ['label' => 'Consent records', 'url' => 'cookie-banner/consent-records'],
             'content' => ['label' => 'Content', 'url' => 'cookie-banner/content'],
@@ -120,7 +162,9 @@ class CookieBanner extends Plugin {
             UrlManager::EVENT_REGISTER_CP_URL_RULES,
             function (RegisterUrlRulesEvent $event) {
                 $event->rules['cookie-banner'] = 'cookie-banner/consent-records/index';
+                $event->rules['cookie-banner/getting-started'] = 'cookie-banner/getting-started/index';
                 $event->rules['cookie-banner/compliancy-checklist'] = 'cookie-banner/compliancy-checklist/index';
+                $event->rules['cookie-banner/compliancy-checklist/edit/<name>'] = 'cookie-banner/compliancy-checklist/edit';
                 $event->rules['cookie-banner/content'] = 'cookie-banner/content/index';
                 $event->rules['cookie-banner/content/add-cookie'] = 'cookie-banner/content/add-cookie';
                 $event->rules['cookie-banner/appearance'] = 'cookie-banner/appearance/index';
@@ -181,7 +225,7 @@ class CookieBanner extends Plugin {
                 ]);
 
                 Craft::$app->getView()->registerHtml($bannerHtml, View::POS_BEGIN);
-                Craft::$app->getView()->registerHtml($dataLayerScript, View::POS_HEAD);
+                // Craft::$app->getView()->registerHtml($dataLayerScript, View::POS_HEAD);
             }
         );
     }

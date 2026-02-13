@@ -1,0 +1,54 @@
+{% extends "_layouts/cp.twig" %}
+
+{% import '_includes/forms.twig' as forms %}
+
+{% set title = "Edit the " ~ cookieForAllSites[0].name ~ " cookie for all sites" %}
+{% set selectedSubnavItem = 'compliancyChecklist' %}
+{% set fullPageForm = true %}
+
+{% set crumbs = [
+    { label: 'Cookie banner'|t, url: url('cookie-banner') },
+    { label: 'Compliancy checklist'|t, url: url('cookie-banner/compliancy-checklist') },
+    { label: 'Manually edit cookie'|t, url: url('cookie-banner/compliancy-checklist/edit') },
+] %}
+
+{% block content %}
+    <div class="ccb-edit-cookie">
+        {{ forms.editableTableField({
+            id: 'cookieForAllSites',
+            name: 'fields[cookieForAllSites]',
+            cols: {
+                siteName: { 
+                    heading: "Site", 
+                    type: "singleline",
+                    width: '15%',
+                },
+                name: { 
+                    heading: "Cookie Name", 
+                    type: "singleline",
+                    width: '20%'
+                },
+                group: { 
+                    heading: "Group", 
+                    type: "singleline",
+                    width: '15%'
+                },
+                purpose: { 
+                    heading: "Purpose", 
+                    type: "multiline",
+                    width: '35%'
+                },
+                expiration: { 
+                    heading: "Expiration", 
+                    type: "singleline",
+                    width: '15%'
+                },
+            },
+            rows: cookieForAllSites,
+            allowAdd: false,
+            allowDelete: false,
+            allowReorder: false,
+            staticRows: true,
+        }) }}
+    </div>
+{% endblock %}

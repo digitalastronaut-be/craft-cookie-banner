@@ -82,6 +82,7 @@ class ConsentRecordsController extends Controller {
         $consentRecord->userAgent = $this->request->getHeaders()['User-agent'] ?? "Unknown";
         $consentRecord->language = $body['language'];
         $consentRecord->consentTimestamp = new DateTime();
+        // TODO: remove expiry field as expired records cannot be stored
         $consentRecord->consentExpiry = (new DateTime())->modify('+12 months');
         $consentRecord->consentAction = $body['consentAction'];
         $consentRecord->essentialCookies = $body['consentCategories']['essentialCookies'];

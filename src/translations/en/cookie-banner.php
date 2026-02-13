@@ -5,4 +5,5 @@ return [
     "Type" => "Type",
     "Purpose" => "Purpose",
     "Expiration" => "Expiration",
+    '{name} plugin loaded' => "{name} plugin geladen"
 ];

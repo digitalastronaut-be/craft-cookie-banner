@@ -39,29 +39,39 @@ class ContentController extends Controller {
     }
 
     public function actionAddCookie() {
-        $cookieName = $this->request->getBodyParam("cookieName");
+        $cookieName = $this->request->getParam('cookieName');
 
         if (!$cookieName) {
-            Craft::$app->getSession()->setError("Unable to add cookie: missing body param cookieName");
+            Craft::$app->getSession()->setError('Unable to add cookie: missing body param cookieName');
             return null;
         }
 
-        $cookieData = CookieBanner::getInstance()->getCookieDetection()->getCookieDataFromDatabase($cookieName, 'en');
- 
-        if (!$cookieData) {
-            $cookieData = [
-		        "name" => $cookieName,
-		        "description" => null,
-		        "vendor" => null,
-		        "retention" => null,
-		        "category" => null
-            ];
-        }
+        $sites = Craft::$app->sites->getAllSites();
 
-        $cookieBannerContentAllLanguages = Content::find()->all();
+        foreach ($sites as $site) {
+            $data = CookieBanner::getInstance()
+                ->getCookieDetection()
+                ->getCookieDataFromDatabase($cookieName, explode("-", $site->language)[0]);
 
-        foreach ($cookieBannerContentAllLanguages as $content) {
-            $existingCookies = CookieBanner::getInstance()->getCookieDetection()->getBannerCookies($content);
+            if (!$data) continue;
+
+            $cookieData = $data['cookie'];
+
+            if (!$data['languageMatch']) {
+                $cookieData = [
+                    'name' => $cookieName,
+                    'description' => null,
+                    'vendor' => null,
+                    'retention' => null,
+                    'category' => $cookieData['category']
+                ];
+            }
+            
+            $content = Content::find()->where(['siteId' => $site->id])->one();
+
+            $existingCookies = CookieBanner::getInstance()
+                ->getCookieDetection()
+                ->getBannerCookies($content);
 
             $alreadyExists = false;
     
@@ -73,8 +83,7 @@ class ContentController extends Controller {
             }
 
             if ($alreadyExists) {
-                Craft::$app->getSession()->setError("Cookie '{$cookieData['name']}' already exists.");
-                return null; 
+                Craft::$app->getSession()->setError("Cookie '{$cookieData['name']}' already exists for {$site->name}.");
             } else {
                 if ($cookieData['category']) {
                     $cookiesForCategory = $content[$cookieData['category'] . 'Cookies'] ?? [];
@@ -92,6 +101,37 @@ class ContentController extends Controller {
 
                 Craft::$app->getSession()->setNotice("Cookie '{$cookieData['name']}' added successfully.");
             }
+        }
+
+        return null;
+    }
+
+    public function actionDeleteCookieForAllSites() {
+        $cookieName = $this->request->getParam("cookieName");
+
+        $allContent = Content::find()->all();
+
+        foreach ($allContent as $content) {            
+            $cookieGroups = [
+                'necessaryCookies',
+                'preferenceCookies',
+                'analyticalCookies',
+                'marketingCookies',
+                'uncategorizedCookies'
+            ];
+            
+            foreach ($cookieGroups as $group) {
+                $cookies = $content->$group ?? [];
+                
+                $filteredCookies = array_values(array_filter(
+                    $cookies,
+                    fn($cookie) => ($cookie['name'] ?? null) !== $cookieName
+                ));
+
+                $content->setAttribute($group, $filteredCookies);
+            }
+
+            $content->save();
         }
 
         return null;
