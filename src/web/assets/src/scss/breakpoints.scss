@@ -4,14 +4,14 @@
 // BREAKPOINTS
 // =======================
 $breakpoints: (
-	"mobileS": 320px,
-	"mobileM": 375px,
-	"mobileL": 425px,
-	"tabletS": 550px,
-	"tablet": 768px,
-	"desktopS": 1024px,
-	"desktopM": 1200px,
-	"desktopL": 1400px,
+	mobileS: 320px,
+	mobileM: 375px,
+	mobileL: 425px,
+	tabletS: 550px,
+	tablet: 768px,
+	desktopS: 1024px,
+	desktopM: 1200px,
+	desktopL: 1400px,
 );
 
 @mixin styles-above($size) {
