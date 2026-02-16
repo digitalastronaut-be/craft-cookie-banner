@@ -500,12 +500,14 @@
 	margin-block: 0 0.5em !important;
 }
 
+.ccb-vendors,
 .ccb-compliancy-checklist {
 	table {
 		width: 100%;
 		max-width: 100%;
 		overflow-x: auto;
 
+		th.centered,
 		td.centered {
 			text-align: center;
 		}
@@ -612,11 +614,18 @@
 	padding: 0;
 }
 
-.ccb-edit-cookie {
+.ccb-detected-cookies-table {
+	position: relative;
+	z-index: 0;
+}
+
+.ccb-edit-cookie,
+.ccb-create-cookie {
 	table {
 		tr {
 			td:nth-child(1),
-			td:nth-child(2) {
+			td:nth-child(2),
+			td:nth-child(3) {
 				position: relative;
 				opacity: 1 !important;
 				cursor: not-allowed !important;
@@ -631,6 +640,7 @@
 					position: absolute;
 					user-select: none;
 					width: 100%;
+					z-index: 10;
 				}
 			}
 		}
@@ -667,7 +677,7 @@
 		display: flex;
 		flex-direction: column;
 		gap: 12px;
-		margin-top: 16px;
+		margin-top: 12px;
 	}
 
 	&-goal {

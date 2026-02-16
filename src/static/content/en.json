@@ -10,11 +10,6 @@
 			"name": "Craft CMS",
 			"description": "A bespoke content management system build for devs and authors",
 			"url": "https://craftcms.com/"
-		},
-		{
-			"name": "Cookie banner",
-			"description": "This banner manages your cookie preferences and is compliant with the latest GDPR regulations.",
-			"url": "https://craftcms.com/"
 		}
 	],
 	"necessaryCookiesTitle": "Necessary cookies",

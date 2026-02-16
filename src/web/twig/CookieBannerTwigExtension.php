@@ -4,10 +4,9 @@ namespace digitalastronaut\craftcookiebanner\web\twig;
 
 use Craft;
 use Twig\Extension\AbstractExtension;
-use Twig\Extension\GlobalsInterface;
 use Twig\TwigFunction;
 
-use Carbon\Carbon;
+use yii\helpers\Inflector;
 
 use digitalastronaut\craftcookiebanner\CookieBanner;
 use digitalastronaut\craftcookiebanner\records\Content;
@@ -18,6 +17,8 @@ class CookieBannerTwigExtension extends AbstractExtension {
             new TwigFunction('renderCookiesListHtml', [$this, 'renderCookiesListHtml']),
             new TwigFunction('getCookieDetectionOverviewData', [$this, 'getCookieDetectionOverviewData']),
             new TwigFunction('checkCookiesDefenitionForLanguages', [$this, 'checkCookiesDefenitionForLanguages']),
+            new TwigFunction('getVendorOverview', [$this, 'getVendorOverview']),
+            new TwigFunction('getVendorOptions', [$this, 'getVendorOptions']),
         ];
     }
 
@@ -38,11 +39,32 @@ class CookieBannerTwigExtension extends AbstractExtension {
         return CookieBanner::getInstance()->getCookieDetection()->getCookiesOverview();
     }
 
+    public function getVendorOverview() {
+        return Content::find()->one()->cookieGroups;
+    }
+
+    public function getVendorOptions(): array {
+        $content = Content::find()->one()->cookieGroups;
+
+        $options[0] = [
+            "label" => "Default",
+            "value" => "default"
+        ];
+
+        foreach ($content as $vendor) {
+            $options[] = [
+                "label" => $vendor['name'],
+                "value" => Inflector::slug($vendor['name']),
+            ];
+        }
+
+        return $options;
+    }
+
     public function checkCookiesDefenitionForLanguages($cookieName) {
         $cookieBannerContentAllLanguages = Content::find()->all();
 
         $result = [];
-
         
         foreach ($cookieBannerContentAllLanguages as $content) {
             $site = Craft::$app->getSites()->getSiteById($content->siteId);

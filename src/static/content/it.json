@@ -10,11 +10,6 @@
 			"name": "Craft CMS",
 			"description": "Un sistema di gestione dei contenuti personalizzato realizzato per sviluppatori e autori",
 			"url": "https://craftcms.com/"
-		},
-		{
-			"name": "Cookie banner",
-			"description": "Questo banner gestisce le tue preferenze sui cookie ed è conforme alle ultime normative GDPR.",
-			"url": "https://craftcms.com/"
 		}
 	],
 	"necessaryCookiesTitle": "Cookie necessari",

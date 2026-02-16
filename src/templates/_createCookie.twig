@@ -1,0 +1,118 @@
+{% extends "_layouts/cp.twig" %}
+
+{% import '_includes/forms.twig' as forms %}
+
+{% set title = "Add a new cookie"|t("cookie-banner") %}
+{% set selectedSubnavItem = 'compliancyChecklist' %}
+{% set fullPageForm = true %}
+
+{% set crumbs = [
+    { label: 'Cookie banner'|t, url: url('cookie-banner') },
+    { label: 'Compliancy checklist'|t, url: url('cookie-banner/compliancy-checklist') },
+    { label: 'Add a new cookie'|t },
+] %}
+
+{% block content %}
+    <div class="ccb-create-cookie">
+        <div class="flex-fields">
+            <div class="field width-50">
+                {{ forms.textField({
+                    label: 'Cookie name',
+                    id: 'name',
+                    name: 'name',
+                    value: "",
+                    placeholder: 'Name of the cookie you want to add',
+                }) }}
+            </div>
+
+            <div class="field width-50">
+                {{ forms.selectField({
+                    label: 'Vendor',
+                    id: 'vendor',
+                    name: 'vendor',
+                    options: getVendorOptions(),
+                    value: 'default',
+                    placeholder: 'Name of the cookie you want to add',
+                }) }}
+            </div>
+
+            <hr>
+
+            <div class="field width-100">
+                {{ forms.editableTableField({
+                    id: 'cookieForAllSites',
+                    name: 'fields[cookieForAllSites]',
+                    cols: {
+                        siteName: { 
+                            heading: "Site", 
+                            type: "singleline",
+                            width: '15%',
+                        },
+                        name: { 
+                            heading: "Cookie Name", 
+                            type: "singleline",
+                        },
+                        group: { 
+                            heading: "Vendor", 
+                            type: "select",
+                            options: getVendorOptions()
+                        },
+                        purpose: { 
+                            heading: "Purpose", 
+                            type: "multiline",
+                        },
+                        expiration: { 
+                            heading: "Expiration", 
+                            type: "singleline",
+                        },
+                        enabled: {
+                            heading: "Enabled for this site",
+                            type: "lightswitch",
+                            width: '10%',
+                        }
+                    },
+                    rows: emptyCookieForAllSites,
+                    allowAdd: false,
+                    allowDelete: false,
+                    allowReorder: false,
+                    staticRows: true,
+                }) }}
+            </div>
+
+            {% for site in craft.app.sites.getAllSites() %}
+                <input type="hidden" name="fields[cookieForAllSites][{{ loop.index - 1 }}][siteId]" value="{{ site.id }}">
+            {% endfor %}
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const masterInput = document.getElementById('name');
+            const masterVendor = document.getElementById('vendor');
+
+            if (masterInput) {
+                masterInput.addEventListener('input', function () {
+                    const value = this.value;
+
+                    const tableInputs = document.querySelectorAll(
+                        '[name^="fields[cookieForAllSites]"][name$="[name]"]'
+                    );
+
+                    tableInputs.forEach(input => input.value = value);
+                });
+            }
+
+            if (masterVendor) {
+                masterVendor.addEventListener('change', function () {
+                    const value = this.value;
+
+                    const tableSelects = document.querySelectorAll(
+                        'select[name^="fields[cookieForAllSites]"][name$="[group]"]'
+                    );
+
+                    tableSelects.forEach(select => select.value = value);
+                });
+            }
+        });
+    </script>
+{% endblock %}

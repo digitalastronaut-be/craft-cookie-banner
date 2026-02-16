@@ -11,8 +11,6 @@ use DateTime;
 
 use digitalastronaut\craftcookiebanner\elements\ConsentRecord;
 use yii\web\BadRequestHttpException;
-use yii\web\Cookie;
-use yii\db\Query;
 
 class ConsentRecordsController extends Controller {
     public $defaultAction = 'index';
@@ -85,11 +83,13 @@ class ConsentRecordsController extends Controller {
         // TODO: remove expiry field as expired records cannot be stored
         $consentRecord->consentExpiry = (new DateTime())->modify('+12 months');
         $consentRecord->consentAction = $body['consentAction'];
+
         $consentRecord->essentialCookies = $body['consentCategories']['essentialCookies'];
         $consentRecord->functionalCookies = $body['consentCategories']['functionalCookies'];
         $consentRecord->analyticalCookies = $body['consentCategories']['analyticalCookies'];
         $consentRecord->advertisementCookies = $body['consentCategories']['advertisementCookies'];
         $consentRecord->personalizationCookies = $body['consentCategories']['personalizationCookies'];
+
         $consentRecord->consentMethod = 'Cookie banner';
         $consentRecord->bannerVersion = 'v1.0.0';
         $consentRecord->privacyPolicyVersion = 'v2.13.11';

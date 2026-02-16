@@ -520,17 +520,24 @@
   margin-block: 0 0.5em !important;
 }
 
+.ccb-vendors table,
 .ccb-compliancy-checklist table {
   width: 100%;
   max-width: 100%;
   overflow-x: auto;
 }
+.ccb-vendors table th.centered,
+.ccb-vendors table td.centered,
+.ccb-compliancy-checklist table th.centered,
 .ccb-compliancy-checklist table td.centered {
   text-align: center;
 }
+.ccb-vendors tr.disabled,
 .ccb-compliancy-checklist tr.disabled {
   pointer-events: none;
 }
+.ccb-vendors table th:last-child,
+.ccb-vendors table td:last-child,
 .ccb-compliancy-checklist table th:last-child,
 .ccb-compliancy-checklist table td:last-child {
   position: sticky;
@@ -538,6 +545,7 @@
   background-color: var(--pane-bg);
   z-index: 99;
 }
+.ccb-vendors table th:last-child,
 .ccb-compliancy-checklist table th:last-child {
   background-color: var(--gray-050);
 }
@@ -617,14 +625,27 @@
   padding: 0;
 }
 
+.ccb-detected-cookies-table {
+  position: relative;
+  z-index: 0;
+}
+
 .ccb-edit-cookie table tr td:nth-child(1),
-.ccb-edit-cookie table tr td:nth-child(2) {
+.ccb-edit-cookie table tr td:nth-child(2),
+.ccb-edit-cookie table tr td:nth-child(3),
+.ccb-create-cookie table tr td:nth-child(1),
+.ccb-create-cookie table tr td:nth-child(2),
+.ccb-create-cookie table tr td:nth-child(3) {
   position: relative;
   opacity: 1 !important;
   cursor: not-allowed !important;
 }
 .ccb-edit-cookie table tr td:nth-child(1)::after,
-.ccb-edit-cookie table tr td:nth-child(2)::after {
+.ccb-edit-cookie table tr td:nth-child(2)::after,
+.ccb-edit-cookie table tr td:nth-child(3)::after,
+.ccb-create-cookie table tr td:nth-child(1)::after,
+.ccb-create-cookie table tr td:nth-child(2)::after,
+.ccb-create-cookie table tr td:nth-child(3)::after {
   background-color: hsla(212, 60%, 97%, 0.75);
   content: "";
   font-size: 0;
@@ -636,6 +657,7 @@
      -moz-user-select: none;
           user-select: none;
   width: 100%;
+  z-index: 10;
 }
 
 .ccb-getting-started {
@@ -664,7 +686,7 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
-  margin-top: 16px;
+  margin-top: 12px;
 }
 .ccb-getting-started-goal {
   display: flex;

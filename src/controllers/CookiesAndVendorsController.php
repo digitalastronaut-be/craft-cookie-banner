@@ -10,16 +10,47 @@ use yii\web\Response;
 use digitalastronaut\craftcookiebanner\CookieBanner;
 use digitalastronaut\craftcookiebanner\records\Content;
 
-class CompliancyChecklistController extends Controller {
+class CookiesAndVendorsController extends Controller {
     public $defaultAction = 'index';
     protected array|int|bool $allowAnonymous = self::ALLOW_ANONYMOUS_NEVER;
 
     public function actionIndex(): Response {
         $settings = CookieBanner::getInstance()->getSettings();
 
-        return $this->renderTemplate("cookie-banner/_compliancyChecklist", [
+        return $this->renderTemplate("cookie-banner/_cookiesAndVendors", [
             'settings' => $settings,
         ]);
+    }
+
+    public function actionCreate(): Response {
+        $settings = CookieBanner::getInstance()->getSettings();
+        $sites = Craft::$app->getSites()->getAllSites();
+
+        if (!$this->request->isPost) {
+            $emptyCookieForAllSites = [];
+
+            foreach ($sites as $site) {
+                $emptyCookieForAllSites[] = [
+                    'siteName' => $site->name,
+                    'name' => "",
+                    'group' => null,
+                    'purpose' => "",
+                    'expiration' => "",
+                    'enabled' => true,
+                ];
+            }
+
+            return $this->renderTemplate("cookie-banner/_createCookie", [
+                'settings' => $settings,
+                'emptyCookieForAllSites' => $emptyCookieForAllSites,
+            ]);
+        } else {
+            $this->request->bodyParams;
+
+            dd($this->request->bodyParams);
+
+            return $this->asJson(["message" => "Need to implment cookie creation logic"]);
+        }
     }
 
     public function actionEdit(string $name): Response {
@@ -75,5 +106,15 @@ class CompliancyChecklistController extends Controller {
             'settings' => $settings,
             'cookieForAllSites' => $cookieForAllSites,
         ]);
+    }
+
+    public function actionGetVendors() {
+        return Content::find()->one()->cookieGroups;
+    }
+
+    public function actionGetCookies() {
+        $content = Content::find()->one();
+
+        dd("hello");
     }
 }

@@ -1,0 +1,243 @@
+{% extends "_layouts/cp.twig" %}
+
+{% import '_includes/forms.twig' as forms %}
+
+{% set title = "Cookies and vendors"|t('cookie-banner') %}
+{% set selectedSubnavItem = 'cookiesAndVendors' %}
+
+{% set crumbs = [
+    { label: 'Cookie banner'|t('cookie-banner'), url: url('cookie-banner') },
+    { label: 'Cookies and vendors'|t('cookie-banner'), url: url('cookie-banner/cookies-and-vendors') },
+] %}
+
+{% set selectedTab = 'cookies' %}
+
+{% set tabs = {
+    cookies: {
+        label: 'Cookies'|t('cookie-banner'),
+        url: '#cookies',
+    },
+    vendors: {
+        label: 'Vendors'|t('cookie-banner'),
+        url: '#vendors',
+    },
+} %}
+
+{% block actionButton %}
+    <div class="btngroup">
+        <a href="{{ url('cookie-banner/cookies-and-vendors/create') }}"
+           class="btn submit add icon">
+            {{ "Add a new cookie"|t('cookie-banner') }}
+        </a>
+    </div>
+{% endblock %}
+
+{# {% set additionalButtons %}
+    <a href="{{ url('cookie-banner/settings') }}" class="btn">
+        {{ "Settings"|t('cookie-banner') }}
+    </a>
+{% endset %} #}
+
+{% block content %}
+    <div id="cookies">
+        <div class="ccb-compliancy-checklist">
+            <h2>Manage your cookies</h2>
+
+            <div class="ccb-detected-cookies-legend">
+                <p>{{ "Status of each cookie per site for the cookie banner"|t("cookie-banner") }}</p>
+
+                <div>
+                    <div class="status-chip not-defined">{{ "Not defined"|t("cookie-banner") }}</div>
+                    <div class="status-chip defined-incomplete">{{ "Defined but incomplete"|t("cookie-banner") }}</div>
+                    <div class="status-chip defined">{{ "Defined completely"|t("cookie-banner") }}</div>
+                </div>
+            </div>
+
+            <div class="ccb-detected-cookies-table">
+                <table class="data">
+                    <thead>
+                        <th>{{ "Actions"|t }}</th>
+                        <th>{{ "Automated"|t }}</th>
+                        <th>{{ "Cookie name"|t }}</th>
+                        <th>{{ "Current value"|t }}</th>
+                        <th>{{ "Cookie definition status"|t }}</th>
+                    </thead>
+
+                    <tbody>
+                        {% for cookie in getCookieDetectionOverviewData() %}
+                            <tr class="{{ cookie.isControlPanelCookie ? "disabled" : "" }}">
+                                <td>
+                                    <div class="ccb-compliancy-checklist-item-actions">
+                                        <div class="ccb-actions-menu">
+                                            <button class="btn btn-submit">
+                                                {{ "Actions"|t }}
+
+                                                {{ svg("@digitalastronaut/craftcookiebanner/web/icons/chevron-down.svg") }}
+                                            </button>
+
+                                            <div class="ccb-actions-menu-content visible">
+                                                <ul>
+                                                    {% if cookie.isAutomated %}
+                                                        <li class="ccb-actions-menu-option">
+                                                            <form method="post">
+                                                                {{ csrfInput() }}
+                                                                {{ actionInput("cookie-banner/content/add-cookie") }}
+                                                                {{ hiddenInput('cookieName', cookie.name) }}
+
+                                                                <button>Automatically add to sites missing this cookie</button>
+                                                            </form>
+                                                        </li>
+                                                    {% endif %}
+
+                                                    <li class="ccb-actions-menu-option">
+                                                        <a 
+                                                            title="Manually edit this cookie for all sites"
+                                                            href="{{ cpUrl('cookie-banner/cookies-and-vendors/edit/' ~ cookie.name )}}"
+                                                        >
+                                                            Manually edit this cookie for all sites
+                                                        </a>
+                                                    </li>
+                                                    
+                                                    <li class="ccb-actions-menu-option danger">
+                                                        <form method="post">
+                                                            {{ csrfInput() }}
+                                                            {{ actionInput("cookie-banner/content/delete-cookie-for-all-sites") }}
+                                                            {{ hiddenInput('cookieName', cookie.name) }}
+
+                                                            <button>Remove this cookie for all sites</button>
+                                                        </form>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td class="centered">
+                                    {% if cookie.isAutomated %}
+                                        <span class="checkbox-icon" title="Enabled" role="img" aria-label="Enabled"></span>
+                                    {% endif %}
+                                </td>
+
+                                <td class="ccb-semi-bold">{{ cookie.name|truncate(30) }}</td>
+
+                                <td>{{ cookie.currentValue|truncate(20) }}</td>
+
+                                {% if not cookie.isControlPanelCookie %}
+                                    <td>
+                                        <div class="inline-chips">
+                                            {% for language, isDefined in checkCookiesDefenitionForLanguages(cookie.name) %}
+                                                <div class="status-chip {{ isDefined }}">{{ language }}</div>
+                                            {% endfor %}
+                                        </div>
+                                    </td>
+                                {% else %}
+                                    <td>
+                                        <div class="status-chip">Used by the control panel internally</div>
+                                    </td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="vendors" class="hidden">
+        <div class="ccb-vendors">
+            <h2>Manage your vendors</h2>
+
+            <div class="ccb-detected-cookies-legend">
+                <p>{{ "Status of each vendor per site for the cookie banner"|t("cookie-banner") }}</p>
+
+                <div>
+                    <div class="status-chip not-defined">{{ "Not defined"|t("cookie-banner") }}</div>
+                    <div class="status-chip defined-incomplete">{{ "Defined but incomplete"|t("cookie-banner") }}</div>
+                    <div class="status-chip defined">{{ "Defined completely"|t("cookie-banner") }}</div>
+                </div>
+            </div>
+
+            <div class="ccb-vendors-table">
+                <table class="data">
+                    <thead>
+                        <th>{{ "Actions"|t }}</th>
+                        <th class="centered">{{ "Automated"|t }}</th>
+                        <th>{{ "Name"|t }}</th>
+                        <th>{{ "URL"|t }}</th>
+                        <th>{{ "Vendor definition status"|t }}</th>
+                    </thead>
+
+                    <tbody>
+                        {% for vendor in getVendorOverview() %}
+                            <tr>
+                                <td>
+                                    <div class="ccb-actions-menu">
+                                        <button class="btn btn-submit">
+                                            {{ "Actions"|t }}
+
+                                            {{ svg("@digitalastronaut/craftcookiebanner/web/icons/chevron-down.svg") }}
+                                        </button>
+
+                                        <div class="ccb-actions-menu-content visible">
+                                            <ul>
+                                                {# {% if cookie.isAutomated %} #}
+                                                    <li class="ccb-actions-menu-option">
+                                                        <form method="post">
+                                                            {{ csrfInput() }}
+                                                            {{ actionInput("cookie-banner/content/add-cookie") }}
+                                                            {{ hiddenInput('vendorName', vendor.name) }}
+
+                                                            <button>Automatically add to sites missing this vendor</button>
+                                                        </form>
+                                                    </li>
+                                                {# {% endif %} #}
+
+                                                <li class="ccb-actions-menu-option">
+                                                    <a 
+                                                        title="Manually edit this cookie for all sites"
+                                                        href="{{ cpUrl('cookie-banner/cookies-and-vendors/edit/' ~ vendor.name )}}"
+                                                    >
+                                                        Manually edit this vendor for all sites
+                                                    </a>
+                                                </li>
+                                                
+                                                <li class="ccb-actions-menu-option danger">
+                                                    <form method="post">
+                                                        {{ csrfInput() }}
+                                                        {{ actionInput("cookie-banner/content/delete-cookie-for-all-sites") }}
+                                                        {{ hiddenInput('vendorName', vendor.name) }}
+
+                                                        <button>Remove this vendor for all sites</button>
+                                                    </form>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td class="centered">
+                                    <span class="checkbox-icon" title="Enabled" role="img" aria-label="Enabled"></span>
+                                </td>
+
+                                <td class="ccb-semi-bold">{{ vendor.name|truncate(30) }}</td>
+
+                                <td class="ccb-semi-bold">
+                                    <a href="{{ vendor.url }}">{{ vendor.url|truncate(30) }}</a>
+                                </td>
+
+                                <td>
+                                    <div class="inline-chips">
+                                        {% for language, isDefined in checkCookiesDefenitionForLanguages(vendor.name) %}
+                                            <div class="status-chip {{ isDefined }}">{{ language }}</div>
+                                        {% endfor %}
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -10,11 +10,6 @@
 			"name": "Craft CMS",
 			"description": "Een op maat gemaakt contentmanagementsysteem gebouwd voor ontwikkelaars en auteurs",
 			"url": "https://craftcms.com/"
-		},
-		{
-			"name": "Cookie banner",
-			"description": "Deze banner beheert uw cookievoorkeuren en voldoet aan de nieuwste AVG-regelgeving.",
-			"url": "https://craftcms.com/"
 		}
 	],
 	"necessaryCookiesTitle": "Noodzakelijke cookies",

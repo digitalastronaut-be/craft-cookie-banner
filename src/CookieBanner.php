@@ -59,21 +59,25 @@ class CookieBanner extends Plugin {
         $this->registerAssetBundles();
         $this->registerTwigExtension();
 
-        $this->getConsentRecords()->cleanup();
+        // $this->getConsentRecords()->cleanup();
 
-        // TODO: Figure out hoe we consent records kunnen deleten zonder elke site/cp request cleanup te triggeren zonder persee een cron job...
-        // TODO: Permissions overal toepassen
-        // TODO: Badge met aantal cookies die nog niet in orde zijn tonen in sidenav
-        // TODO: Error handling in controllers verbetern
-        // TODO: All business logic veranderen naar services
-        // TODO: Styling en templates mooier opsplitsen
-        // TODO: Cascade for content table fixen.
-        // TODO: Loading animation when saving consent so it's more clear to the user.
-        // TODO: Provide a way to insert the detected cookies in to all languages.
-        // TODO: rename consent records controller action view -> index and  edit -> view
+        // TODO: remove adding or removing rows from content page and centralize cookies and vendors on their own page (BASE)
+        // TODO: add a language swicher to the cookie banner as an option (EXTRA)
+        // TODO: rename create cookie to add cookie in the controllers and logic
+
+        // TODO: Figure out hoe we consent records kunnen deleten zonder elke site/cp request cleanup te triggeren zonder persee een cron job... (BASE)
+        // TODO: Permissions overal toepassen (BASE)
+        // TODO: Badge met aantal cookies die nog niet in orde zijn tonen in sidenav (BASE)
+        // TODO: Error handling in controllers verbetern (BASE)
+        // TODO: All business logic veranderen naar services (BASE)
+        // TODO: Styling en templates mooier opsplitsen (BASE) 
+        // TODO: Cascade for content table fixen. (BASE)
+        // TODO: Loading animation when saving consent so it's more clear to the user. (BASE)
+        // TODO: Provide a way to insert the detected cookies in to all languages. (BASE)
+        // TODO: rename consent records controller action view -> index and  edit -> view (BASE)
 
         if (Craft::$app->getRequest()->getIsCpRequest()) {
-            $this->_registerPermissions();
+            $this->registerPermissions();
             $this->registerCpRoutes();
             $this->registerCpEvents();
         }
@@ -114,7 +118,7 @@ class CookieBanner extends Plugin {
         );
     }
 
-    private function _registerPermissions(): void {
+    private function registerPermissions(): void {
         Event::on(UserPermissions::class, UserPermissions::EVENT_REGISTER_PERMISSIONS, function(RegisterUserPermissionsEvent $event) {
             $event->permissions[] = [
                 'heading' => 'Cookie banner',
@@ -122,8 +126,8 @@ class CookieBanner extends Plugin {
                     'cookie-banner:access-settings' => [
                         'label' => Craft::t('cookie-banner', 'Access settings'),
                     ],
-                    'cookie-banner:access-compliancy-checklist' => [
-                        'label' => Craft::t('cookie-banner', 'Access compliancy checklist')
+                    'cookie-banner:access-cookies-and-vendors' => [
+                        'label' => Craft::t('cookie-banner', 'Access cookies and vendors')
                     ],
                     'cookie-banner:access-content' => [
                         'label' => Craft::t('cookie-banner', 'Access content')
@@ -146,7 +150,7 @@ class CookieBanner extends Plugin {
         $item['url'] = 'cookie-banner';
         $item['subnav'] = [
             'gettingStarted' => ['label' => 'Getting started', 'url' => 'cookie-banner/getting-started'],
-            'compliancyChecklist' => ['label' => 'Compliancy checklist', 'url' => 'cookie-banner/compliancy-checklist'],
+            'cookiesAndVendors' => ['label' => 'Cookies and vendors', 'url' => 'cookie-banner/cookies-and-vendors'],
             'consentRecords' => ['label' => 'Consent records', 'url' => 'cookie-banner/consent-records'],
             'content' => ['label' => 'Content', 'url' => 'cookie-banner/content'],
             'appearance' => ['label' => 'Appearance', 'url' => 'cookie-banner/appearance'],
@@ -163,8 +167,9 @@ class CookieBanner extends Plugin {
             function (RegisterUrlRulesEvent $event) {
                 $event->rules['cookie-banner'] = 'cookie-banner/consent-records/index';
                 $event->rules['cookie-banner/getting-started'] = 'cookie-banner/getting-started/index';
-                $event->rules['cookie-banner/compliancy-checklist'] = 'cookie-banner/compliancy-checklist/index';
-                $event->rules['cookie-banner/compliancy-checklist/edit/<name>'] = 'cookie-banner/compliancy-checklist/edit';
+                $event->rules['cookie-banner/cookies-and-vendors'] = 'cookie-banner/cookies-and-vendors/index';
+                $event->rules['cookie-banner/cookies-and-vendors/edit/<name>'] = 'cookie-banner/cookies-and-vendors/edit';
+                $event->rules['cookie-banner/cookies-and-vendors/create'] = 'cookie-banner/cookies-and-vendors/create';
                 $event->rules['cookie-banner/content'] = 'cookie-banner/content/index';
                 $event->rules['cookie-banner/content/add-cookie'] = 'cookie-banner/content/add-cookie';
                 $event->rules['cookie-banner/appearance'] = 'cookie-banner/appearance/index';
@@ -187,9 +192,13 @@ class CookieBanner extends Plugin {
     }
 
     private function registerElementTypes(): void {
-        Event::on(Elements::class, Elements::EVENT_REGISTER_ELEMENT_TYPES, function (RegisterComponentTypesEvent $event) {
-            $event->types[] = ConsentRecord::class;
-        });
+        Event::on(
+            Elements::class, 
+            Elements::EVENT_REGISTER_ELEMENT_TYPES, 
+            function (RegisterComponentTypesEvent $event) {
+                $event->types[] = ConsentRecord::class;
+            }
+        );
     }
 
     private function registerAssetBundles(): void {
@@ -200,10 +209,6 @@ class CookieBanner extends Plugin {
                 Craft::$app->getView()->registerAssetBundle(CookieBannerAssets::class);
             }
         );
-    }
-
-    private function registerTwigExtension(): void {
-        Craft::$app->view->registerTwigExtension(new CookieBannerTwigExtension());
     }
 
     private function registerCookieBanner(): void {
@@ -257,5 +262,9 @@ class CookieBanner extends Plugin {
                 Content::deleteAll(['siteId' => $event->site->id]);
             }
         );
+    }
+
+    private function registerTwigExtension(): void {
+        Craft::$app->view->registerTwigExtension(new CookieBannerTwigExtension());
     }
 }

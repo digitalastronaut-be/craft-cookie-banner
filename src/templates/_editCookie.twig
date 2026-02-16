@@ -8,8 +8,8 @@
 
 {% set crumbs = [
     { label: 'Cookie banner'|t, url: url('cookie-banner') },
-    { label: 'Compliancy checklist'|t, url: url('cookie-banner/compliancy-checklist') },
-    { label: 'Manually edit cookie'|t, url: url('cookie-banner/compliancy-checklist/edit') },
+    { label: 'Compliancy checklist'|t, url: url('cookie-banner/cookies-and-vendors') },
+    { label: 'Manually edit cookie'|t },
 ] %}
 
 {% block content %}
@@ -26,23 +26,25 @@
                 name: { 
                     heading: "Cookie Name", 
                     type: "singleline",
-                    width: '20%'
                 },
                 group: { 
-                    heading: "Group", 
-                    type: "singleline",
-                    width: '15%'
+                    heading: "Vendor", 
+                    type: "select",
+                    options: getVendorOptions()
                 },
                 purpose: { 
                     heading: "Purpose", 
                     type: "multiline",
-                    width: '35%'
                 },
                 expiration: { 
                     heading: "Expiration", 
                     type: "singleline",
-                    width: '15%'
                 },
+                enabled: {
+                    heading: "Enabled for this site",
+                    type: "lightswitch",
+                    width: '10%',
+                }
             },
             rows: cookieForAllSites,
             allowAdd: false,

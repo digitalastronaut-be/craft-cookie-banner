@@ -125,8 +125,8 @@ class Install extends Migration {
             $languageCode = strtolower(explode('-', $site->language)[0]);
             $filePath = "{$basePath}/{$languageCode}.json";
 
-            if (!file_exists($filePath)) $filePath = "{$basePath}/en.json";
-            
+            if (!file_exists($filePath)) $filePath = "{$basePath}/default.json";
+
             $this->insert(Table::COOKIE_BANNER_CONTENT, array_merge(
                 ['siteId' => $site->id],
                 json_decode(file_get_contents($filePath), true)
