@@ -1,0 +1,86 @@
+{% extends "_layouts/cp.twig" %}
+
+{% import '_includes/forms.twig' as forms %}
+
+{% set title = "Edit the " ~ vendorForAllSites[0].name ~ " cookie for all sites" %}
+{% set selectedSubnavItem = 'compliancyChecklist' %}
+{% set fullPageForm = true %}
+
+{% set crumbs = [
+    { label: 'Cookie banner'|t, url: url('cookie-banner') },
+    { label: 'Cookies and vendors'|t, url: url('cookie-banner/cookies-and-vendors') },
+    { label: 'Add a new vendor'|t },
+] %}
+
+{% block content %}
+    <div class="ccb-create-vendor">
+        <div class="flex-fields">
+            <div class="field width-50">
+                {{ forms.textField({
+                    label: 'Vendor name',
+                    id: 'name',
+                    name: 'name',
+                    value: vendorForAllSites[0]['name'],
+                    placeholder: 'Name of the vendor',
+                }) }}
+            </div>
+
+            <hr>
+
+            <div class="field width-100">
+                {{ forms.editableTableField({
+                    id: 'vendorForAllSites',
+                    name: 'fields[vendorForAllSites]',
+                    cols: {
+                        siteName: { 
+                            heading: "Site", 
+                            type: "singleline",
+                            width: "15%"
+                        },
+                        name: { 
+                            heading: "Vendor Name", 
+                            type: "singleline",
+                            width: "15%"
+                        },
+                        url: { 
+                            heading: "URL", 
+                            type: "singleline",
+                        },
+                        description: { 
+                            heading: "Description", 
+                            type: "singleline",
+                        },
+                        enabled: {
+                            heading: "Enabled for this site",
+                            type: "lightswitch",
+                            width: "10%"
+                        }
+                    },
+                    rows: vendorForAllSites,
+                    allowAdd: false,
+                    allowDelete: false,
+                    allowReorder: false,
+                    staticRows: true,
+                }) }}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const masterInput = document.getElementById('name');
+
+            if (masterInput) {
+                masterInput.addEventListener('input', function () {
+                    const value = this.value;
+
+                    const tableInputs = document.querySelectorAll(
+                        '[name^="fields[vendorForAllSites]"][name$="[name]"]'
+                    );
+
+                    tableInputs.forEach(input => input.value = value);
+                });
+            }
+        });
+    </script>
+{% endblock %}

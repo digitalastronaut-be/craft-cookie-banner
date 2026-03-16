@@ -9,12 +9,8 @@
 		{
 			"name": "Craft CMS",
 			"description": "Een op maat gemaakt contentmanagementsysteem gebouwd voor ontwikkelaars en auteurs",
-			"url": "https://craftcms.com/"
-		},
-		{
-			"name": "Cookie banner",
-			"description": "Deze banner beheert uw cookievoorkeuren en voldoet aan de nieuwste AVG-regelgeving.",
-			"url": "https://craftcms.com/"
+			"url": "https://craftcms.com",
+			"enabled": true
 		}
 	],
 	"necessaryCookiesTitle": "Noodzakelijke cookies",
@@ -25,13 +21,15 @@
 			"name": "CRAFT_CSRF_TOKEN",
 			"group": "craft-cms",
 			"purpose": "Beveiligingstoken gebruikt om cross-site request forgery (CSRF) aanvallen te voorkomen. Zorgt ervoor dat formulierinzendingen en verzoeken afkomstig zijn van vertrouwde bronnen.",
-			"expiration": "Sessie"
+			"expiration": "Sessie",
+			"enabled": true
 		},
 		{
 			"name": "CraftSessionId",
 			"group": "craft-cms",
 			"purpose": "Identificeert een unieke sessie tussen de browser en de server. Vereist voor basisfunctionaliteit van de site zoals inloggen en formulierinzendingen.",
-			"expiration": "Sessie"
+			"expiration": "Sessie",
+			"enabled": true
 		}
 	],
 	"preferenceCookiesTitle": "Voorkeurscookies",
@@ -42,7 +40,8 @@
 			"name": "craft-cookie-banner",
 			"group": "craft-cms",
 			"purpose": "Slaat de cookievoorkeuren van de gebruiker op (bijvoorbeeld geaccepteerde of geweigerde categorieën) zodat de banner niet bij elk bezoek opnieuw verschijnt.",
-			"expiration": "1 jaar"
+			"expiration": "1 jaar",
+			"enabled": true
 		}
 	],
 	"analyticalCookiesTitle": "Analytische cookies",

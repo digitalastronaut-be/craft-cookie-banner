@@ -57,7 +57,7 @@
     {{ actionInput('cookie-banner/content/save') }}
     {{ hiddenInput('siteId', selectedSite.id) }}
 
-    <div class="flex-fields">
+    <div class="flex-fields ccb-settings">
         <h2>Introduction</h2>
 
         <div class="field width-50">
@@ -127,27 +127,27 @@
 
         <hr>
 
-        <div class="width-50">
-            <h2>Cookies</h2>
-
-            <p>If your use case requires grouping cookies even further by provider or other traits you can define them here. If you don't need this funcitonality just leave it blank.</p>
-        </div>
+        <h2>Cookies</h2>
 
         <div class="field width-75">
-            {{ forms.editableTableField({
-                label: 'Groups',
-                id: 'cookieGroups',
-                name: 'fields[cookieGroups]',
-                cols: {
-                    name: { heading: "Name", type: "singleline" },
-                    description: { heading: "Description", type: "multiline"},
-                    url: { heading: "URL", type: "url"},
-                },
-                rows: banner.cookieGroups ?? [],
-                allowAdd: true,
-                allowDelete: true,
-                allowReorder: true,
-            }) }}
+            {% if banner.cookieGroups|length %}
+                {{ forms.editableTableField({
+                    label: 'Vendors',
+                    id: 'cookieGroups',
+                    name: 'fields[cookieGroups]',
+                    cols: {
+                        name: { heading: "Name", type: "singleline" },
+                        description: { heading: "Description", type: "multiline"},
+                        url: { heading: "URL", type: "url"},
+                    },
+                    rows: banner.cookieGroups ?? [],
+                    allowReorder: true,
+                }) }}
+            {% else %}
+                <div class="pane no-border zilch small">
+                    <p class="zilch small">{{ "No vendors defined"|t }}</p>
+                </div>    
+            {% endif %}
         </div>
 
         <h2>Necessary cookies</h2>
@@ -184,21 +184,26 @@
         </div>
 
         <div class="width-75">
-            {{ forms.editableTableField({
-                label: 'List',
-                id: 'necessaryCookies',
-                name: 'fields[necessaryCookies]',
-                cols: {
-                    name: { heading: "Name", type: "singleline" },
-                    group: { heading: "Group", type: "select", options: cookieGroups },
-                    purpose: { heading: "Purpose", type: "multiline" },
-                    expiration: { heading: "Expiration", type: "singleline" },
-                },
-                rows: banner.necessaryCookies ?? [],
-                allowAdd: true,
-                allowDelete: true,
-                allowReorder: true,
-            }) }}
+            {% if banner.necessaryCookies|length %}
+                {{ forms.editableTableField({
+                    label: 'List',
+                    id: 'necessaryCookies',
+                    name: 'fields[necessaryCookies]',
+                    cols: {
+                        name: { heading: "Name", type: "singleline" },
+                        group: { heading: "Vendor", type: "select", options: cookieGroups },
+                        purpose: { heading: "Purpose", type: "multiline" },
+                        expiration: { heading: "Expiration", type: "singleline" },
+                        enabled: { heading: "Enabled", type: "lightswitch" },
+                    },
+                    rows: banner.necessaryCookies ?? [],
+                    allowReorder: true,
+                }) }}
+            {% else %}
+                <div class="pane no-border zilch small">
+                    <p class="zilch small">{{ "No necessary cookies defined"|t }}</p>
+                </div>    
+            {% endif %}
         </div>
 
         <h2>Preference cookies</h2>
@@ -235,21 +240,26 @@
         </div>
 
         <div class="field width-75">
-            {{ forms.editableTableField({
-                label: 'List',
-                id: 'preferenceCookies',
-                name: 'fields[preferenceCookies]',
-                cols: {
-                    name: { heading: "Name", type: "singleline" },
-                    group: { heading: "Group", type: "select", options: cookieGroups },
-                    purpose: { heading: "Purpose", type: "multiline" },
-                    expiration: { heading: "Expiration", type: "singleline" },
-                },
-                rows: banner.preferenceCookies ?? [],
-                allowAdd: true,
-                allowDelete: true,
-                allowReorder: true,
-            }) }}
+            {% if banner.preferenceCookies|length %}
+                {{ forms.editableTableField({
+                    label: 'List',
+                    id: 'preferenceCookies',
+                    name: 'fields[preferenceCookies]',
+                    cols: {
+                        name: { heading: "Name", type: "singleline" },
+                        group: { heading: "Vendor", type: "select", options: cookieGroups },
+                        purpose: { heading: "Purpose", type: "multiline" },
+                        expiration: { heading: "Expiration", type: "singleline" },
+                        enabled: { heading: "Enabled", type: "lightswitch" },
+                    },
+                    rows: banner.preferenceCookies ?? [],
+                    allowReorder: true,
+                }) }}
+            {% else %}
+                <div class="pane no-border zilch small">
+                    <p class="zilch small">{{ "No preference cookies defined"|t }}</p>
+                </div>    
+            {% endif %}
         </div>
 
         <h2>Analytical cookies</h2>
@@ -286,21 +296,26 @@
         </div>
 
         <div class="field width-75">
-            {{ forms.editableTableField({
-                label: 'List',
-                id: 'analyticalCookies',
-                name: 'fields[analyticalCookies]',
-                cols: {
-                    name: { heading: "Name", type: "singleline" },
-                    group: { heading: "Group", type: "select", options: cookieGroups },
-                    purpose: { heading: "Purpose", type: "multiline" },
-                    expiration: { heading: "Expiration", type: "singleline" },
-                },
-                rows: banner.analyticalCookies ?? [],
-                allowAdd: true,
-                allowDelete: true,
-                allowReorder: true,
-            }) }}
+            {% if banner.analyticalCookies %}
+                {{ forms.editableTableField({
+                    label: 'List',
+                    id: 'analyticalCookies',
+                    name: 'fields[analyticalCookies]',
+                    cols: {
+                        name: { heading: "Name", type: "singleline" },
+                        group: { heading: "Vendor", type: "select", options: cookieGroups },
+                        purpose: { heading: "Purpose", type: "multiline" },
+                        expiration: { heading: "Expiration", type: "singleline" },
+                        enabled: { heading: "Enabled", type: "lightswitch" },
+                    },
+                    rows: banner.analyticalCookies ?? [],
+                    allowReorder: true,
+                }) }}
+            {% else %}
+                <div class="pane no-border zilch small">
+                    <p class="zilch small">{{ "No analytical cookies defined"|t }}</p>
+                </div>        
+            {% endif %}
         </div>
 
         <h2>Marketing cookies</h2>
@@ -337,21 +352,26 @@
         </div>
 
         <div class="field width-75">
-            {{ forms.editableTableField({
-                label: 'List',
-                id: 'marketingCookies',
-                name: 'fields[marketingCookies]',
-                cols: {
-                    name: { heading: "Name", type: "singleline" },
-                    group: { heading: "Group", type: "select", options: cookieGroups },
-                    purpose: { heading: "Purpose", type: "multiline" },
-                    expiration: { heading: "Expiration", type: "singleline" },
-                },
-                rows: banner.marketingCookies ?? [],
-                allowAdd: true,
-                allowDelete: true,
-                allowReorder: true,
-            }) }}
+            {% if banner.marketingCookies|length %}
+                {{ forms.editableTableField({
+                    label: 'List',
+                    id: 'marketingCookies',
+                    name: 'fields[marketingCookies]',
+                    cols: {
+                        name: { heading: "Name", type: "singleline" },
+                        group: { heading: "Vendor", type: "select", options: cookieGroups },
+                        purpose: { heading: "Purpose", type: "multiline" },
+                        expiration: { heading: "Expiration", type: "singleline" },
+                        enabled: { heading: "Enabled", type: "lightswitch" },
+                    },
+                    rows: banner.marketingCookies ?? [],
+                    allowReorder: true,
+                }) }}
+            {% else %}
+                <div class="pane no-border zilch small">
+                    <p class="zilch small">{{ "No marketing cookies defined"|t }}</p>
+                </div>        
+            {% endif %}
         </div>
 
         <h2>Uncategorized cookies</h2>
@@ -388,21 +408,26 @@
         </div>
 
         <div class="field width-75">
-            {{ forms.editableTableField({
-                label: 'List',
-                id: 'uncategorizedCookies',
-                name: 'fields[uncategorizedCookies]',
-                cols: {
-                    name: { heading: "Name", type: "singleline" },
-                    group: { heading: "Group", type: "select", options: cookieGroups },
-                    purpose: { heading: "Purpose", type: "multiline" },
-                    expiration: { heading: "Expiration", type: "singleline" },
-                },
-                rows: banner.uncategorizedCookies ?? [],
-                allowAdd: true,
-                allowDelete: true,
-                allowReorder: true,
-            }) }}
+            {% if banner.uncategorizedCookies|length %}
+                {{ forms.editableTableField({
+                    label: 'List',
+                    id: 'uncategorizedCookies',
+                    name: 'fields[uncategorizedCookies]',
+                    cols: {
+                        name: { heading: "Name", type: "singleline" },
+                        group: { heading: "Vendor", type: "select", options: cookieGroups },
+                        purpose: { heading: "Purpose", type: "multiline" },
+                        expiration: { heading: "Expiration", type: "singleline" },
+                        enabled: { heading: "Enabled", type: "lightswitch" },
+                    },
+                    rows: banner.uncategorizedCookies ?? [],
+                    allowReorder: true,
+                }) }}
+            {% else %}
+                <div class="pane no-border zilch small">
+                    <p class="zilch small">{{ "No uncategorized cookies defined"|t }}</p>
+                </div>            
+            {% endif %}
         </div>
 
         <h2>Button labels</h2>

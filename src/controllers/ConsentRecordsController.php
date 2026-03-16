@@ -5,14 +5,11 @@ namespace digitalastronaut\craftcookiebanner\controllers;
 use Craft;
 use craft\web\Controller;
 use craft\web\Response;
-use craft\helpers\Json;
 
 use DateTime;
-
+use digitalastronaut\craftcookiebanner\CookieBanner;
 use digitalastronaut\craftcookiebanner\elements\ConsentRecord;
 use yii\web\BadRequestHttpException;
-use yii\web\Cookie;
-use yii\db\Query;
 
 class ConsentRecordsController extends Controller {
     public $defaultAction = 'index';
@@ -67,6 +64,7 @@ class ConsentRecordsController extends Controller {
     }
 
     public function actionCreate(): Response {
+        $settings = CookieBanner::getInstance()->getSettings();
         $body = $this->request->bodyParams;
 
         $consentRecord = new ConsentRecord();
@@ -85,15 +83,17 @@ class ConsentRecordsController extends Controller {
         // TODO: remove expiry field as expired records cannot be stored
         $consentRecord->consentExpiry = (new DateTime())->modify('+12 months');
         $consentRecord->consentAction = $body['consentAction'];
+
         $consentRecord->essentialCookies = $body['consentCategories']['essentialCookies'];
         $consentRecord->functionalCookies = $body['consentCategories']['functionalCookies'];
         $consentRecord->analyticalCookies = $body['consentCategories']['analyticalCookies'];
         $consentRecord->advertisementCookies = $body['consentCategories']['advertisementCookies'];
         $consentRecord->personalizationCookies = $body['consentCategories']['personalizationCookies'];
+
         $consentRecord->consentMethod = 'Cookie banner';
-        $consentRecord->bannerVersion = 'v1.0.0';
-        $consentRecord->privacyPolicyVersion = 'v2.13.11';
-        $consentRecord->cookiePolicyVersion = 'v1.7.24';
+        $consentRecord->bannerVersion = $settings->cookieBannerVersion;
+        $consentRecord->privacyPolicyVersion = $settings->privacyPolicyVersion;
+        $consentRecord->cookiePolicyVersion = $settings->cookiePolicyVersion;
 
         $succes = Craft::$app->elements->saveElement($consentRecord);
 

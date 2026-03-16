@@ -13,8 +13,8 @@ use Carbon\Carbon;
 class Settings extends Model {
     public bool $cookieBannerEnabled = true;
     public string $cookieBannerVersion = 'v1.0.0';
-    public string $privacyPolicyVersion = 'v1.4.7';
-    public string $cookiePolicyVersion = 'v1.3.1';
+    public string $privacyPolicyVersion = 'v1.0.0';
+    public string $cookiePolicyVersion = 'v1.0.0';
     public string $consentRecordRetention = 'sixMonths';
 
     public string $cookieBannerPosition = 'bottom-left';
@@ -64,4 +64,15 @@ class Settings extends Model {
     public string $buttonSize = 'small';
     public string $bannerStyle = 'square';
     public string $cookieListStyle = 'ungrouped';
+
+    public array $gettingStartedProgress = [
+        "legalPagesStepCompleted" => false,
+        "deferScriptsStepCompleted" => false,
+        "contentStepCompleted" => false,
+        "appearanceStepCompleted" => false,
+        "finalSettingsStepCompleted" => false,
+    ];
+
+    public array $blacklistedCookies = [];
+    public array $blacklistedVendors = [];
 }

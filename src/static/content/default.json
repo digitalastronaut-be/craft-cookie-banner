@@ -1,0 +1,64 @@
+{
+	"title": "",
+	"text": "",
+	"privacyPolicyLinkLabel": "",
+	"privacyPolicyLinkURL": "",
+	"cookiePolicyLinkLabel": "",
+	"cookiePolicyLinkURL": "",
+	"cookieGroups": [
+		{
+			"name": "Craft CMS",
+			"description": "",
+			"url": "https://craftcms.com",
+			"enabled": true
+		}
+	],
+	"necessaryCookiesTitle": "",
+	"necessaryCookiesLabel": "",
+	"necessaryCookiesDefinition": "",
+	"necessaryCookies": [
+		{
+			"name": "CRAFT_CSRF_TOKEN",
+			"group": "craft-cms",
+			"purpose": "",
+			"expiration": "",
+			"enabled": true
+		},
+		{
+			"name": "CraftSessionId",
+			"group": "craft-cms",
+			"purpose": "",
+			"expiration": "",
+			"enabled": true
+		}
+	],
+	"preferenceCookiesTitle": "",
+	"preferenceCookiesLabel": "",
+	"preferenceCookiesDefinition": "",
+	"preferenceCookies": [
+		{
+			"name": "craft-cookie-banner",
+			"group": "craft-cms",
+			"purpose": "",
+			"expiration": "",
+			"enabled": true
+		}
+	],
+	"analyticalCookiesTitle": "",
+	"analyticalCookiesLabel": "",
+	"analyticalCookiesDefinition": "",
+	"analyticalCookies": [],
+	"marketingCookiesTitle": "",
+	"marketingCookiesLabel": "",
+	"marketingCookiesDefinition": "",
+	"marketingCookies": [],
+	"uncategorizedCookiesTitle": "",
+	"uncategorizedCookiesLabel": "",
+	"uncategorizedCookiesDefinition": "",
+	"uncategorizedCookies": [],
+	"acceptAllButtonLabel": "",
+	"acceptSelectedButtonLabel": "",
+	"refuseAllButtonLabel": "",
+	"determinePreferencesButtonLabel": "",
+	"detailedPreferencesButtonLabel": ""
+}

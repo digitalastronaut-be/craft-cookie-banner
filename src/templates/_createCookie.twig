@@ -2,30 +2,28 @@
 
 {% import '_includes/forms.twig' as forms %}
 
-{% set title = "Edit the " ~ cookieForAllSites[0].name ~ " cookie for all sites" %}
+{% set title = "Add a new cookie"|t("cookie-banner") %}
 {% set selectedSubnavItem = 'compliancyChecklist' %}
 {% set fullPageForm = true %}
 
 {% set crumbs = [
     { label: 'Cookie banner'|t, url: url('cookie-banner') },
     { label: 'Compliancy checklist'|t, url: url('cookie-banner/cookies-and-vendors') },
-    { label: 'Manually edit cookie'|t },
+    { label: 'Add a new cookie'|t },
 ] %}
 
 {% block content %}
-    <div class="ccb-edit-cookie">
+    <div class="ccb-create-cookie">
         <div class="flex-fields">
             <div class="field width-50">
                 {{ forms.textField({
                     label: 'Cookie name',
                     id: 'name',
                     name: 'name',
-                    value: cookieForAllSites[0]['name'],
+                    value: "",
                     placeholder: 'Name of the cookie you want to add',
                 }) }}
             </div>
-
-            <input type="hidden" name="currentCategory" value="{{ cookieForAllSites[0]['category'] }}">
 
             <div class="field width-25">
                 {{ forms.selectField({
@@ -39,7 +37,7 @@
                         { 'label': 'Marketing cookies', 'value': 'marketingCookies' },
                         { 'label': 'Uncategorized cookies', 'value': 'uncategorizedCookies' }
                     ],
-                    value: cookieForAllSites[0]['category'],
+                    value: 'necessaryCookies',
                 }) }}
             </div>
             
@@ -49,7 +47,7 @@
                     id: 'vendor',
                     name: 'vendor',
                     options: getVendorOptions(),
-                    value: cookieForAllSites[0]['group'],
+                    value: 'default',
                 }) }}
             </div>
 
@@ -77,7 +75,6 @@
                         purpose: { 
                             heading: "Purpose", 
                             type: "multiline",
-                            placeholder: "Describe the purpose of the cookie"
                         },
                         expiration: { 
                             heading: "Expiration", 
@@ -89,7 +86,7 @@
                             width: '10%',
                         }
                     },
-                    rows: cookieForAllSites,
+                    rows: emptyCookieForAllSites,
                     allowAdd: false,
                     allowDelete: false,
                     allowReorder: false,
@@ -103,21 +100,6 @@
         document.addEventListener('DOMContentLoaded', function () {
             const masterInput = document.getElementById('name');
             const masterVendor = document.getElementById('vendor');
-
-            const lightswitches = document.querySelectorAll(
-                'button.lightswitch[aria-labelledby="cookieForAllSites-heading-6"]'
-            );
-
-            lightswitches.forEach((lightswitch) => {
-                const tableRow = lightswitch.parentNode.parentNode;
-
-                const isEnabled = lightswitch.getAttribute('aria-checked') === 'true';
-                if (!isEnabled) tableRow.classList.toggle('uneditable');
-
-                lightswitch.addEventListener('click', function (event) {
-                    tableRow.classList.toggle('uneditable');
-                });
-            });
 
             if (masterInput) {
                 masterInput.addEventListener('input', function () {

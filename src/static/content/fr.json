@@ -9,12 +9,8 @@
 		{
 			"name": "Craft CMS",
 			"description": "Un système de gestion de contenu sur mesure conçu pour les développeurs et les auteurs",
-			"url": "https://craftcms.com/"
-		},
-		{
-			"name": "Cookie banner",
-			"description": "Cette bannière gère vos préférences en matière de cookies et est conforme aux dernières réglementations RGPD.",
-			"url": "https://craftcms.com/"
+			"url": "https://craftcms.com",
+			"enabled": true
 		}
 	],
 	"necessaryCookiesTitle": "Cookies nécessaires",
@@ -25,13 +21,15 @@
 			"name": "CRAFT_CSRF_TOKEN",
 			"group": "craft-cms",
 			"purpose": "Jeton de sécurité utilisé pour empêcher les attaques par falsification de requête intersite (CSRF). Garantit que les soumissions de formulaires et les requêtes proviennent de sources fiables.",
-			"expiration": "Session"
+			"expiration": "Session",
+			"enabled": true
 		},
 		{
 			"name": "CraftSessionId",
 			"group": "craft-cms",
 			"purpose": "Identifie une session unique entre le navigateur et le serveur. Requis pour les fonctionnalités de base du site telles que les connexions et les soumissions de formulaires.",
-			"expiration": "Session"
+			"expiration": "Session",
+			"enabled": true
 		}
 	],
 	"preferenceCookiesTitle": "Cookies de préférence",
@@ -42,7 +40,8 @@
 			"name": "craft-cookie-banner",
 			"group": "craft-cms",
 			"purpose": "Stocke les préférences de cookies de l'utilisateur (par exemple, catégories acceptées ou refusées) afin que la bannière ne réapparaisse pas à chaque visite.",
-			"expiration": "1 an"
+			"expiration": "1 an",
+			"enabled": true
 		}
 	],
 	"analyticalCookiesTitle": "Cookies analytiques",

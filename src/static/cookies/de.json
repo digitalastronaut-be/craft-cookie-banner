@@ -7765,7 +7765,7 @@
 	{
 		"name": "craft-cookie-banner",
 		"description": "Speichert die Cookie-Präferenzen des Benutzers (z. B. akzeptierte oder abgelehnte Kategorien), damit das Banner nicht bei jedem Besuch erneut angezeigt wird.",
-		"vendor": "CraftCMS",
+		"vendor": "Craft CMS",
 		"retention": "1 Jahr",
 		"category": "preference"
 	},
@@ -8171,21 +8171,21 @@
 	{
 		"name": "CRAFT_CSRF_TOKEN",
 		"description": "Ermöglicht den Schutz vor Cross-Site-Request-Forgery-Angriffen. Dies trägt zum Schutz der Daten bei, die über Formulare auf der Website übermittelt werden.",
-		"vendor": "CraftCMS",
+		"vendor": "Craft CMS",
 		"retention": "Sitzung",
 		"category": "uncategorized"
 	},
 	{
 		"name": "CraftSessionId",
 		"description": "Craft verwendet PHP-Sessions, um Sitzungen über Webanfragen hinweg aufrechtzuerhalten. Dies geschieht mithilfe des PHP-Session-Cookies. Craft benennt diesen Cookie standardmäßig „CraftSessionId“. Dieser Cookie läuft ab, sobald die Sitzung abläuft.",
-		"vendor": "CraftCMS",
+		"vendor": "Craft CMS",
 		"retention": "Sitzung",
 		"category": "preference"
 	},
 	{
 		"name": "Craft-*",
 		"description": "Craft verwendet diese Cookies, um die Einstellungen für das Bedienfeld zu speichern.",
-		"vendor": "CraftCMS",
+		"vendor": "Craft CMS",
 		"retention": "Sitzung",
 		"category": "preference"
 	},

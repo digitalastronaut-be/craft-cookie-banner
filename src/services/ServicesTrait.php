@@ -8,6 +8,7 @@ trait ServicesTrait {
             'components' => [
                 'cookieDetection' => CookieDetectionService::class,
                 'consentRecords' => ConsentRecordsService::class,
+                'cookiesAndVendors' => CookiesAndVendorsService::class,
             ],
         ];
     }
@@ -18,5 +19,9 @@ trait ServicesTrait {
 
     public function getConsentRecords(): ConsentRecordsService {
         return $this->get('consentRecords');
+    }
+
+    public function getCookiesAndVendors(): CookiesAndVendorsService {
+        return $this->get('cookiesAndVendors');
     }
 }

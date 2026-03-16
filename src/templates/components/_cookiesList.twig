@@ -32,12 +32,12 @@
 ] %}
 
 {% if settings.cookieListStyle == "grouped" %}
-    {# One table with cookie type column #}
+    {# Multiple tables with headers #}
     {% for group in cookieGroups %}
         {% if group.cookies is not empty %}
             <h3>{{ group.title }}</h3>
             <p>{{ group.definition }}</p>
-            <table>
+            <table class="ccb-cookies-list">
                 <thead>
                     <tr>
                         <th>{{ "Name"|t('cookie-banner') }}</th>
@@ -58,8 +58,8 @@
         {% endif %}
     {% endfor %}
 {% else %}
-    {# Multiple tables with headers #}
-    <table>
+    {# One table with cookie type column #}
+    <table class="ccb-cookies-list">
         <thead>
             <tr>
                 <th>{{ "Name"|t('cookie-banner') }}</th>

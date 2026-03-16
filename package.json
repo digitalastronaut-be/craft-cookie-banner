@@ -12,10 +12,10 @@
 	"license": "ISC",
 	"type": "module",
 	"devDependencies": {
+		"baseline-browser-mapping": "^2.10.8",
 		"laravel-mix": "^6.0.49",
 		"resolve-url-loader": "^5.0.0",
 		"sass": "^1.93.2",
 		"sass-loader": "^12.6.0"
-	},
-	"dependencies": {}
+	}
 }
