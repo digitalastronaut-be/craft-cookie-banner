@@ -14,43 +14,134 @@
 
 {% block content %}
     <div class="ccb-edit-cookie">
-        {{ forms.editableTableField({
-            id: 'cookieForAllSites',
-            name: 'fields[cookieForAllSites]',
-            cols: {
-                siteName: { 
-                    heading: "Site", 
-                    type: "singleline",
-                    width: '15%',
-                },
-                name: { 
-                    heading: "Cookie Name", 
-                    type: "singleline",
-                },
-                group: { 
-                    heading: "Vendor", 
-                    type: "select",
-                    options: getVendorOptions()
-                },
-                purpose: { 
-                    heading: "Purpose", 
-                    type: "multiline",
-                },
-                expiration: { 
-                    heading: "Expiration", 
-                    type: "singleline",
-                },
-                enabled: {
-                    heading: "Enabled for this site",
-                    type: "lightswitch",
-                    width: '10%',
-                }
-            },
-            rows: cookieForAllSites,
-            allowAdd: false,
-            allowDelete: false,
-            allowReorder: false,
-            staticRows: true,
-        }) }}
+        <div class="flex-fields">
+            <div class="field width-50">
+                {{ forms.textField({
+                    label: 'Cookie name',
+                    id: 'name',
+                    name: 'name',
+                    value: cookieForAllSites[0]['name'],
+                    placeholder: 'Name of the cookie you want to add',
+                }) }}
+            </div>
+
+            <input type="hidden" name="currentCategory" value="{{ cookieForAllSites[0]['category'] }}">
+
+            <div class="field width-25">
+                {{ forms.selectField({
+                    label: 'Category',
+                    id: 'category',
+                    name: 'category',
+                    options: [
+                        { 'label': 'Necessary cookies', 'value': 'necessaryCookies' },
+                        { 'label': 'Preference cookies', 'value': 'preferenceCookies' },
+                        { 'label': 'Analytical cookies', 'value': 'analyticalCookies' },
+                        { 'label': 'Marketing cookies', 'value': 'marketingCookies' },
+                        { 'label': 'Uncategorized cookies', 'value': 'uncategorizedCookies' }
+                    ],
+                    value: cookieForAllSites[0]['category'],
+                }) }}
+            </div>
+            
+            <div class="field width-25">
+                {{ forms.selectField({
+                    label: 'Vendor',
+                    id: 'vendor',
+                    name: 'vendor',
+                    options: getVendorOptions(),
+                    value: cookieForAllSites[0]['group'],
+                }) }}
+            </div>
+
+            <hr>
+
+            <div class="field width-100">
+                {{ forms.editableTableField({
+                    id: 'cookieForAllSites',
+                    name: 'fields[cookieForAllSites]',
+                    cols: {
+                        siteName: { 
+                            heading: "Site", 
+                            type: "singleline",
+                            width: '15%',
+                        },
+                        name: { 
+                            heading: "Cookie Name", 
+                            type: "singleline",
+                        },
+                        group: { 
+                            heading: "Vendor", 
+                            type: "select",
+                            options: getVendorOptions()
+                        },
+                        purpose: { 
+                            heading: "Purpose", 
+                            type: "multiline",
+                            placeholder: "Describe the purpose of the cookie"
+                        },
+                        expiration: { 
+                            heading: "Expiration", 
+                            type: "singleline",
+                        },
+                        enabled: {
+                            heading: "Enabled for this site",
+                            type: "lightswitch",
+                            width: '10%',
+                        }
+                    },
+                    rows: cookieForAllSites,
+                    allowAdd: false,
+                    allowDelete: false,
+                    allowReorder: false,
+                    staticRows: true,
+                }) }}
+            </div>
+        </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const masterInput = document.getElementById('name');
+            const masterVendor = document.getElementById('vendor');
+
+            const lightswitches = document.querySelectorAll(
+                'button.lightswitch[aria-labelledby="cookieForAllSites-heading-6"]'
+            );
+
+            lightswitches.forEach((lightswitch) => {
+                const tableRow = lightswitch.parentNode.parentNode;
+
+                const isEnabled = lightswitch.getAttribute('aria-checked') === 'true';
+                if (!isEnabled) tableRow.classList.toggle('uneditable');
+
+                lightswitch.addEventListener('click', function (event) {
+                    tableRow.classList.toggle('uneditable');
+                });
+            });
+
+            if (masterInput) {
+                masterInput.addEventListener('input', function () {
+                    const value = this.value;
+
+                    const tableInputs = document.querySelectorAll(
+                        '[name^="fields[cookieForAllSites]"][name$="[name]"]'
+                    );
+
+                    tableInputs.forEach(input => input.value = value);
+                });
+            }
+
+            if (masterVendor) {
+                masterVendor.addEventListener('change', function () {
+                    const value = this.value;
+
+                    const tableSelects = document.querySelectorAll(
+                        'select[name^="fields[cookieForAllSites]"][name$="[group]"]'
+                    );
+
+                    tableSelects.forEach(select => select.value = value);
+                });
+            }
+        });
+    </script>
 {% endblock %}

@@ -28,7 +28,7 @@
 
             <ul class="ccb-getting-started-checklist">
                 <li class="ccb-getting-started-checklist-item">
-                    <article class="ccb-getting-started-goal">
+                    <article class="ccb-getting-started-goal {{ gettingStartedProgress.legalPagesStepCompleted ? "completed" : "" }}">
                         <div class="ccb-getting-started-goal-main">
                             <div class="ccb-getting-started-goal-title">
                                 {{ svg("@digitalastronaut/craftcookiebanner/web/icons/circle-check.svg") }}
@@ -57,15 +57,20 @@
                             </ol>
                         </div>
 
-
                         <div class="ccb-getting-started-goal-action">
-                            <a href="#" class="btn">Complete this step</a>
+                            <form method="post">
+                                {{ csrfInput() }}
+                                {{ actionInput('cookie-banner/getting-started/complete-legal-pages-step') }}
+                                {{ redirectInput('cookie-banner/getting-started') }}
+
+                                <button type="submit" class="btn">{{ "Complete this step"|t("cookie-banner") }}</button>
+                            </form>
                         </div>
                     </article>
                 </li>
 
                 <li class="ccb-getting-started-checklist-item">
-                    <article class="ccb-getting-started-goal">
+                    <article class="ccb-getting-started-goal {{ gettingStartedProgress.deferScriptsStepCompleted ? "completed" : "" }}">
                         <div class="ccb-getting-started-goal-main">
                             <div class="ccb-getting-started-goal-title">
                                 {{ svg("@digitalastronaut/craftcookiebanner/web/icons/circle-check.svg") }}
@@ -96,15 +101,20 @@
                             })|raw }}</p>
                         </div>
 
-
                         <div class="ccb-getting-started-goal-action">
-                            <a href="#" class="btn">Complete this step</a>
+                            <form method="post">
+                                {{ csrfInput() }}
+                                {{ actionInput('cookie-banner/getting-started/complete-defer-scripts-step') }}
+                                {{ redirectInput('cookie-banner/getting-started') }}
+
+                                <button type="submit" class="btn">{{ "Complete this step"|t("cookie-banner") }}</button>
+                            </form>
                         </div>
                     </article>
                 </li>
 
                 <li class="ccb-getting-started-checklist-item">
-                    <article class="ccb-getting-started-goal">
+                    <article class="ccb-getting-started-goal {{ gettingStartedProgress.contentStepCompleted ? "completed" : "" }}">
                         <div class="ccb-getting-started-goal-main">
                             <div class="ccb-getting-started-goal-title">
                                 {{ svg("@digitalastronaut/craftcookiebanner/web/icons/circle-check.svg") }}
@@ -127,15 +137,20 @@
                             </ol>
                         </div>
 
-
                         <div class="ccb-getting-started-goal-action">
-                            <a href="#" class="btn">Complete this step</a>
+                            <form method="post">
+                                {{ csrfInput() }}
+                                {{ actionInput('cookie-banner/getting-started/complete-content-step') }}
+                                {{ redirectInput('cookie-banner/getting-started') }}
+
+                                <button type="submit" class="btn">{{ "Complete this step"|t("cookie-banner") }}</button>
+                            </form>
                         </div>
                     </article>
                 </li>
 
                 <li class="ccb-getting-started-checklist-item">
-                    <article class="ccb-getting-started-goal">
+                    <article class="ccb-getting-started-goal {{ gettingStartedProgress.appearanceStepCompleted ? "completed" : "" }}">
                         <div class="ccb-getting-started-goal-main">
                             <div class="ccb-getting-started-goal-title">
                                 {{ svg("@digitalastronaut/craftcookiebanner/web/icons/circle-check.svg") }}
@@ -152,15 +167,20 @@
                             </ol>
                         </div>
 
-
                         <div class="ccb-getting-started-goal-action">
-                            <a href="#" class="btn">Complete this step</a>
+                            <form method="post">
+                                {{ csrfInput() }}
+                                {{ actionInput('cookie-banner/getting-started/complete-appearance-step') }}
+                                {{ redirectInput('cookie-banner/getting-started') }}
+
+                                <button type="submit" class="btn">{{ "Complete this step"|t("cookie-banner") }}</button>
+                            </form>
                         </div>
                     </article>
                 </li>
 
                 <li class="ccb-getting-started-checklist-item">
-                    <article class="ccb-getting-started-goal">
+                    <article class="ccb-getting-started-goal {{ gettingStartedProgress.finalSettingsStepCompleted ? "completed" : "" }}">
                         <div class="ccb-getting-started-goal-main">
                             <div class="ccb-getting-started-goal-title">
                                 {{ svg("@digitalastronaut/craftcookiebanner/web/icons/circle-check.svg") }}
@@ -180,9 +200,14 @@
                             </ol>
                         </div>
 
-
                         <div class="ccb-getting-started-goal-action">
-                            <a href="#" class="btn">Complete this step</a>
+                            <form method="post">
+                                {{ csrfInput() }}
+                                {{ actionInput('cookie-banner/getting-started/complete-final-settings-step') }}
+                                {{ redirectInput('cookie-banner/getting-started') }}
+
+                                <button type="submit" class="btn">{{ "Complete this step"|t("cookie-banner") }}</button>
+                            </form>
                         </div>
                     </article>
                 </li>

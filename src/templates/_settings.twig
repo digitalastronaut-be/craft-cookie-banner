@@ -95,5 +95,47 @@
                 placeholder: 'Version',
             }) }}
         </div>
+
+        <hr>
+
+        <div class="width-50">
+            <h2>{{ "Blacklisted cookies"|t }}</h2>
+
+            <p>{{ "Cookies that should be ignored by the cookie detector. Specify the name of the cookie and use the * operator for generated pieces of a cookie"|t }}</p>
+        </div>
+
+        <div class="width-50">
+            <h2>{{ "Blacklisted vendors"|t }}</h2>
+
+            <p>{{ "Vendors that should not be suggested based on existing cookies"|t }}</p>
+        </div>
+
+        <div class="field width-50">
+            {{ forms.editableTableField({
+                id: 'blacklistedCookies',
+                name: 'settings[blacklistedCookies]',
+                cols: {
+                    name: { heading: "Name", type: "singleline" },
+                },
+                rows: settings.blacklistedCookies ?? [],
+                allowReorder: true,
+                allowAdd: true,
+                allowDelete: true,
+            }) }}
+        </div>
+
+        <div class="field width-50">
+            {{ forms.editableTableField({
+                id: 'blacklistedVendors',
+                name: 'settings[blacklistedVendors]',
+                cols: {
+                    name: { heading: "Name", type: "singleline" },
+                },
+                rows: settings.blacklistedVendors ?? [],
+                allowReorder: true,
+                allowAdd: true,
+                allowDelete: true,
+            }) }}
+        </div>
     </div>
 {% endblock %}

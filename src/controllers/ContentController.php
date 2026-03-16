@@ -6,6 +6,7 @@ use Craft;
 use craft\helpers\UrlHelper;
 use craft\web\Controller;
 use digitalastronaut\craftcookiebanner\CookieBanner;
+use digitalastronaut\craftcookiebanner\helpers\CookieBanner as HelpersCookieBanner;
 use yii\web\Response;
 
 use digitalastronaut\craftcookiebanner\records\Content;
@@ -86,13 +87,16 @@ class ContentController extends Controller {
                 Craft::$app->getSession()->setError("Cookie '{$cookieData['name']}' already exists for {$site->name}.");
             } else {
                 if ($cookieData['category']) {
-                    $cookiesForCategory = $content[$cookieData['category'] . 'Cookies'] ?? [];
+                    $cookiesForCategory = $content[$cookieData['category'] . 'Cookies'];
+
+                    if (!is_array($cookiesForCategory)) $cookiesForCategory = [];
 
                     $cookiesForCategory[] = [
                         "name" => $cookieData['name'],
                         "group" => 'default',
                         "purpose" => $cookieData['description'],
                         "expiration" => $cookieData['retention'],
+                        "enabled" => true,
                     ];
 
                     $content->setAttribute($cookieData['category'] . 'Cookies', $cookiesForCategory);
@@ -112,16 +116,12 @@ class ContentController extends Controller {
         $allContent = Content::find()->all();
 
         foreach ($allContent as $content) {            
-            $cookieGroups = [
-                'necessaryCookies',
-                'preferenceCookies',
-                'analyticalCookies',
-                'marketingCookies',
-                'uncategorizedCookies'
-            ];
+            $cookieGroups = HelpersCookieBanner::COOKIE_GROUPS;
             
             foreach ($cookieGroups as $group) {
                 $cookies = $content->$group ?? [];
+
+                if (!is_array($cookies)) continue;
                 
                 $filteredCookies = array_values(array_filter(
                     $cookies,
@@ -135,5 +135,59 @@ class ContentController extends Controller {
         }
 
         return null;
+    }
+
+    public function actionDeleteVendorForAllSites() {
+        $vendorName = $this->request->getParam("vendorName");
+
+        $allContent = Content::find()->all();
+
+        foreach ($allContent as $content) {
+            $filteredVendors = array_values(array_filter(
+                $content['cookieGroups'],
+                fn($vendor) => ($vendor['name'] ?? null) !== $vendorName
+            ));
+
+            $content->setAttribute('cookieGroups', $filteredVendors);
+            $content->save();
+        }
+
+        return null;
+    }
+
+    public function actionBlacklistCookie() {
+        $cookieName = $this->request->getParam('cookieName');
+        $settings = CookieBanner::getInstance()->getSettings();
+
+        if (!in_array($cookieName, $settings->blacklistedCookies)) {
+            $settings->blacklistedCookies[] = ['name' => $cookieName];
+        }
+
+        Craft::$app->plugins->savePluginSettings(
+            CookieBanner::getInstance(),
+            $settings->toArray()
+        );
+
+        Craft::$app->getSession()->setSuccess("Cookie '{$cookieName}' added to blacklist");
+
+        return $this->redirectToPostedUrl();
+    }
+
+    public function actionBlacklistVendor() {
+        $vendorName = $this->request->getParam('vendorName');
+        $settings = CookieBanner::getInstance()->getSettings();
+
+        if (!in_array($vendorName, $settings->blacklistedVendors)) {
+            $settings->blacklistedVendors[] = ['name' => $vendorName];
+        }
+
+        Craft::$app->plugins->savePluginSettings(
+            CookieBanner::getInstance(),
+            $settings->toArray()
+        );
+
+        Craft::$app->getSession()->setSuccess("Vendor '{$vendorName}' added to blacklist");
+
+        return $this->redirectToPostedUrl();
     }
 }

@@ -9,7 +9,8 @@
 		{
 			"name": "Craft CMS",
 			"description": "A bespoke content management system build for devs and authors",
-			"url": "https://craftcms.com/"
+			"url": "https://craftcms.com",
+			"enabled": true
 		}
 	],
 	"necessaryCookiesTitle": "Necessary cookies",
@@ -20,13 +21,15 @@
 			"name": "CRAFT_CSRF_TOKEN",
 			"group": "craft-cms",
 			"purpose": "Security token used to prevent cross-site request forgery (CSRF) attacks. Ensures that form submissions and requests are coming from trusted sources.",
-			"expiration": "Session"
+			"expiration": "Session",
+			"enabled": true
 		},
 		{
 			"name": "CraftSessionId",
 			"group": "craft-cms",
 			"purpose": "Identifies a unique session between the browser and the server. Required for basic site functionality such as logins and form submissions.",
-			"expiration": "Session"
+			"expiration": "Session",
+			"enabled": true
 		}
 	],
 	"preferenceCookiesTitle": "Preference cookies",
@@ -37,7 +40,8 @@
 			"name": "craft-cookie-banner",
 			"group": "craft-cms",
 			"purpose": "Stores the user's cookie preferences (e.g. accepted or refused categories) so that the banner does not reappear on every visit.",
-			"expiration": "1 year"
+			"expiration": "1 year",
+			"enabled": true
 		}
 	],
 	"analyticalCookiesTitle": "Analytical cookies",

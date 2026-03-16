@@ -9,7 +9,8 @@
 		{
 			"name": "Craft CMS",
 			"description": "",
-			"url": "https://craftcms.com/"
+			"url": "https://craftcms.com",
+			"enabled": true
 		}
 	],
 	"necessaryCookiesTitle": "",
@@ -20,13 +21,15 @@
 			"name": "CRAFT_CSRF_TOKEN",
 			"group": "craft-cms",
 			"purpose": "",
-			"expiration": ""
+			"expiration": "",
+			"enabled": true
 		},
 		{
 			"name": "CraftSessionId",
 			"group": "craft-cms",
 			"purpose": "",
-			"expiration": ""
+			"expiration": "",
+			"enabled": true
 		}
 	],
 	"preferenceCookiesTitle": "",
@@ -37,7 +40,8 @@
 			"name": "craft-cookie-banner",
 			"group": "craft-cms",
 			"purpose": "",
-			"expiration": ""
+			"expiration": "",
+			"enabled": true
 		}
 	],
 	"analyticalCookiesTitle": "",

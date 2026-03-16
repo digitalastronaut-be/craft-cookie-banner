@@ -8,7 +8,7 @@
 
 {% set crumbs = [
     { label: 'Cookie banner'|t, url: url('cookie-banner') },
-    { label: 'Compliancy checklist'|t, url: url('cookie-banner/compliancy-checklist') },
+    { label: 'Compliancy checklist'|t, url: url('cookie-banner/cookies-and-vendors') },
     { label: 'Add a new cookie'|t },
 ] %}
 
@@ -25,14 +25,29 @@
                 }) }}
             </div>
 
-            <div class="field width-50">
+            <div class="field width-25">
+                {{ forms.selectField({
+                    label: 'Category',
+                    id: 'category',
+                    name: 'category',
+                    options: [
+                        { 'label': 'Necessary cookies', 'value': 'necessaryCookies' },
+                        { 'label': 'Preference cookies', 'value': 'preferenceCookies' },
+                        { 'label': 'Analytical cookies', 'value': 'analyticalCookies' },
+                        { 'label': 'Marketing cookies', 'value': 'marketingCookies' },
+                        { 'label': 'Uncategorized cookies', 'value': 'uncategorizedCookies' }
+                    ],
+                    value: 'necessaryCookies',
+                }) }}
+            </div>
+            
+            <div class="field width-25">
                 {{ forms.selectField({
                     label: 'Vendor',
                     id: 'vendor',
                     name: 'vendor',
                     options: getVendorOptions(),
                     value: 'default',
-                    placeholder: 'Name of the cookie you want to add',
                 }) }}
             </div>
 
@@ -78,10 +93,6 @@
                     staticRows: true,
                 }) }}
             </div>
-
-            {% for site in craft.app.sites.getAllSites() %}
-                <input type="hidden" name="fields[cookieForAllSites][{{ loop.index - 1 }}][siteId]" value="{{ site.id }}">
-            {% endfor %}
         </div>
     </div>
 

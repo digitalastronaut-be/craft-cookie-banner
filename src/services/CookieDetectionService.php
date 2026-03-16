@@ -2,9 +2,9 @@
 
 namespace digitalastronaut\craftcookiebanner\services;
 
-use Craft;
 use craft\base\Component;
 use digitalastronaut\craftcookiebanner\CookieBanner;
+use digitalastronaut\craftcookiebanner\records\Content;
 
 class CookieDetectionService extends Component {
     public array $controlPanelCookies = [
@@ -14,6 +14,7 @@ class CookieDetectionService extends Component {
     ];
 
     public function getCookiesOverview(): array {
+        $blacklistedCookies = CookieBanner::getInstance()->getSettings()->blacklistedCookies;
         $cookieDatabase = json_decode(file_get_contents(CookieBanner::getInstance()->getBasePath() . '/static/cookies/en.json'), true);
 
         $result = [];
@@ -22,6 +23,13 @@ class CookieDetectionService extends Component {
             $matchedCookie = null;
             $isControlPanelCookie = $this->isControlPanelCookie($cookieName);
             
+            foreach ($blacklistedCookies as $blacklistedCookie) {
+                if (!empty($blacklistedCookie['name']) &&
+                    $this->cookieNameMatches($cookieName, $blacklistedCookie['name'])) {
+                    continue 2;
+                }
+            }
+
             foreach ($cookieDatabase as $cookie) {
                 if ($this->cookieNameMatches($cookieName, $cookie['name'])) {
                     $matchedCookie = $cookie;
@@ -38,6 +46,7 @@ class CookieDetectionService extends Component {
                     'vendor'      => $matchedCookie['vendor'],
                     'currentValue' => $cookieValue,
                     'isControlPanelCookie' => $isControlPanelCookie,
+                    'onlyInBrowserCookies' => true,
                     'isAutomated' => true
                 ];
             } else {
@@ -49,9 +58,45 @@ class CookieDetectionService extends Component {
                     'vendor'      => '',
                     'currentValue' => $cookieValue,
                     'isControlPanelCookie' => $isControlPanelCookie,
+                    'onlyInBrowserCookies' => true,
                     'isAutomated' => false
                 ];
             }
+        }
+
+        $alreadyDefinedCookies = CookieBanner::getInstance()
+            ->getCookiesAndVendors()
+            ->getAllCookies();
+
+        foreach ($alreadyDefinedCookies as $index => $alreadyDefinedCookie) {
+            $matchedCookie = null;
+            $isControlPanelCookie = $this->isControlPanelCookie($alreadyDefinedCookie['name']);
+            
+            // Check if the already defined cookie is in the detected cookies array if so skip it
+            $existingKey = array_search($alreadyDefinedCookie['name'], array_column($result, 'name'));
+            if ($existingKey !== false) {
+                $result[$existingKey]['onlyInBrowserCookies'] = false;
+                continue;
+            }
+
+            foreach ($cookieDatabase as $cookie) {
+                if ($this->cookieNameMatches($alreadyDefinedCookie['name'], $cookie['name'])) {
+                    $matchedCookie = $cookie;
+                    break;
+                }
+            }
+
+            $result[] = [
+                'category'    => $alreadyDefinedCookie['category'],
+                'name'        => $alreadyDefinedCookie['name'],
+                'description' => $alreadyDefinedCookie['purpose'],
+                'retention'  => $alreadyDefinedCookie['expiration'],
+                'vendor'      => $alreadyDefinedCookie['group'],
+                'currentValue' => "",
+                'isControlPanelCookie' => $isControlPanelCookie,
+                'isAutomated' => $matchedCookie ? true : false,
+                'onlyInBrowserCookies' => false,
+            ];
         }
 
         usort($result, function($a, $b) {
@@ -89,6 +134,31 @@ class CookieDetectionService extends Component {
         return null;
     }
 
+    public function getVendorDataFromDatabase(string $vendorName, string $language) {
+        $languageMatch = true;
+        $path = CookieBanner::getInstance()->getBasePath() . "/static/vendors/{$language}.json";
+        
+        if (!is_file($path)) {
+            $path = CookieBanner::getInstance()->getBasePath() . "/static/vendors/en.json";
+            $languageMatch = false;
+        }
+
+        $databaseFile = file_get_contents($path);
+
+        if (!$databaseFile) return null;
+
+        $vendorDatabase = json_decode($databaseFile, true);
+
+        foreach ($vendorDatabase as $vendor) {
+            if ($vendorName === $vendor['name']) {
+                return [
+                    "vendor" => $vendor,
+                    "languageMatch" => $languageMatch,
+                ];
+            }
+        }
+    }
+
     public function getBannerCookies($content) {
         return array_merge(
             is_array($content["necessaryCookies"]) ? $content["necessaryCookies"] : [],
@@ -111,5 +181,62 @@ class CookieDetectionService extends Component {
         }
         
         return false;
+    }
+
+    public function getVendorsOverview() {
+        $result = [];
+        $existingVendorNames = [];
+
+        $existingVendors = Content::find()->one()->cookieGroups;
+
+        foreach ($existingVendors as $vendor) {
+            $vendorMatch = CookieBanner::getInstance()
+                ->getCookieDetection()
+                ->getVendorDataFromDatabase($vendor['name'], "en");
+            
+            if (
+                $vendorMatch &&
+                !in_array($vendor['name'], $existingVendorNames)
+            ) {
+                $result[] = [
+                    'name' => $vendor['name'],
+                    'url' => $vendor['url'],
+                    'isAutomated' => $vendorMatch ? true : false,
+                    'isSuggestion' => false,
+                ];
+
+                $existingVendorNames[] = $vendor['name'];
+            };
+        }
+
+        $alreadyDefinedCookies = CookieBanner::getInstance()
+            ->getCookiesAndVendors()
+            ->getAllCookies();
+
+        foreach ($alreadyDefinedCookies as $cookie) {
+            $cookieMatch = CookieBanner::getInstance()
+                ->getCookieDetection()
+                ->getCookieDataFromDatabase($cookie['name'], "en");
+            
+            $vendorMatch = CookieBanner::getInstance()
+                ->getCookieDetection()
+                ->getVendorDataFromDatabase($cookieMatch['cookie']['vendor'], "en");
+
+            if (
+                $vendorMatch &&
+                !in_array($vendorMatch['vendor']['name'], $existingVendorNames)
+            ) {
+                $result[] = [
+                    'name' => $vendorMatch['vendor']['name'],
+                    'url' => $vendorMatch['vendor']['homePage'],
+                    'isAutomated' => true,
+                    'isSuggestion' => true,
+                ];
+
+                $existingVendorNames[] = $vendorMatch['vendor']['name'];
+            }
+        }
+
+        return $result;
     }
 }

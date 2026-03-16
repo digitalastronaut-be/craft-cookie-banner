@@ -172,30 +172,30 @@
                 {% endblock %}
             {% endembed %}
         </div>
+    </div>
 
-        <div class="ccb-cookie-banner-action-buttons">
-            <button data-refuse-all-button class="ccb-button ccb-typo-body-md">
-                {{ banner.refuseAllButtonLabel }}
-            </button>
+    <div class="ccb-cookie-banner-action-buttons">
+        <button data-refuse-all-button class="ccb-button ccb-typo-body-md">
+            {{ banner.refuseAllButtonLabel }}
+        </button>
 
-            <button 
-                data-determine-preferences-button
-                class="ccb-button ccb-typo-body-md"
-            >
-                {{ settings.showCookieCategoriesPreview ? banner.detailedPreferencesButtonLabel : banner.determinePreferencesButtonLabel }}
-            </button>
+        <button 
+            data-determine-preferences-button
+            class="ccb-button ccb-typo-body-md"
+        >
+            {{ settings.showCookieCategoriesPreview ? banner.detailedPreferencesButtonLabel : banner.determinePreferencesButtonLabel }}
+        </button>
 
-            <button 
-                data-accept-selected-button 
-                class="ccb-button ccb-typo-body-md"
-            >
-                {{ banner.acceptSelectedButtonLabel }}
-            </button>
+        <button 
+            data-accept-selected-button 
+            class="ccb-button ccb-typo-body-md"
+        >
+            {{ banner.acceptSelectedButtonLabel }}
+        </button>
 
-            <button data-accept-all-button class="ccb-button ccb-typo-body-md">
-                {{ banner.acceptAllButtonLabel }}
-            </button>
-        </div>
+        <button data-accept-all-button class="ccb-button ccb-typo-body-md">
+            {{ banner.acceptAllButtonLabel }}
+        </button>
     </div>
 </cookie-banner>
 
