@@ -7,22 +7,26 @@
 {% set fullPageForm = true %}
 
 {% set crumbs = [
-    { label: 'Cookie banner'|t, url: url('cookie-banner') },
-    { label: 'Cookies and vendors'|t, url: url('cookie-banner/cookies-and-vendors') },
-    { label: 'Add a new vendor'|t },
+    { label: 'Cookie banner'|t("cookie-banner"), url: url('cookie-banner') },
+    { label: 'Cookies and vendors'|t("cookie-banner"), url: url('cookie-banner/cookies-and-vendors') },
+    { label: 'Add a new vendor'|t("cookie-banner") },
 ] %}
 
 {% block content %}
     <div class="ccb-create-vendor">
         <div class="flex-fields">
-            <div class="field width-50">
+            <div class="ccb-create-cookie-search field width-50">
                 {{ forms.textField({
-                    label: 'Vendor name',
+                    label: 'Vendor name'|t("cookie-banner"),
                     id: 'name',
                     name: 'name',
-                    value: "",
-                    placeholder: 'Name of the vendor you want to add',
+                    value: vendorForAllSites|first['name'],
+                    placeholder: 'Name of the vendor you want to add'|t("cookie-banner"),
                 }) }}
+
+                <div vendor-search-results class="menu tagmenu">
+                    <ul class="group"></ul>
+                </div>
             </div>
 
             <hr>
@@ -33,30 +37,30 @@
                     name: 'fields[vendorForAllSites]',
                     cols: {
                         siteName: { 
-                            heading: "Site", 
+                            heading: "Site"|t("cookie-banner"), 
                             type: "singleline",
                             width: "15%"
                         },
                         name: { 
-                            heading: "Vendor Name", 
+                            heading: "Vendor Name"|t("cookie-banner"), 
                             type: "singleline",
                             width: "15%"
                         },
                         url: { 
-                            heading: "URL", 
+                            heading: "URL"|t("cookie-banner"), 
                             type: "singleline",
                         },
                         description: { 
-                            heading: "Description", 
+                            heading: "Description"|t("cookie-banner"), 
                             type: "singleline",
                         },
                         enabled: {
-                            heading: "Enabled for this site",
+                            heading: "Enabled for this site"|t("cookie-banner"),
                             type: "lightswitch",
                             width: "10%"
                         }
                     },
-                    rows: emptyVendorForAllSites,
+                    rows: vendorForAllSites,
                     allowAdd: false,
                     allowDelete: false,
                     allowReorder: false,
@@ -67,19 +71,40 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', async function () {
             const masterInput = document.getElementById('name');
+            const vendorSearchResults = document.querySelector("[vendor-search-results]");
 
             if (masterInput) {
-                masterInput.addEventListener('input', function () {
+                masterInput.addEventListener('input', async function () {
                     const value = this.value;
 
                     const tableInputs = document.querySelectorAll(
                         '[name^="fields[vendorForAllSites]"][name$="[name]"]'
                     );
 
+                    await renderVendorSearchResults(value);
+
                     tableInputs.forEach(input => input.value = value);
                 });
+            }
+
+            const templateRequest = async (url) => {
+                const response = await fetch(url);
+
+                const text = await response.text();
+
+                const parser = new DOMParser();
+                const html = parser.parseFromString(text, "text/html");
+                const content = html.body.innerHTML;
+
+                return { html, content };
+            };
+
+            const renderVendorSearchResults = async (searchTerm) => {
+                const { content } = await templateRequest(`/admin/cookie-banner/requests/vendorDatabase?searchTerm=${searchTerm}`);
+
+                vendorSearchResults.innerHTML = content;
             }
         });
     </script>

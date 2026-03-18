@@ -5,8 +5,8 @@
 {% set selectedSubnavItem = 'consentRecords' %}
 
 {% set crumbs = [
-    { label: 'Cookie banner'|t, url: url('cookie-banner') },
-    { label: 'Consent records'|t, url: url('cookie-banner/consent-records') },
+    { label: 'Cookie banner'|t("cookie-banner"), url: url('cookie-banner') },
+    { label: 'Consent records'|t("cookie-banner"), url: url('cookie-banner/consent-records') },
 ] %}
 
 {% set elementType = 'digitalastronaut\\craftcookiebanner\\elements\\ConsentRecord' %}
@@ -14,28 +14,31 @@
 {% set canHaveDrafts = true %}
 
 {% block content %}
+    {% set result = craft.app.i18n.translate('cookie-banner', 'Introduction', {}, craft.app.language) %}
+    {{ dump(craft.app.i18n) }}
+
     <div class="ccb-consent-overview">
-        <h2>Consent statistics</h2>
+        <h2>{{ "Consent statistics"|t("cookie-banner") }}</h2>
 
         <ul class="ccb-consent-overview-list">
             <li class="ccb-consent-overview-list-item">
-                <h3>Essential</h3>
+                <h3>{{ "Essential"|t("cookie-banner") }}</h3>
                 <p class="ccb-semi-bold">{{ consentStatistics.acceptedEssentialCookiesPercentage }}%</p>
             </li>
             <li class="ccb-consent-overview-list-item">
-                <h3>Functional</h3>
+                <h3>{{ "Functional"|t("cookie-banner") }}</h3>
                 <p class="ccb-semi-bold">{{ consentStatistics.acceptedFunctionalCookiesPercentage }}%</p>
             </li>
             <li class="ccb-consent-overview-list-item">
-                <h3>Analytical</h3>
+                <h3>{{ "Analytical"|t("cookie-banner") }}</h3>
                 <p class="ccb-semi-bold">{{ consentStatistics.acceptedAnalyticsCookiesPercentage }}%</p>
             </li>
             <li class="ccb-consent-overview-list-item">
-                <h3>Advertisement</h3>
+                <h3>{{ "Advertisement"|t("cookie-banner") }}</h3>
                 <p class="ccb-semi-bold">{{ consentStatistics.acceptedAdvertisementCookiesPercentage }}%</p>
             </li>
             <li class="ccb-consent-overview-list-item">
-                <h3>Personalization</h3>
+                <h3>{{ "Personalization"|t("cookie-banner") }}</h3>
                 <p class="ccb-semi-bold">{{ consentStatistics.acceptedPersonalizationCookiesPercentage }}%</p>
             </li>
         </ul>

@@ -1,0 +1,19 @@
+{% set searchTermQueryParam = craft.app.request.getQueryParam("searchTerm") %}
+
+{% set results = searchCookieDatabase(searchTermQueryParam) %}
+
+<ul class="group">
+    {% for cookie in results %}
+        <li>
+            <a class="menu-item" href="{{ url('cookie-banner/cookies-and-vendors/create?autoFillCookie=' ~ cookie.item.name) }}">
+                <h3>
+                    <span>{{ cookie.item.name }}</span> 
+                    {% if cookie.item.vendor %}
+                        <span>({{ cookie.item.vendor }})</span> 
+                    {% endif %}
+                    <span>{{ cookie.item.description|default("")|truncate(40) }}</span>
+                </h3>
+            </a>
+        </li>
+    {% endfor %}
+</ul>

@@ -11,6 +11,7 @@ use yii\web\Response;
 use digitalastronaut\craftcookiebanner\CookieBanner;
 use digitalastronaut\craftcookiebanner\helpers\CookieBanner as CookieBannerHelper;
 use digitalastronaut\craftcookiebanner\records\Content;
+use yii\web\BadRequestHttpException;
 
 // Refactoring routes when all actions are ok functionality wise
 // actionIndex (GET) -> Load cookiesAndVendors.twig
@@ -39,22 +40,41 @@ class CookiesAndVendorsController extends Controller {
         $sites = Craft::$app->getSites()->getAllSites();
 
         if (!$this->request->isPost) {
-            $emptyCookieForAllSites = [];
+            $autoFillCookie = $this->request->getParam('autoFillCookie');
 
-            foreach ($sites as $site) {
-                $emptyCookieForAllSites[$site->id] = [
-                    'siteName' => $site->name,
-                    'name' => "",
-                    'group' => null,
-                    'purpose' => "",
-                    'expiration' => "",
-                    'enabled' => true,
-                ];
+            $cookieForAllSites = [];
+            
+            if ($autoFillCookie) {
+                foreach ($sites as $site) {
+                    $data = CookieBanner::getInstance()
+                        ->getCookieDetection()
+                        ->getCookieDataFromDatabase($autoFillCookie, explode("-", $site->language)[0]);
+
+                    $cookieForAllSites[$site->id] = [
+                        'siteName' => $site->name,
+                        'name' => $data['cookie']['name'],
+                        'group' => $data['cookie']['category'],
+                        'purpose' => $data['languageMatch'] ? $data['cookie']['description'] : "",
+                        'expiration' => $data['languageMatch'] ? $data['cookie']['retention'] : "",
+                        'enabled' => true,
+                    ];
+                }
+            } else {
+                foreach ($sites as $site) {
+                    $cookieForAllSites[$site->id] = [
+                        'siteName' => $site->name,
+                        'name' => "",
+                        'group' => null,
+                        'purpose' => "",
+                        'expiration' => "",
+                        'enabled' => true,
+                    ];
+                }
             }
 
             return $this->renderTemplate("cookie-banner/_createCookie", [
                 'settings' => $settings,
-                'emptyCookieForAllSites' => $emptyCookieForAllSites,
+                'cookieForAllSites' => $cookieForAllSites,
             ]);
         } else {
             $db = Craft::$app->getDb();
@@ -64,6 +84,10 @@ class CookiesAndVendorsController extends Controller {
                 foreach ($sites as $site) {
                     $category = $this->request->bodyParams['category'];
                     $newCookie = $this->request->bodyParams['fields']['cookieForAllSites'][$site->id];
+
+                    if (!$newCookie['name']) {
+                        throw new BadRequestHttpException("Cookie name param missing for " . $site->name);
+                    }
 
                     $content = Content::find()->where(['siteId' => $site->id])->one();
 
@@ -90,14 +114,14 @@ class CookiesAndVendorsController extends Controller {
 
                 $transaction->commit();
 
-                Craft::$app->getSession()->setSucces('Cookie created for all sites.');
+                Craft::$app->getSession()->setSuccess($newCookie['name'] . ' cookie created for all sites.');
                 return $this->redirect('cookie-banner/cookies-and-vendors');
 
             } catch (\Throwable $e) {
                 $transaction->rollBack();
 
                 Craft::error($e->getMessage(), __METHOD__);
-                Craft::$app->getSession()->setError('Could not create cookie.');
+                Craft::$app->getSession()->setError('Failed to create cookie ' . $e->getMessage());
 
                 return $this->redirectToPostedUrl();
             }
@@ -236,20 +260,38 @@ class CookiesAndVendorsController extends Controller {
         $sites = Craft::$app->getSites()->getAllSites();
 
         if (!$this->request->isPost) {
-            $emptyVendorForAllSites = [];
+            $autoFillVendor = $this->request->getParam('autoFillVendor');
 
-            foreach ($sites as $site) {
-                $emptyVendorForAllSites[$site->id] = [
-                    'siteName' => $site->name,
-                    'name' => "",
-                    'url' => "",
-                    'description' => "",
-                    'enabled' => true,
-                ];
+            $vendorForAllSites = [];
+
+            if ($autoFillVendor) {
+                foreach ($sites as $site) {
+                    $data = CookieBanner::getInstance()
+                        ->getCookieDetection()
+                        ->getVendorDataFromDatabase($autoFillVendor, explode("-", $site->language)[0]);
+
+                    $vendorForAllSites[$site->id] = [
+                        'siteName' => $site->name,
+                        'name' => $data['languageMatch'] ? $data['vendor']['name'] : $autoFillVendor,
+                        'url' => $data['languageMatch'] ? $data['vendor']['homePage'] : "",
+                        'description' => $data['languageMatch'] ? $data['vendor']['description'] : "",
+                        'enabled' => true,
+                    ];
+                }
+            } else {
+                foreach ($sites as $site) {
+                    $vendorForAllSites[$site->id] = [
+                        'siteName' => $site->name,
+                        'name' => "",
+                        'url' => "",
+                        'description' => "",
+                        'enabled' => true,
+                    ];
+                }
             }
 
             return $this->renderTemplate("cookie-banner/_createVendor", [
-                'emptyVendorForAllSites' => $emptyVendorForAllSites,
+                'vendorForAllSites' => $vendorForAllSites,
             ]);
         } else {
             $db = Craft::$app->getDb();

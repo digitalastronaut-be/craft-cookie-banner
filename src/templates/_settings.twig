@@ -7,12 +7,12 @@
 
 {% set settings = settings|default([]) %}
 {% set fullPageForm = true %}
-{% set title = "Settings"|t %}
+{% set title = "Settings"|t("cookie-banner") %}
 {% set selectedSubnavItem = 'settings' %}
 
 {% set crumbs = [
-    { label: 'Cookie banner'|t, url: url('cookie-banner') },
-    { label: 'Settings'|t, url: url('cookie-banner/settings') },
+    { label: 'Cookie banner'|t("cookie-banner"), url: url('cookie-banner') },
+    { label: 'Settings'|t("cookie-banner"), url: url('cookie-banner/settings') },
 ] %}
 
 {# ======================= #}
@@ -24,15 +24,15 @@
     {{ hiddenInput('siteId', ) }}
 
     <div class="flex-fields">
-        <h2>General</h2>
+        <h2>{{ 'General'|t("cookie-banner") }}</h2>
 
         <div class="field width-25">
             {{ forms.lightswitchField({
-                label: 'Cookie banner'|t,
-                instructions: 'Show the banner on the frontend'|t,
+                label: 'Cookie banner'|t("cookie-banner"),
+                instructions: 'Show the banner on the frontend'|t("cookie-banner"),
                 id: 'cookieBannerEnabled',
-                offLabel: 'Disabled',
-                onLabel: 'Enabled',
+                offLabel: 'Disabled'|t("cookie-banner"),
+                onLabel: 'Enabled'|t("cookie-banner"),
                 name: 'settings[cookieBannerEnabled]',
                 on: settings.cookieBannerEnabled,
             }) }}
@@ -40,18 +40,18 @@
 
         <div class="field width-50">
             {{ forms.buttonGroupField({
-                label: 'Consent records retention'|t,
-                instructions: 'This determines how long consent records are kept before being hard deleted'|t,
-                warning: 'If you set this to a lower value than the current value you risk losing consent records',
+                label: 'Consent records retention'|t("cookie-banner"),
+                instructions: 'This determines how long consent records are kept before being hard deleted'|t("cookie-banner"),
+                warning: 'If you set this to a lower value than the current value you risk losing consent records'|t("cookie-banner"),
                 id: 'consentRecordRetention',
                 name: 'settings[consentRecordRetention]',
                 value: settings.consentRecordRetention,
                 options: [
-                    { label: '1 Week', value: 'oneWeek' },
-                    { label: '1 Month', value: 'oneMonth' },
-                    { label: '6 Months', value: 'sixMonths' },
-                    { label: '1 Year', value: 'oneYear' },
-                    { label: '5 Years', value: 'fiveYears' }
+                    { label: '1 Week'|t("cookie-banner"), value: 'oneWeek' },
+                    { label: '1 Month'|t("cookie-banner"), value: 'oneMonth' },
+                    { label: '6 Months'|t("cookie-banner"), value: 'sixMonths' },
+                    { label: '1 Year'|t("cookie-banner"), value: 'oneYear' },
+                    { label: '5 Years'|t("cookie-banner"), value: 'fiveYears' },
                 ]
             }) }}
         </div>
@@ -59,55 +59,55 @@
         <hr>
 
         <div class="width-50">
-            <h2>{{ "Versioning"|t }}</h2>
+            <h2>{{ "Versioning"|t("cookie-banner") }}</h2>
 
-            <p>{{ "Versions get saved to consent records so you can see what version of banner an legal pages where active at the time of consent"|t }}</p>
+            <p>{{ "Versions get saved to consent records so you can see what version of banner an legal pages where active at the time of consent"|t("cookie-banner") }}</p>
         </div>
 
         <div class="line-break"></div>
 
         <div class="field width-25">
             {{ forms.textField({
-                label: 'Cookie banner',
+                label: 'Cookie banner'|t("cookie-banner"),
                 id: 'cookieBannerVersion',
                 name: 'settings[cookieBannerVersion]',
                 value: settings.cookieBannerVersion,
-                placeholder: 'Version',
+                placeholder: 'Version'|t("cookie-banner"),
             }) }}
         </div>
 
         <div class="field width-25">
             {{ forms.textField({
-                label: 'Privacy policy',
+                label: 'Privacy policy'|t("cookie-banner"),
                 id: 'privacyPolicyVersion',
                 name: 'settings[privacyPolicyVersion]',
                 value: settings.privacyPolicyVersion,
-                placeholder: 'Version',
+                placeholder: 'Version'|t("cookie-banner"),
             }) }}
         </div>
 
         <div class="field width-25">
             {{ forms.textField({
-                label: 'Cookie policy' ,
+                label: 'Cookie policy'|t("cookie-banner"),
                 id: 'cookiePolicyVersion',
                 name: 'settings[cookiePolicyVersion]',
                 value: settings.cookiePolicyVersion,
-                placeholder: 'Version',
+                placeholder: 'Version'|t("cookie-banner"),
             }) }}
         </div>
 
         <hr>
 
         <div class="width-50">
-            <h2>{{ "Blacklisted cookies"|t }}</h2>
+            <h2>{{ "Blacklisted cookies"|t("cookie-banner") }}</h2>
 
-            <p>{{ "Cookies that should be ignored by the cookie detector. Specify the name of the cookie and use the * operator for generated pieces of a cookie"|t }}</p>
+            <p>{{ "Cookies that should be ignored by the cookie detector. Specify the name of the cookie and use the * operator for generated pieces of a cookie"|t("cookie-banner") }}</p>
         </div>
 
         <div class="width-50">
-            <h2>{{ "Blacklisted vendors"|t }}</h2>
+            <h2>{{ "Blacklisted vendors"|t("cookie-banner") }}</h2>
 
-            <p>{{ "Vendors that should not be suggested based on existing cookies"|t }}</p>
+            <p>{{ "Vendors that should not be suggested based on existing cookies"|t("cookie-banner") }}</p>
         </div>
 
         <div class="field width-50">
@@ -115,7 +115,7 @@
                 id: 'blacklistedCookies',
                 name: 'settings[blacklistedCookies]',
                 cols: {
-                    name: { heading: "Name", type: "singleline" },
+                    name: { heading: "Name"|t("cookie-banner"), type: "singleline" },
                 },
                 rows: settings.blacklistedCookies ?? [],
                 allowReorder: true,
@@ -129,7 +129,7 @@
                 id: 'blacklistedVendors',
                 name: 'settings[blacklistedVendors]',
                 cols: {
-                    name: { heading: "Name", type: "singleline" },
+                    name: { heading: "Name"|t("cookie-banner"), type: "singleline" },
                 },
                 rows: settings.blacklistedVendors ?? [],
                 allowReorder: true,

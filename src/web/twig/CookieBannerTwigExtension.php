@@ -20,6 +20,8 @@ class CookieBannerTwigExtension extends AbstractExtension {
             new TwigFunction('checkVendorDefenitionForLanguages', [$this, 'checkVendorDefenitionForLanguages']),
             new TwigFunction('getVendorOverview', [$this, 'getVendorOverview']),
             new TwigFunction('getVendorOptions', [$this, 'getVendorOptions']),
+            new TwigFunction('searchCookieDatabase', [$this, 'searchCookieDatabase']),
+            new TwigFunction('searchVendorDatabase', [$this, 'searchVendorDatabase']),
         ];
     }
 
@@ -36,6 +38,14 @@ class CookieBannerTwigExtension extends AbstractExtension {
         echo $cookiesListHtml;
     }
 
+    public function searchCookieDatabase($searchTerm) {
+        return CookieBanner::getInstance()->getCookieDetection()->searchCookieDatabase($searchTerm);
+    }
+
+    public function searchVendorDatabase($searchTerm) {
+        return CookieBanner::getInstance()->getCookieDetection()->searchVendorDatabase($searchTerm);
+    }
+
     public function getCookieDetectionOverviewData() {
         return CookieBanner::getInstance()->getCookieDetection()->getCookiesOverview();
     }
@@ -48,7 +58,7 @@ class CookieBannerTwigExtension extends AbstractExtension {
         $content = Content::find()->one()->cookieGroups;
 
         $options[0] = [
-            "label" => "Default",
+            "label" => Craft::t("cookie-banner", "Default"),
             "value" => "default"
         ];
 

@@ -2,13 +2,13 @@
 
 {% import '_includes/forms.twig' as forms %}
 
-{% set title = "Appearance" %}
+{% set title = "Appearance"|t("cookie-banner") %}
 {% set selectedSubnavItem = 'appearance' %}
 {% set fullPageForm = true %}
 
 {% set crumbs = [
-    { label: 'Cookie banner'|t, url: url('cookie-banner') },
-    { label: 'Consent records'|t, url: url('cookie-banner/appearance') },
+    { label: 'Cookie banner'|t("cookie-banner"), url: url('cookie-banner') },
+    { label: 'Consent records'|t("cookie-banner"), url: url('cookie-banner/appearance') },
 ] %}
 
 {% block content %}
@@ -16,15 +16,15 @@
     {{ hiddenInput('pluginHandle', 'cookie-banner') }}
 
     <div class="flex-fields">
-        <h2>Layout options</h2>
+        <h2>{{ 'Layout options'|t("cookie-banner") }}</h2>
 
         <div class="field width-50">
             {{ forms.lightswitchField({
-                label: 'Cookie categories preview'|t,
-                instructions: "This allows users to manage consent without clicking the 'Determine preferences' button/link.",
+                label: 'Cookie categories preview'|t("cookie-banner"),
+                instructions: "This allows users to manage consent without clicking the 'Determine preferences' button/link."|t("cookie-banner"),
                 id: 'showCookieCategoriesPreview',
-                offLabel: 'Disabled',
-                onLabel: 'Enabled',
+                offLabel: 'Disabled'|t("cookie-banner"),
+                onLabel: 'Enabled'|t("cookie-banner"),
                 name: 'settings[showCookieCategoriesPreview]',
                 on: settings.showCookieCategoriesPreview,
             }) }}
@@ -34,11 +34,11 @@
 
         <div class="field width-50">
             {{ forms.lightswitchField({
-                label: 'Cookie tables/groups'|t,
-                instructions: "If you prefer listing your cookies on a seperate cookie policy page you can disable this toggle to prevent them showing inside the of the cookie banner.",
+                label: 'Cookie tables/groups'|t("cookie-banner"),
+                instructions: "If you prefer listing your cookies on a seperate cookie policy page you can disable this toggle to prevent them showing inside the of the cookie banner."|t("cookie-banner"),
                 id: 'showCookieTables',
-                offLabel: 'Disabled',
-                onLabel: 'Enabled',
+                offLabel: 'Disabled'|t("cookie-banner"),
+                onLabel: 'Enabled'|t("cookie-banner"),
                 name: 'settings[showCookieTables]',
                 on: settings.showCookieTables,
             }) }}
@@ -48,57 +48,57 @@
 
         <div class="field width-50">
             {{ forms.buttonGroupField({
-                label: 'Banner position',
-                instructions: 'Choose where the banner should be displayed',
+                label: 'Banner position'|t("cookie-banner"),
+                instructions: 'Choose where the banner should be displayed'|t("cookie-banner"),
                 id: 'cookieBannerPosition',
                 name: 'settings[cookieBannerPosition]',
                 value: settings.cookieBannerPosition ?? 'bottom-left',
                 options: [
-                    { label: 'Bottom Left', value: 'bottom-left', icon: 'arrow-down-left' },
-                    { label: 'Bottom Right', value: 'bottom-right', icon: 'arrow-down-right' },
-                    { label: 'Centered', value: 'centered', icon: 'arrow-down-left-and-arrow-up-right-to-center' },
+                    { label: 'Bottom Left'|t("cookie-banner"), value: 'bottom-left', icon: 'arrow-down-left' },
+                    { label: 'Bottom Right'|t("cookie-banner"), value: 'bottom-right', icon: 'arrow-down-right' },
+                    { label: 'Centered'|t("cookie-banner"), value: 'centered', icon: 'arrow-down-left-and-arrow-up-right-to-center' },
                 ]
             }) }}
         </div>
 
         <div class="field width-50">
             {{ forms.buttonGroupField({
-                label: 'Preferences action',
-                instructions: 'Show the determine/detailed preferences action as a button or a link',
+                label: 'Preferences action'|t("cookie-banner"),
+                instructions: 'Show the determine/detailed preferences action as a button or a link'|t("cookie-banner"),
                 id: 'preferencesAction',
                 name: 'settings[preferencesAction]',
                 value: settings.preferencesAction ?? 'button',
                 options: [
-                    { label: 'Button', value: 'button', icon: 'square' },
-                    { label: 'Link', value: 'link', icon: 'link' },
+                    { label: 'Button'|t("cookie-banner"), value: 'button', icon: 'square' },
+                    { label: 'Link'|t("cookie-banner"), value: 'link', icon: 'link' },
                 ]
             }) }}
         </div>
 
         <div class="field width-50">
             {{ forms.buttonGroupField({
-                label: 'Buttons size',
+                label: 'Buttons size'|t("cookie-banner"),
                 id: 'buttonSize',
                 name: 'settings[buttonSize]',
                 value: settings.buttonSize ?? 'small',
                 options: [
-                    { label: 'Small', value: 'small', icon: 'square-small' },
-                    { label: 'Medium', value: 'medium', icon: 'stop' },
-                    { label: 'Large', value: 'large', icon: 'square' },
+                    { label: 'Small'|t("cookie-banner"), value: 'small', icon: 'square-small' },
+                    { label: 'Medium'|t("cookie-banner"), value: 'medium', icon: 'stop' },
+                    { label: 'Large'|t("cookie-banner"), value: 'large', icon: 'square' },
                 ]
             }) }}
         </div>
 
         <div class="field width-50">
             {{ forms.buttonGroupField({
-                label: 'Banner style',
+                label: 'Banner style'|t("cookie-banner"),
                 id: 'bannerStyle',
                 name: 'settings[bannerStyle]',
                 value: settings.bannerStyle ?? 'square',
                 options: [
-                    { label: 'Square', value: 'square' },
-                    { label: 'Rounded', value: 'rounded' },
-                    { label: 'Extra rounded', value: 'extra-rounded' },
+                    { label: 'Square'|t("cookie-banner"), value: 'square' },
+                    { label: 'Rounded'|t("cookie-banner"), value: 'rounded' },
+                    { label: 'Extra rounded'|t("cookie-banner"), value: 'extra-rounded' },
                 ]
             }) }}
         </div>
@@ -107,23 +107,23 @@
 
         <div class="field width-100">
             {{ forms.buttonGroupField({
-                label: 'Cookie list style',
-                instructions: 'Determines the way the cookie list is rendered when using the `{{ renderCookiesListHtml() }}`',
+                label: 'Cookie list style'|t("cookie-banner"),
+                instructions: 'Determines the way the cookie list is rendered when using the `{{ renderCookiesListHtml() }}`'|t("cookie-banner"),
                 id: 'cookieListStyle',
                 name: 'settings[cookieListStyle]',
                 value: settings.cookieListStyle ?? 'grouped',
                 options: [
-                    { label: 'Ungrouped', value: 'ungrouped' },
-                    { label: 'Grouped', value: 'grouped' },
+                    { label: 'Ungrouped'|t("cookie-banner"), value: 'ungrouped' },
+                    { label: 'Grouped'|t("cookie-banner"), value: 'grouped' },
                 ]
             }) }}
         </div>
 
-        <h2>Typography</h2>
+        <h2>{{ 'Typography'|t("cookie-banner") }}</h2>
 
         <div class="field width-25">
             {{ forms.textField({
-                label: 'Title font',
+                label: 'Title font'|t("cookie-banner"),
                 id: 'titleFont',
                 name: 'settings[titleFont]',
                 placeholder: '"system-ui", sans-serif',
@@ -133,7 +133,7 @@
 
         <div class="field width-25">
             {{ forms.textField({
-                label: 'Text font',
+                label: 'Text font'|t("cookie-banner"),
                 id: 'textFont',
                 name: 'settings[textFont]',
                 placeholder: '"system-ui", sans-serif',
@@ -141,11 +141,11 @@
             }) }}
         </div>
 
-        <h2>Theming & Colors</h2>
+        <h2>{{ 'Theming & Colors'|t("cookie-banner") }}</h2>
 
         <div class="field width-25">
             {{ forms.colorField({
-                label: 'Banner background',
+                label: 'Banner background'|t("cookie-banner"),
                 id: 'bannerBackground',
                 name: 'settings[bannerBackground]',
                 value: settings.bannerBackground,
@@ -154,7 +154,7 @@
 
         <div class="field width-25">
             {{ forms.colorField({
-                label: 'Banner border color',
+                label: 'Banner border color'|t("cookie-banner"),
                 id: 'bannerBorderColor',
                 name: 'settings[bannerBorderColor]',
                 value: settings.bannerBorderColor,
@@ -163,7 +163,7 @@
 
         <div class="field width-25">
             {{ forms.textField({
-                label: 'Banner border thickness',
+                label: 'Banner border thickness'|t("cookie-banner"),
                 type: 'number',
                 id: 'bannerBorderThickness',
                 name: 'settings[bannerBorderThickness]',
@@ -174,7 +174,7 @@
 
         <div class="field width-25">
             {{ forms.rangeField({
-                label: 'Banner overlay',
+                label: 'Banner overlay'|t("cookie-banner"),
                 id: 'bannerOverlayOpacity',
                 name: 'settings[bannerOverlayOpacity]',
                 value: settings.bannerOverlayOpacity,
@@ -188,7 +188,7 @@
 
         <div class="field width-25">
             {{ forms.colorField({
-                label: 'Title color',
+                label: 'Title color'|t("cookie-banner"),
                 id: 'titleColor',
                 name: 'settings[titleColor]',
                 value: settings.titleColor,
@@ -197,7 +197,7 @@
 
         <div class="field width-25">
             {{ forms.colorField({
-                label: 'Text color',
+                label: 'Text color'|t("cookie-banner"),
                 id: 'textColor',
                 name: 'settings[textColor]',
                 value: settings.textColor,
@@ -208,7 +208,7 @@
 
         <div class="field width-25">
             {{ forms.colorField({
-                label: 'Link color',
+                label: 'Link color'|t("cookie-banner"),
                 id: 'linkColor',
                 name: 'settings[linkColor]',
                 value: settings.linkColor,
@@ -217,18 +217,18 @@
 
         <div class="field width-25">
             {{ forms.colorField({
-                label: 'Link hover color',
+                label: 'Link hover color'|t("cookie-banner"),
                 id: 'linkHoverColor',
                 name: 'settings[linkHoverColor]',
                 value: settings.linkHoverColor,
             }) }}
         </div>
 
-        <h2>Buttons</h2>
+        <h2>{{ 'Buttons'|t("cookie-banner") }}</h2>
 
         <div class="field width-25">
             {{ forms.colorField({
-                label: 'Background',
+                label: 'Background'|t("cookie-banner"),
                 id: 'buttonBackground',
                 name: 'settings[buttonBackground]',
                 value: settings.buttonBackground,
@@ -237,7 +237,7 @@
 
         <div class="field width-25">
             {{ forms.colorField({
-                label: 'Text color',
+                label: 'Text color'|t("cookie-banner"),
                 id: 'buttonColor',
                 name: 'settings[buttonColor]',
                 value: settings.buttonColor,
@@ -246,7 +246,7 @@
 
         <div class="field width-25">
             {{ forms.colorField({
-                label: 'Border color',
+                label: 'Border color'|t("cookie-banner"),
                 id: 'buttonBorderColor',
                 name: 'settings[buttonBorderColor]',
                 value: settings.buttonBorderColor,
@@ -255,7 +255,7 @@
 
         <div class="field width-25">
             {{ forms.textField({
-                label: 'Border thickness',
+                label: 'Border thickness'|t("cookie-banner"),
                 type: 'number',
                 id: 'buttonBorderThickness',
                 name: 'settings[buttonBorderThickness]',
@@ -268,7 +268,7 @@
 
         <div class="field width-25">
             {{ forms.colorField({
-                label: 'Hover background',
+                label: 'Hover background'|t("cookie-banner"),
                 id: 'buttonHoverBackground',
                 name: 'settings[buttonHoverBackground]',
                 value: settings.buttonHoverBackground,
@@ -277,7 +277,7 @@
 
         <div class="field width-25">
             {{ forms.colorField({
-                label: 'Hover text color',
+                label: 'Hover text color'|t("cookie-banner"),
                 id: 'buttonHoverColor',
                 name: 'settings[buttonHoverColor]',
                 value: settings.buttonHoverColor,
@@ -286,18 +286,18 @@
 
         <div class="field width-25">
             {{ forms.colorField({
-                label: 'Hover border color',
+                label: 'Hover border color'|t("cookie-banner"),
                 id: 'buttonHoverBorderColor',
                 name: 'settings[buttonHoverBorderColor]',
                 value: settings.buttonHoverBorderColor,
             }) }}
         </div>
 
-        <h2>Toggles</h2>
+        <h2>{{ 'Toggles'|t("cookie-banner") }}</h2>
 
         <div class="field width-25">
             {{ forms.colorField({
-                label: 'Toggle background off',
+                label: 'Toggle background off'|t("cookie-banner"),
                 id: 'toggleBackgroundOff',
                 name: 'settings[toggleBackgroundOff]',
                 value: settings.toggleBackgroundOff,
@@ -306,7 +306,7 @@
 
         <div class="field width-25">
             {{ forms.colorField({
-                label: 'Toggle background on',
+                label: 'Toggle background on'|t("cookie-banner"),
                 id: 'toggleBackgroundOn',
                 name: 'settings[toggleBackgroundOn]',
                 value: settings.toggleBackgroundOn,
@@ -315,7 +315,7 @@
 
         <div class="field width-25">
             {{ forms.colorField({
-                label: 'Toggle color',
+                label: 'Toggle color'|t("cookie-banner"),
                 id: 'toggleColor',
                 name: 'settings[toggleColor]',
                 value: settings.toggleColor,
@@ -323,11 +323,11 @@
         </div>
 
         {% if settings.showCookieTables %}
-            <h2>Cookie groups</h2>
+            <h2>{{ 'Cookie groups'|t("cookie-banner") }}</h2>
 
             <div class="field width-25">
                 {{ forms.colorField({
-                    label: 'Title color',
+                    label: 'Title color'|t("cookie-banner"),
                     id: 'cookieGroupTitleColor',
                     name: 'settings[cookieGroupTitleColor]',
                     value: settings.cookieGroupTitleColor,
@@ -336,7 +336,7 @@
 
             <div class="field width-25">
                 {{ forms.colorField({
-                    label: 'Text color',
+                    label: 'Text color'|t("cookie-banner"),
                     id: 'cookieGroupTextColor',
                     name: 'settings[cookieGroupTextColor]',
                     value: settings.cookieGroupTextColor,
@@ -347,7 +347,7 @@
 
             <div class="field width-25">
                 {{ forms.colorField({
-                    label: 'Link color',
+                    label: 'Link color'|t("cookie-banner"),
                     id: 'cookieGroupLinkColor',
                     name: 'settings[cookieGroupLinkColor]',
                     value: settings.cookieGroupLinkColor,
@@ -356,7 +356,7 @@
 
             <div class="field width-25">
                 {{ forms.colorField({
-                    label: 'Link hover color',
+                    label: 'Link hover color'|t("cookie-banner"),
                     id: 'cookieGroupLinkHoverColor',
                     name: 'settings[cookieGroupLinkHoverColor]',
                     value: settings.cookieGroupLinkHoverColor,
@@ -367,7 +367,7 @@
 
             <div class="field width-25">
                 {{ forms.colorField({
-                    label: 'background',
+                    label: 'background'|t("cookie-banner"),
                     id: 'cookieGroupBackground',
                     name: 'settings[cookieGroupBackground]',
                     value: settings.cookieGroupBackground,
@@ -376,7 +376,7 @@
 
             <div class="field width-25">
                 {{ forms.colorField({
-                    label: 'border color',
+                    label: 'border color'|t("cookie-banner"),
                     id: 'cookieGroupBorderColor',
                     name: 'settings[cookieGroupBorderColor]',
                     value: settings.cookieGroupBorderColor,
@@ -385,7 +385,7 @@
 
             <div class="field width-25">
                 {{ forms.textField({
-                    label: 'border thickness',
+                    label: 'border thickness'|t("cookie-banner"),
                     type: 'number',
                     id: 'cookieGroupBorderThickness',
                     name: 'settings[cookieGroupBorderThickness]',
@@ -398,7 +398,7 @@
 
             <div class="field width-25">
                 {{ forms.colorField({
-                    label: 'Hover background',
+                    label: 'Hover background'|t("cookie-banner"),
                     id: 'cookieGroupHoverBackground',
                     name: 'settings[cookieGroupHoverBackground]',
                     value: settings.cookieGroupHoverBackground,
@@ -407,18 +407,18 @@
 
             <div class="field width-25">
                 {{ forms.colorField({
-                    label: 'Hover border color',
+                    label: 'Hover border color'|t("cookie-banner"),
                     id: 'cookieGroupHoverBorderColor',
                     name: 'settings[cookieGroupHoverBorderColor]',
                     value: settings.cookieGroupHoverBorderColor,
                 }) }}
             </div>
 
-            <h2>Cookie Tables</h2>
+            <h2>{{ 'Cookie Tables'|t("cookie-banner") }}</h2>
 
             <div class="field width-25">
                 {{ forms.colorField({
-                    label: 'Title color',
+                    label: 'Title color'|t("cookie-banner"),
                     id: 'cookieTableTitleColor',
                     name: 'settings[cookieTableTitleColor]',
                     value: settings.cookieTableTitleColor,
@@ -427,7 +427,7 @@
 
             <div class="field width-25">
                 {{ forms.colorField({
-                    label: 'Text color',
+                    label: 'Text color'|t("cookie-banner"),
                     id: 'cookieTableTextColor',
                     name: 'settings[cookieTableTextColor]',
                     value: settings.cookieTableTextColor,
@@ -438,7 +438,7 @@
 
             <div class="field width-25">
                 {{ forms.colorField({
-                    label: 'Background',
+                    label: 'Background'|t("cookie-banner"),
                     id: 'cookieTableBackground',
                     name: 'settings[cookieTableBackground]',
                     value: settings.cookieTableBackground,
@@ -447,7 +447,7 @@
 
             <div class="field width-25">
                 {{ forms.colorField({
-                    label: 'Border color',
+                    label: 'Border color'|t("cookie-banner"),
                     id: 'cookieTableBorderColor',
                     name: 'settings[cookieTableBorderColor]',
                     value: settings.cookieTableBorderColor,
@@ -456,7 +456,7 @@
 
             <div class="field width-25">
                 {{ forms.textField({
-                    label: 'border thickness',
+                    label: 'border thickness'|t("cookie-banner"),
                     type: 'number',
                     id: 'cookieTableBorderThickness',
                     name: 'settings[cookieTableBorderThickness]',

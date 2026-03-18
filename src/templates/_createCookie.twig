@@ -7,43 +7,48 @@
 {% set fullPageForm = true %}
 
 {% set crumbs = [
-    { label: 'Cookie banner'|t, url: url('cookie-banner') },
-    { label: 'Compliancy checklist'|t, url: url('cookie-banner/cookies-and-vendors') },
-    { label: 'Add a new cookie'|t },
+    { label: 'Cookie banner'|t("cookie-banner"), url: url('cookie-banner') },
+    { label: 'Cookies and vendors'|t("cookie-banner"), url: url('cookie-banner/cookies-and-vendors') },
+    { label: 'Add a new cookie'|t("cookie-banner") },
 ] %}
+
 
 {% block content %}
     <div class="ccb-create-cookie">
         <div class="flex-fields">
-            <div class="field width-50">
+            <div class="ccb-create-cookie-search field width-50">
                 {{ forms.textField({
-                    label: 'Cookie name',
+                    label: 'Cookie name'|t("cookie-banner"),
                     id: 'name',
                     name: 'name',
-                    value: "",
-                    placeholder: 'Name of the cookie you want to add',
+                    value: cookieForAllSites|first['name'],
+                    placeholder: 'Name of the cookie you want to add'|t("cookie-banner"),
                 }) }}
+
+                <div cookie-search-results class="menu tagmenu">
+                    <ul class="group"></ul>
+                </div>
             </div>
 
             <div class="field width-25">
                 {{ forms.selectField({
-                    label: 'Category',
+                    label: 'Category'|t("cookie-banner"),
                     id: 'category',
                     name: 'category',
                     options: [
-                        { 'label': 'Necessary cookies', 'value': 'necessaryCookies' },
-                        { 'label': 'Preference cookies', 'value': 'preferenceCookies' },
-                        { 'label': 'Analytical cookies', 'value': 'analyticalCookies' },
-                        { 'label': 'Marketing cookies', 'value': 'marketingCookies' },
-                        { 'label': 'Uncategorized cookies', 'value': 'uncategorizedCookies' }
+                        { 'label': 'Necessary cookies'|t("cookie-banner"), 'value': 'necessaryCookies' },
+                        { 'label': 'Preference cookies'|t("cookie-banner"), 'value': 'preferenceCookies' },
+                        { 'label': 'Analytical cookies'|t("cookie-banner"), 'value': 'analyticalCookies' },
+                        { 'label': 'Marketing cookies'|t("cookie-banner"), 'value': 'marketingCookies' },
+                        { 'label': 'Uncategorized cookies'|t("cookie-banner"), 'value': 'uncategorizedCookies' }
                     ],
-                    value: 'necessaryCookies',
+                    value: cookieForAllSites|first['group'] ~ "Cookies",
                 }) }}
             </div>
             
             <div class="field width-25">
                 {{ forms.selectField({
-                    label: 'Vendor',
+                    label: 'Vendor'|t("cookie-banner"),
                     id: 'vendor',
                     name: 'vendor',
                     options: getVendorOptions(),
@@ -59,34 +64,34 @@
                     name: 'fields[cookieForAllSites]',
                     cols: {
                         siteName: { 
-                            heading: "Site", 
+                            heading: "Site"|t("cookie-banner"), 
                             type: "singleline",
                             width: '15%',
                         },
                         name: { 
-                            heading: "Cookie Name", 
+                            heading: "Cookie name"|t("cookie-banner"), 
                             type: "singleline",
                         },
                         group: { 
-                            heading: "Vendor", 
+                            heading: "Vendor"|t("cookie-banner"), 
                             type: "select",
                             options: getVendorOptions()
                         },
                         purpose: { 
-                            heading: "Purpose", 
+                            heading: "Purpose"|t("cookie-banner"), 
                             type: "multiline",
                         },
                         expiration: { 
-                            heading: "Expiration", 
+                            heading: "Expiration"|t("cookie-banner"), 
                             type: "singleline",
                         },
                         enabled: {
-                            heading: "Enabled for this site",
+                            heading: "Enabled for this site"|t("cookie-banner"),
                             type: "lightswitch",
                             width: '10%',
                         }
                     },
-                    rows: emptyCookieForAllSites,
+                    rows: cookieForAllSites,
                     allowAdd: false,
                     allowDelete: false,
                     allowReorder: false,
@@ -97,17 +102,20 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', async function () {
             const masterInput = document.getElementById('name');
             const masterVendor = document.getElementById('vendor');
+            const cookieSearchResults = document.querySelector("[cookie-search-results]");
 
             if (masterInput) {
-                masterInput.addEventListener('input', function () {
+                masterInput.addEventListener('input', async function () {
                     const value = this.value;
 
                     const tableInputs = document.querySelectorAll(
                         '[name^="fields[cookieForAllSites]"][name$="[name]"]'
                     );
+
+                    await renderCookieSearchResults(value);
 
                     tableInputs.forEach(input => input.value = value);
                 });
@@ -123,6 +131,24 @@
 
                     tableSelects.forEach(select => select.value = value);
                 });
+            }
+
+            const templateRequest = async (url) => {
+                const response = await fetch(url);
+
+                const text = await response.text();
+
+                const parser = new DOMParser();
+                const html = parser.parseFromString(text, "text/html");
+                const content = html.body.innerHTML;
+
+                return { html, content };
+            };
+
+            const renderCookieSearchResults = async (searchTerm) => {
+                const { content } = await templateRequest(`/admin/cookie-banner/requests/cookieDatabase?searchTerm=${searchTerm}`);
+
+                cookieSearchResults.innerHTML = content;
             }
         });
     </script>

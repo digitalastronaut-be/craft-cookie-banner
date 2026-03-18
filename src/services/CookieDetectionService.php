@@ -3,8 +3,11 @@
 namespace digitalastronaut\craftcookiebanner\services;
 
 use craft\base\Component;
+
 use digitalastronaut\craftcookiebanner\CookieBanner;
 use digitalastronaut\craftcookiebanner\records\Content;
+
+use Fuse\Fuse;
 
 class CookieDetectionService extends Component {
     public array $controlPanelCookies = [
@@ -107,26 +110,38 @@ class CookieDetectionService extends Component {
         return $result;
     }
 
+    public function searchCookieDatabase(string|null $searchTerm) {
+        if (!$searchTerm) return [];
+    
+        $cookieDatabase = $this->getDatabaseFile("cookies", "en");
+
+        $fuzzySearchIndex = new Fuse($cookieDatabase['data'], ['keys' => ['name', 'vendor']]);
+
+        $results = $fuzzySearchIndex->search($searchTerm);
+
+        return array_slice($results, 0, 100);
+    }
+
+    public function searchVendorDatabase(string|null $searchTerm) {
+        if (!$searchTerm) return [];
+    
+        $vendorDatabase = $this->getDatabaseFile("vendors", "en");
+
+        $fuzzySearchIndex = new Fuse($vendorDatabase['data'], ['keys' => ['name']]);
+
+        $results = $fuzzySearchIndex->search($searchTerm);
+
+        return array_slice($results, 0, 100);
+    }
+
     public function getCookieDataFromDatabase(string $cookieName, string $language) {
-        $languageMatch = true;
-        $path = CookieBanner::getInstance()->getBasePath() . "/static/cookies/{$language}.json";
-        
-        if (!is_file($path)) {
-            $path = CookieBanner::getInstance()->getBasePath() . "/static/cookies/en.json";
-            $languageMatch = false;
-        }
+        $cookieDatabase = $this->getDatabaseFile("cookies", $language);
 
-        $databaseFile = file_get_contents($path);
-
-        if (!$databaseFile) return null;
-
-        $cookieDatabase = json_decode($databaseFile, true);
-
-        foreach ($cookieDatabase as $cookie) {
+        foreach ($cookieDatabase['data'] as $cookie) {
             if ($this->cookieNameMatches($cookieName, $cookie['name'])) {
                 return [
                     "cookie" => $cookie,
-                    "languageMatch" => $languageMatch,
+                    "languageMatch" => $cookieDatabase['languageMatch'],
                 ];
             };
         }
@@ -135,28 +150,37 @@ class CookieDetectionService extends Component {
     }
 
     public function getVendorDataFromDatabase(string $vendorName, string $language) {
-        $languageMatch = true;
-        $path = CookieBanner::getInstance()->getBasePath() . "/static/vendors/{$language}.json";
-        
-        if (!is_file($path)) {
-            $path = CookieBanner::getInstance()->getBasePath() . "/static/vendors/en.json";
-            $languageMatch = false;
-        }
+        $vendorDatabase = $this->getDatabaseFile("vendors", $language);
 
-        $databaseFile = file_get_contents($path);
-
-        if (!$databaseFile) return null;
-
-        $vendorDatabase = json_decode($databaseFile, true);
-
-        foreach ($vendorDatabase as $vendor) {
+        foreach ($vendorDatabase['data'] as $vendor) {
             if ($vendorName === $vendor['name']) {
                 return [
                     "vendor" => $vendor,
-                    "languageMatch" => $languageMatch,
+                    "languageMatch" => $vendorDatabase['languageMatch'],
                 ];
             }
         }
+    }
+
+    public function getDatabaseFile(string $handle, string $language): ?array {
+        $languageMatch = true;
+        $path = CookieBanner::getInstance()->getBasePath() . "/static/{$handle}/{$language}.json";
+
+        if (!is_file($path)) {
+            $path = CookieBanner::getInstance()->getBasePath() . "/static/{$handle}/en.json";
+            $languageMatch = false;
+        }
+
+        $fileContents = file_get_contents($path);
+        if (!$fileContents) return null;
+
+        $data = json_decode($fileContents, true);
+        if (!is_array($data)) return null;
+
+        return [
+            'data' => $data,
+            'languageMatch' => $languageMatch,
+        ];
     }
 
     public function getBannerCookies($content) {

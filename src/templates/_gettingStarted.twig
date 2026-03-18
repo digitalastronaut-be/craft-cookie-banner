@@ -2,12 +2,12 @@
 
 {% import '_includes/forms.twig' as forms %}
 
-{% set title = "Getting started" %}
+{% set title = "Getting started"|t("cookie-banner") %}
 {% set selectedSubnavItem = 'gettingStarted' %}
 
 {% set crumbs = [
-    { label: 'Cookie banner'|t, url: url('cookie-banner') },
-    { label: 'Getting started'|t, url: url('cookie-banner/getting-started') },
+    { label: 'Cookie banner'|t("cookie-banner"), url: url('cookie-banner') },
+    { label: 'Getting started'|t("cookie-banner"), url: url('cookie-banner/getting-started') },
 ] %}
 
 {% block content %}
@@ -16,13 +16,13 @@
             <div class="ccb-getting-started-welcome">
                 {{ svg("@digitalastronaut/craftcookiebanner/web/icons/plugin-icon.svg") }}
 
-                <h2>{{ "Thanks for installing this cookie banner plugin!"|t }}</h2>
+                <h2>{{ "Thanks for installing this cookie banner plugin!"|t("cookie-banner") }}</h2>
 
-                <p>{{ "Being compliant is unfortunatly way more work than installing a banner for your website. Luckily with this plugin you are halfway there already. Follow this getting started guide to make your site compliant in no time!"|t }}</p>
+                <p>{{ "Being compliant is unfortunatly way more work than installing a banner for your website. Luckily with this plugin you are halfway there already. Follow this getting started guide to make your site compliant in no time!"|t("cookie-banner") }}</p>
 
                 <div>
-                    <a href="#" class="btn">{{ "Visit the documentation"|t }}</a>
-                    <a href="#" class="btn">{{ "Skip this guide"|t }}</a>
+                    <a href="#" class="btn">{{ "Visit the documentation"|t("cookie-banner") }}</a>
+                    <a href="#" class="btn">{{ "Skip this guide"|t("cookie-banner") }}</a>
                 </div>
             </div>
 
@@ -33,13 +33,13 @@
                             <div class="ccb-getting-started-goal-title">
                                 {{ svg("@digitalastronaut/craftcookiebanner/web/icons/circle-check.svg") }}
 
-                                <h2>{{ "Correctly setup your legal pages"|t }}</h2>
+                                <h2>{{ "Correctly setup your legal pages"|t("cookie-banner") }}</h2>
                             </div>
 
                             <ol>
                                 <li>
                                     <p>
-                                        {{ "Create the mandatory privacy and cookie policy pages (can be one page)"|t }}
+                                        {{ "Create the mandatory privacy and cookie policy pages (can be one page)"|t("cookie-banner") }}
                                     </p>
                                 </li>
                                 <li>
@@ -51,7 +51,7 @@
                                 </li>
                                 <li>
                                     <p>
-                                        {{ "Render a table of all cookies and their purpose on the cookie page. You can easily achieve this using the build in <code>{{ getCookiesTableHtml() }}</code> twig extension"|t|raw }}
+                                        {{ "Render a table of all cookies and their purpose on the cookie page. You can easily achieve this using the build in <code>{{ getCookiesTableHtml() }}</code> twig extension"|t("cookie-banner")|raw }}
                                     </p>
                                 </li>
                             </ol>
@@ -75,7 +75,7 @@
                             <div class="ccb-getting-started-goal-title">
                                 {{ svg("@digitalastronaut/craftcookiebanner/web/icons/circle-check.svg") }}
 
-                                <h2>{{ "Defer third party scripts/embeds on the website until consent is given"|t }}</h2>
+                                <h2>{{ "Defer third party scripts/embeds on the website until consent is given"|t("cookie-banner") }}</h2>
                             </div>
 
                             <ol>
@@ -119,12 +119,12 @@
                             <div class="ccb-getting-started-goal-title">
                                 {{ svg("@digitalastronaut/craftcookiebanner/web/icons/circle-check.svg") }}
 
-                                <h2>{{ "Complete (and translate) the cookie banner content"|t }}</h2>
+                                <h2>{{ "Complete (and translate) the cookie banner content"|t("cookie-banner") }}</h2>
                             </div>
 
                             <ol>
                                 <li>
-                                    <p>{{ "Fill out basic content fields: title, description, definitions and button labels"|t }}</p>
+                                    <p>{{ "Fill out basic content fields: title, description, definitions and button labels"|t("cookie-banner") }}</p>
                                 </li>
                                 <li>
                                     <p>{{ 'Use <a href="{url}">the compliancy checklist</a> to easily add all your cookies to the banner in multiple languages'|t('cookie-banner', {
@@ -155,7 +155,7 @@
                             <div class="ccb-getting-started-goal-title">
                                 {{ svg("@digitalastronaut/craftcookiebanner/web/icons/circle-check.svg") }}
 
-                                <h2>{{ "Personalise the cookie banner"|t }}</h2>
+                                <h2>{{ "Personalise the cookie banner"|t("cookie-banner") }}</h2>
                             </div>
 
                             <ol>
@@ -185,7 +185,7 @@
                             <div class="ccb-getting-started-goal-title">
                                 {{ svg("@digitalastronaut/craftcookiebanner/web/icons/circle-check.svg") }}
 
-                                <h2>{{ "Configure some final settings"|t }}</h2>
+                                <h2>{{ "Configure some final settings"|t("cookie-banner") }}</h2>
                             </div>
 
                             <ol>

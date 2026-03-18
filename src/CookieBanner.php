@@ -68,27 +68,27 @@ class CookieBanner extends Plugin {
         $item['badgeCount'] = 0;
         $item['subnav'] = [
             'gettingStarted' => [
-                'label' => 'Getting started', 
+                'label' => Craft::t('cookie-banner', 'Getting started'), 
                 'url' => 'cookie-banner/getting-started'
             ],
             'cookiesAndVendors' => [
-                'label' => 'Cookies and vendors', 
+                'label' => Craft::t('cookie-banner', 'Cookies and vendors'), 
                 'url' => 'cookie-banner/cookies-and-vendors'
             ],
             'consentRecords' => [
-                'label' => 'Consent records', 
+                'label' => Craft::t('cookie-banner', 'Consent records'), 
                 'url' => 'cookie-banner/consent-records'
             ],
             'content' => [
-                'label' => 'Content', 
+                'label' => Craft::t('cookie-banner', 'Content'), 
                 'url' => 'cookie-banner/content'
             ],
             'appearance' => [
-                'label' => 'Appearance', 
+                'label' => Craft::t('cookie-banner', 'Appearance'), 
                 'url' => 'cookie-banner/appearance'
             ],
             'settings' => [
-                'label' => 'Settings', 
+                'label' => Craft::t('cookie-banner', 'Settings'), 
                 'url' => 'cookie-banner/settings'
             ],
         ];

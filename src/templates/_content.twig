@@ -36,13 +36,13 @@
                 label: 'Select site'|t('app')
             }
         },
-        { label: 'Cookie banner'|t, url: url('cookie-banner') },
-        { label: 'Content'|t, url: url('cookie-banner/content') },
+        { label: 'Cookie banner'|t('cookie-banner'), url: url('cookie-banner') },
+        { label: 'Content'|t('cookie-banner'), url: url('cookie-banner/content') },
     ] %}
 {% else %}
     {% set crumbs = [
-        { label: 'Cookie banner'|t, url: url('cookie-banner') },
-        { label: 'Content'|t, url: url('cookie-banner/content') },
+        { label: 'Cookie banner'|t('cookie-banner'), url: url('cookie-banner') },
+        { label: 'Content'|t('cookie-banner'), url: url('cookie-banner/content') },
     ] %}
 {% endif %}
 
@@ -58,15 +58,15 @@
     {{ hiddenInput('siteId', selectedSite.id) }}
 
     <div class="flex-fields ccb-settings">
-        <h2>Introduction</h2>
+        <h2>{{ 'Introduction'|t('cookie-banner') }}</h2>
 
         <div class="field width-50">
             {{ forms.textField({
-                label: 'Title',
+                label: 'Title'|t('cookie-banner'),
                 id: 'title',
                 name: 'fields[title]',
                 value: banner.title ?? '',
-                placeholder: 'Title',
+                placeholder: 'Title'|t('cookie-banner'),
             }) }}
         </div>
 
@@ -74,25 +74,25 @@
 
         <div class="field width-75">
             {{ forms.textareaField({
-                label: 'Text',
+                label: 'Text'|t('cookie-banner'),
                 id: 'text',
                 name: 'fields[text]',
                 value: banner.text ?? '',
-                placeholder: 'Text',
+                placeholder: 'Text'|t('cookie-banner'),
                 rows: 4,
             }) }}
         </div>
 
         <div class="line-break"></div>
 
-        <h3 class="ccb-h3-label">Privacy policy link</h3>
+        <h3 class="ccb-h3-label">{{ 'Privacy policy link'|t('cookie-banner') }}</h3>
 
         <div class="field width-25">
             {{ forms.textField({
                 id: 'privacyPolicyLinkLabel',
                 name: 'fields[privacyPolicyLinkLabel]',
                 value: banner.privacyPolicyLinkLabel ?? '',
-                placeholder: 'Label',
+                placeholder: 'Label'|t('cookie-banner'),
             }) }}
         </div>
 
@@ -101,18 +101,18 @@
                 id: 'privacyPolicyLinkURL',
                 name: 'fields[privacyPolicyLinkURL]',
                 value: banner.privacyPolicyLinkURL ?? '',
-                placeholder: 'URL',
+                placeholder: 'URL'|t('cookie-banner'),
             }) }}
         </div>
 
-        <h3 class="ccb-h3-label">Cookie policy link</h3>
+        <h3 class="ccb-h3-label">{{ 'Cookie policy link'|t('cookie-banner') }}</h3>
 
         <div class="field width-25">
             {{ forms.textField({
                 id: 'cookiePolicyLinkLabel',
                 name: 'fields[cookiePolicyLinkLabel]',
                 value: banner.cookiePolicyLinkLabel ?? '',
-                placeholder: 'Label',
+                placeholder: 'Label'|t('cookie-banner'),
             }) }}
         </div>
 
@@ -121,64 +121,64 @@
                 id: 'cookiePolicyLinkURL',
                 name: 'fields[cookiePolicyLinkURL]',
                 value: banner.cookiePolicyLinkURL ?? '',
-                placeholder: 'URL',
+                placeholder: 'URL'|t('cookie-banner'),
             }) }}
         </div>
 
         <hr>
 
-        <h2>Cookies</h2>
+        <h2>{{ 'Cookies'|t('cookie-banner') }}</h2>
 
         <div class="field width-75">
             {% if banner.cookieGroups|length %}
                 {{ forms.editableTableField({
-                    label: 'Vendors',
+                    label: 'Vendors'|t('cookie-banner'),
                     id: 'cookieGroups',
                     name: 'fields[cookieGroups]',
                     cols: {
-                        name: { heading: "Name", type: "singleline" },
-                        description: { heading: "Description", type: "multiline"},
-                        url: { heading: "URL", type: "url"},
+                        name: { heading: "Name"|t('cookie-banner'), type: "singleline" },
+                        description: { heading: "Description"|t('cookie-banner'), type: "multiline"},
+                        url: { heading: "URL"|t('cookie-banner'), type: "url"},
                     },
                     rows: banner.cookieGroups ?? [],
                     allowReorder: true,
                 }) }}
             {% else %}
                 <div class="pane no-border zilch small">
-                    <p class="zilch small">{{ "No vendors defined"|t }}</p>
+                    <p class="zilch small">{{ "No vendors defined"|t('cookie-banner') }}</p>
                 </div>    
             {% endif %}
         </div>
 
-        <h2>Necessary cookies</h2>
+        <h2>{{ 'Necessary cookies'|t('cookie-banner') }}</h2>
 
         <div class="field width-50">
             {{ forms.textField({
-                label: 'Title',
+                label: 'Title'|t('cookie-banner'),
                 id: 'necessaryCookiesTitle',
                 name: 'fields[necessaryCookiesTitle]',
                 value: banner.necessaryCookiesTitle ?? '',
-                placeholder: 'Title',
+                placeholder: 'Title'|t('cookie-banner'),
             }) }}
         </div>
 
         <div class="field width-25">
             {{ forms.textField({
-                label: 'Label',
+                label: 'Label'|t('cookie-banner'),
                 id: 'necessaryCookiesLabel',
                 name: 'fields[necessaryCookiesLabel]',
                 value: banner.necessaryCookiesLabel ?? '',
-                placeholder: 'Label',
+                placeholder: 'Label'|t('cookie-banner'),
             }) }}
         </div>
 
         <div class="field width-75">
             {{ forms.textareaField({
-                label: 'Definition',
+                label: 'Definition'|t('cookie-banner'),
                 id: 'necessaryCookiesDefinition',
                 name: 'fields[necessaryCookiesDefinition]',
                 value: banner.necessaryCookiesDefinition ?? '',
-                placeholder: 'Definition',
+                placeholder: 'Definition'|t('cookie-banner'),
                 rows: 4,
             }) }}
         </div>
@@ -186,55 +186,55 @@
         <div class="width-75">
             {% if banner.necessaryCookies|length %}
                 {{ forms.editableTableField({
-                    label: 'List',
+                    label: 'List'|t('cookie-banner'),
                     id: 'necessaryCookies',
                     name: 'fields[necessaryCookies]',
                     cols: {
-                        name: { heading: "Name", type: "singleline" },
-                        group: { heading: "Vendor", type: "select", options: cookieGroups },
-                        purpose: { heading: "Purpose", type: "multiline" },
-                        expiration: { heading: "Expiration", type: "singleline" },
-                        enabled: { heading: "Enabled", type: "lightswitch" },
+                        name: { heading: "Name"|t('cookie-banner'), type: "singleline" },
+                        group: { heading: "Vendor"|t('cookie-banner'), type: "select", options: cookieGroups },
+                        purpose: { heading: "Purpose"|t('cookie-banner'), type: "multiline" },
+                        expiration: { heading: "Expiration"|t('cookie-banner'), type: "singleline" },
+                        enabled: { heading: "Enabled"|t('cookie-banner'), type: "lightswitch" },
                     },
                     rows: banner.necessaryCookies ?? [],
                     allowReorder: true,
                 }) }}
             {% else %}
                 <div class="pane no-border zilch small">
-                    <p class="zilch small">{{ "No necessary cookies defined"|t }}</p>
+                    <p class="zilch small">{{ "No necessary cookies defined"|t('cookie-banner') }}</p>
                 </div>    
             {% endif %}
         </div>
 
-        <h2>Preference cookies</h2>
+        <h2>{{ 'Preference cookies'|t('cookie-banner') }}</h2>
 
         <div class="field width-50">
             {{ forms.textField({
-                label: 'Title',
+                label: 'Title'|t('cookie-banner'),
                 id: 'preferenceCookiesTitle',
                 name: 'fields[preferenceCookiesTitle]',
                 value: banner.preferenceCookiesTitle ?? '',
-                placeholder: 'Title',
+                placeholder: 'Title'|t('cookie-banner'),
             }) }}
         </div>
 
         <div class="field width-25">
             {{ forms.textField({
-                label: 'Label',
+                label: 'Label'|t('cookie-banner'),
                 id: 'preferenceCookiesLabel',
                 name: 'fields[preferenceCookiesLabel]',
                 value: banner.preferenceCookiesLabel ?? '',
-                placeholder: 'Label',
+                placeholder: 'Label'|t('cookie-banner'),
             }) }}
         </div>
 
         <div class="field width-75">
             {{ forms.textareaField({
-                label: 'Definition',
+                label: 'Definition'|t('cookie-banner'),
                 id: 'preferenceCookiesDefinition',
                 name: 'fields[preferenceCookiesDefinition]',
                 value: banner.preferenceCookiesDefinition ?? '',
-                placeholder: 'Definition',
+                placeholder: 'Definition'|t('cookie-banner'),
                 rows: 4,
             }) }}
         </div>
@@ -242,55 +242,55 @@
         <div class="field width-75">
             {% if banner.preferenceCookies|length %}
                 {{ forms.editableTableField({
-                    label: 'List',
+                    label: 'List'|t('cookie-banner'),
                     id: 'preferenceCookies',
                     name: 'fields[preferenceCookies]',
                     cols: {
-                        name: { heading: "Name", type: "singleline" },
-                        group: { heading: "Vendor", type: "select", options: cookieGroups },
-                        purpose: { heading: "Purpose", type: "multiline" },
-                        expiration: { heading: "Expiration", type: "singleline" },
-                        enabled: { heading: "Enabled", type: "lightswitch" },
+                        name: { heading: "Name"|t('cookie-banner'), type: "singleline" },
+                        group: { heading: "Vendor"|t('cookie-banner'), type: "select", options: cookieGroups },
+                        purpose: { heading: "Purpose"|t('cookie-banner'), type: "multiline" },
+                        expiration: { heading: "Expiration"|t('cookie-banner'), type: "singleline" },
+                        enabled: { heading: "Enabled"|t('cookie-banner'), type: "lightswitch" },
                     },
                     rows: banner.preferenceCookies ?? [],
                     allowReorder: true,
                 }) }}
             {% else %}
                 <div class="pane no-border zilch small">
-                    <p class="zilch small">{{ "No preference cookies defined"|t }}</p>
+                    <p class="zilch small">{{ "No preference cookies defined"|t('cookie-banner') }}</p>
                 </div>    
             {% endif %}
         </div>
 
-        <h2>Analytical cookies</h2>
+        <h2>{{ 'Analytical cookies'|t('cookie-banner') }}</h2>
 
         <div class="field width-50">
             {{ forms.textField({
-                label: 'Title',
+                label: 'Title'|t('cookie-banner'),
                 id: 'analyticalCookiesTitle',
                 name: 'fields[analyticalCookiesTitle]',
                 value: banner.analyticalCookiesTitle ?? '',
-                placeholder: 'Title',
+                placeholder: 'Title'|t('cookie-banner'),
             }) }}
         </div>
 
         <div class="field width-25">
             {{ forms.textField({
-                label: 'Label',
+                label: 'Label'|t('cookie-banner'),
                 id: 'analyticalCookiesLabel',
                 name: 'fields[analyticalCookiesLabel]',
                 value: banner.analyticalCookiesLabel ?? '',
-                placeholder: 'Label',
+                placeholder: 'Label'|t('cookie-banner'),
             }) }}
         </div>
 
         <div class="field width-75">
             {{ forms.textareaField({
-                label: 'Definition',
+                label: 'Definition'|t('cookie-banner'),
                 id: 'analyticalCookiesDefinition',
                 name: 'fields[analyticalCookiesDefinition]',
                 value: banner.analyticalCookiesDefinition ?? '',
-                placeholder: 'Definition',
+                placeholder: 'Definition'|t('cookie-banner'),
                 rows: 4,
             }) }}
         </div>
@@ -298,55 +298,55 @@
         <div class="field width-75">
             {% if banner.analyticalCookies %}
                 {{ forms.editableTableField({
-                    label: 'List',
+                    label: 'List'|t('cookie-banner'),
                     id: 'analyticalCookies',
                     name: 'fields[analyticalCookies]',
                     cols: {
-                        name: { heading: "Name", type: "singleline" },
-                        group: { heading: "Vendor", type: "select", options: cookieGroups },
-                        purpose: { heading: "Purpose", type: "multiline" },
-                        expiration: { heading: "Expiration", type: "singleline" },
-                        enabled: { heading: "Enabled", type: "lightswitch" },
+                        name: { heading: "Name"|t('cookie-banner'), type: "singleline" },
+                        group: { heading: "Vendor"|t('cookie-banner'), type: "select", options: cookieGroups },
+                        purpose: { heading: "Purpose"|t('cookie-banner'), type: "multiline" },
+                        expiration: { heading: "Expiration"|t('cookie-banner'), type: "singleline" },
+                        enabled: { heading: "Enabled"|t('cookie-banner'), type: "lightswitch" },
                     },
                     rows: banner.analyticalCookies ?? [],
                     allowReorder: true,
                 }) }}
             {% else %}
                 <div class="pane no-border zilch small">
-                    <p class="zilch small">{{ "No analytical cookies defined"|t }}</p>
+                    <p class="zilch small">{{ "No analytical cookies defined"|t('cookie-banner') }}</p>
                 </div>        
             {% endif %}
         </div>
 
-        <h2>Marketing cookies</h2>
+        <h2>{{ 'Marketing cookies'|t('cookie-banner') }}</h2>
 
         <div class="field width-50">
             {{ forms.textField({
-                label: 'Title',
+                label: 'Title'|t('cookie-banner'),
                 id: 'marketingCookiesTitle',
                 name: 'fields[marketingCookiesTitle]',
                 value: banner.marketingCookiesTitle ?? '',
-                placeholder: 'Title',
+                placeholder: 'Title'|t('cookie-banner'),
             }) }}
         </div>
 
         <div class="field width-25">
             {{ forms.textField({
-                label: 'Label',
+                label: 'Label'|t('cookie-banner'),
                 id: 'marketingCookiesLabel',
                 name: 'fields[marketingCookiesLabel]',
                 value: banner.marketingCookiesLabel ?? '',
-                placeholder: 'Label',
+                placeholder: 'Label'|t('cookie-banner'),
             }) }}
         </div>
 
         <div class="field width-75">
             {{ forms.textareaField({
-                label: 'Definition',
+                label: 'Definition'|t('cookie-banner'),
                 id: 'marketingCookiesDefinition',
                 name: 'fields[marketingCookiesDefinition]',
                 value: banner.marketingCookiesDefinition ?? '',
-                placeholder: 'Definition',
+                placeholder: 'Definition'|t('cookie-banner'),
                 rows: 4,
             }) }}
         </div>
@@ -354,55 +354,55 @@
         <div class="field width-75">
             {% if banner.marketingCookies|length %}
                 {{ forms.editableTableField({
-                    label: 'List',
+                    label: 'List'|t('cookie-banner'),
                     id: 'marketingCookies',
                     name: 'fields[marketingCookies]',
                     cols: {
-                        name: { heading: "Name", type: "singleline" },
-                        group: { heading: "Vendor", type: "select", options: cookieGroups },
-                        purpose: { heading: "Purpose", type: "multiline" },
-                        expiration: { heading: "Expiration", type: "singleline" },
-                        enabled: { heading: "Enabled", type: "lightswitch" },
+                        name: { heading: "Name"|t('cookie-banner'), type: "singleline" },
+                        group: { heading: "Vendor"|t('cookie-banner'), type: "select", options: cookieGroups },
+                        purpose: { heading: "Purpose"|t('cookie-banner'), type: "multiline" },
+                        expiration: { heading: "Expiration"|t('cookie-banner'), type: "singleline" },
+                        enabled: { heading: "Enabled"|t('cookie-banner'), type: "lightswitch" },
                     },
                     rows: banner.marketingCookies ?? [],
                     allowReorder: true,
                 }) }}
             {% else %}
                 <div class="pane no-border zilch small">
-                    <p class="zilch small">{{ "No marketing cookies defined"|t }}</p>
+                    <p class="zilch small">{{ "No marketing cookies defined"|t('cookie-banner') }}</p>
                 </div>        
             {% endif %}
         </div>
 
-        <h2>Uncategorized cookies</h2>
+        <h2>{{ 'Uncategorized cookies'|t('cookie-banner') }}</h2>
 
         <div class="field width-50">
             {{ forms.textField({
-                label: 'Title',
+                label: 'Title'|t('cookie-banner'),
                 id: 'uncategorizedCookiesTitle',
                 name: 'fields[uncategorizedCookiesTitle]',
                 value: banner.uncategorizedCookiesTitle ?? '',
-                placeholder: 'Title',
+                placeholder: 'Title'|t('cookie-banner'),
             }) }}
         </div>
 
         <div class="field width-25">
             {{ forms.textField({
-                label: 'Label',
+                label: 'Label'|t('cookie-banner'),
                 id: 'uncategorizedCookiesLabel',
                 name: 'fields[uncategorizedCookiesLabel]',
                 value: banner.uncategorizedCookiesLabel ?? '',
-                placeholder: 'Label',
+                placeholder: 'Label'|t('cookie-banner'),
             }) }}
         </div>
 
         <div class="field width-75">
             {{ forms.textareaField({
-                label: 'Definition',
+                label: 'Definition'|t('cookie-banner'),
                 id: 'uncategorizedCookiesDefinition',
                 name: 'fields[uncategorizedCookiesDefinition]',
                 value: banner.uncategorizedCookiesDefinition ?? '',
-                placeholder: 'Definition',
+                placeholder: 'Definition'|t('cookie-banner'),
                 rows: 4,
             }) }}
         </div>
@@ -410,55 +410,55 @@
         <div class="field width-75">
             {% if banner.uncategorizedCookies|length %}
                 {{ forms.editableTableField({
-                    label: 'List',
+                    label: 'List'|t('cookie-banner'),
                     id: 'uncategorizedCookies',
                     name: 'fields[uncategorizedCookies]',
                     cols: {
-                        name: { heading: "Name", type: "singleline" },
-                        group: { heading: "Vendor", type: "select", options: cookieGroups },
-                        purpose: { heading: "Purpose", type: "multiline" },
-                        expiration: { heading: "Expiration", type: "singleline" },
-                        enabled: { heading: "Enabled", type: "lightswitch" },
+                        name: { heading: "Name"|t('cookie-banner'), type: "singleline" },
+                        group: { heading: "Vendor"|t('cookie-banner'), type: "select", options: cookieGroups },
+                        purpose: { heading: "Purpose"|t('cookie-banner'), type: "multiline" },
+                        expiration: { heading: "Expiration"|t('cookie-banner'), type: "singleline" },
+                        enabled: { heading: "Enabled"|t('cookie-banner'), type: "lightswitch" },
                     },
                     rows: banner.uncategorizedCookies ?? [],
                     allowReorder: true,
                 }) }}
             {% else %}
                 <div class="pane no-border zilch small">
-                    <p class="zilch small">{{ "No uncategorized cookies defined"|t }}</p>
+                    <p class="zilch small">{{ "No uncategorized cookies defined"|t('cookie-banner') }}</p>
                 </div>            
             {% endif %}
         </div>
 
-        <h2>Button labels</h2>
+        <h2>{{ 'Button labels'|t('cookie-banner') }}</h2>
 
         <div class="field width-25">
             {{ forms.textField({
-                label: 'Refuse all',
+                label: 'Refuse all'|t('cookie-banner'),
                 id: 'refuseAllLabel',
                 name: 'fields[refuseAllButtonLabel]',
                 value: banner.refuseAllButtonLabel ?? '',
-                placeholder: 'Label',
+                placeholder: 'Label'|t('cookie-banner'),
             }) }}
         </div>
 
         <div class="field width-25">
             {{ forms.textField({
-                label: 'Accept selected',
+                label: 'Accept selected'|t('cookie-banner'),
                 id: 'acceptSelectedLabel',
                 name: 'fields[acceptSelectedButtonLabel]',
                 value: banner.acceptSelectedButtonLabel ?? '',
-                placeholder: 'Label',
+                placeholder: 'Label'|t('cookie-banner'),
             }) }}
         </div>
 
         <div class="field width-25">
             {{ forms.textField({
-                label: 'Accept all',
+                label: 'Accept all'|t('cookie-banner'),
                 id: 'acceptAllLabel',
                 name: 'fields[acceptAllButtonLabel]',
                 value: banner.acceptAllButtonLabel ?? '',
-                placeholder: 'Label',
+                placeholder: 'Label'|t('cookie-banner'),
             }) }}
         </div>
 
@@ -466,21 +466,21 @@
 
         <div class="field width-25">
             {{ forms.textField({
-                label: 'Determine preferences',
+                label: 'Determine preferences'|t('cookie-banner'),
                 id: 'determinePreferencesLabel',
                 name: 'fields[determinePreferencesButtonLabel]',
                 value: banner.determinePreferencesButtonLabel ?? '',
-                placeholder: 'Label',
+                placeholder: 'Label'|t('cookie-banner'),
             }) }}
         </div>
 
         <div class="field width-25">
             {{ forms.textField({
-                label: 'Detailed preferences',
+                label: 'Detailed preferences'|t('cookie-banner'),
                 id: 'detailedPreferencesLabel',
                 name: 'fields[detailedPreferencesButtonLabel]',
                 value: banner.detailedPreferencesButtonLabel ?? '',
-                placeholder: 'Label',
+                placeholder: 'Label'|t('cookie-banner'),
             }) }}
         </div>
     </div>

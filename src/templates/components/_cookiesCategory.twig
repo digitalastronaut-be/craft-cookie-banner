@@ -4,7 +4,11 @@
 {% set title = title|default("") %}
 {% set description = description|default("") %}
 {% set cookies = cookies|default([]) %}
-{% set groups = banner.cookieGroups|default([]) %}
+{% set groups = banner.cookieGroups|merge([{
+    "name": "Default",
+    "description": "",
+    "url": "",
+}])|default([]) %}
 
 {% set groupedCookies = groups|map(group => {
     'name': group.name,
@@ -12,10 +16,6 @@
     'url': group.url,
     'cookies': cookies|filter(cookie => cookie.group == (group.name|lower|replace({' ': '-'})))
 }) %}
-
-{# <pre>
-    {{ dump(groupedCookies) }}
-</pre> #}
 
 {# ======================= #}
 {# TEMPLATE                #}
@@ -43,7 +43,7 @@
                         {% set url = group.url|default("") %}
                         {% set cookies = group.cookies|default([]) %}
 
-                        {% if cookies|length %}
+                        {% if name != "Default" and cookies|length %}
                             <li class="ccb-cookies-category-groups-list-item">
                                 <collapsible-content class="ccb-cookies-category-groups-list-item-collapse ccb-collapse">
                                     <div data-collapse-toggle class="ccb-cookies-category-groups-list-item-toggle">
@@ -73,6 +73,10 @@
                                         </div>
                                     </div>
                                 </collapsible-content>
+                            </li>
+                        {% elseif cookies|length %}
+                            <li class="ccb-cookies-category-groups-list-item">
+                                {% include "cookie-banner/components/_cookiesTable" with { cookies } only %}
                             </li>
                         {% endif %}
                     {% endfor %}

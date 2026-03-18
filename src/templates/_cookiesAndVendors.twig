@@ -36,7 +36,7 @@
 {% block content %}
     <div id="cookies">
         <div class="ccb-compliancy-checklist">
-            <h2>Manage your cookies</h2>
+            <h2>{{ "Manage your cookies"|t("cookie-banner") }}</h2>
             
             <div class="ccb-detected-cookies-legend">
                 <p>{{ "Status of each cookie per site for the cookie banner"|t("cookie-banner") }}</p>
@@ -53,11 +53,11 @@
             <div class="ccb-detected-cookies-table">
                 <table class="data">
                     <thead>
-                        <th>{{ "Actions"|t }}</th>
-                        <th>{{ "Automated"|t }}</th>
-                        <th>{{ "Cookie name"|t }}</th>
-                        <th>{{ "Current value"|t }}</th>
-                        <th>{{ "Cookie definition status"|t }}</th>
+                        <th>{{ "Actions"|t("cookie-banner") }}</th>
+                        <th>{{ "Automated"|t("cookie-banner") }}</th>
+                        <th>{{ "Cookie name"|t("cookie-banner") }}</th>
+                        <th>{{ "Current value"|t("cookie-banner") }}</th>
+                        <th>{{ "Cookie definition status"|t("cookie-banner") }}</th>
                     </thead>
 
                     <tbody>
@@ -67,7 +67,7 @@
                                     <div class="ccb-compliancy-checklist-item-actions">
                                         <div class="ccb-actions-menu">
                                             <button class="btn btn-submit">
-                                                {{ "Actions"|t }}
+                                                {{ "Actions"|t("cookie-banner") }}
 
                                                 {{ svg("@digitalastronaut/craftcookiebanner/web/icons/chevron-down.svg") }}
                                             </button>
@@ -149,13 +149,13 @@
 
                                 {% if cookie.isControlPanelCookie %}
                                     <td>
-                                        <div class="status-chip">Used by the control panel internally</div>
+                                        <div class="status-chip">{{ "Used by the control panel internally"|t("cookie-banner") }}</div>
                                     </td>
                                 {% elseif cookie.onlyInBrowserCookies %}
                                     <td>
                                         <div class="inline-chips">
-                                            <div class="status-chip not-defined">Not defined</div>
-                                            <div class="status-chip detected">Detected from browser storage</div>
+                                            <div class="status-chip not-defined">{{ "Not defined"|t("cookie-banner") }}</div>
+                                            <div class="status-chip detected">{{ "Detected from browser storage"|t("cookie-banner") }}</div>
                                         </div>
                                     </td>
                                 {% else %}
@@ -177,7 +177,7 @@
 
     <div id="vendors" class="hidden">
         <div class="ccb-vendors">
-            <h2>Manage your vendors</h2>
+            <h2>{{ "Manage your vendors"|t("cookie-banner") }}</h2>
 
             <div class="ccb-detected-cookies-legend">
                 <p>{{ "Status of each vendor per site for the cookie banner"|t("cookie-banner") }}</p>
@@ -194,11 +194,11 @@
             <div class="ccb-vendors-table">
                 <table class="data">
                     <thead>
-                        <th>{{ "Actions"|t }}</th>
-                        <th class="centered">{{ "Automated"|t }}</th>
-                        <th>{{ "Name"|t }}</th>
-                        <th>{{ "URL"|t }}</th>
-                        <th>{{ "Vendor definition status"|t }}</th>
+                        <th>{{ "Actions"|t("cookie-banner") }}</th>
+                        <th class="centered">{{ "Automated"|t("cookie-banner") }}</th>
+                        <th>{{ "Name"|t("cookie-banner") }}</th>
+                        <th>{{ "URL"|t("cookie-banner") }}</th>
+                        <th>{{ "Vendor definition status"|t("cookie-banner") }}</th>
                     </thead>
 
                     <tbody>

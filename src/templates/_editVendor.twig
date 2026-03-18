@@ -2,14 +2,14 @@
 
 {% import '_includes/forms.twig' as forms %}
 
-{% set title = "Edit the " ~ vendorForAllSites[0].name ~ " cookie for all sites" %}
+{% set title = "Edit the " ~ vendorForAllSites[0].name ~ " cookie for all sites"|t("cookie-banner") %}
 {% set selectedSubnavItem = 'compliancyChecklist' %}
 {% set fullPageForm = true %}
 
 {% set crumbs = [
-    { label: 'Cookie banner'|t, url: url('cookie-banner') },
-    { label: 'Cookies and vendors'|t, url: url('cookie-banner/cookies-and-vendors') },
-    { label: 'Add a new vendor'|t },
+    { label: 'Cookie banner'|t("cookie-banner"), url: url('cookie-banner') },
+    { label: 'Cookies and vendors'|t("cookie-banner"), url: url('cookie-banner/cookies-and-vendors') },
+    { label: 'Add a new vendor'|t("cookie-banner") },
 ] %}
 
 {% block content %}
@@ -17,11 +17,11 @@
         <div class="flex-fields">
             <div class="field width-50">
                 {{ forms.textField({
-                    label: 'Vendor name',
+                    label: 'Vendor name'|t("cookie-banner"),
                     id: 'name',
                     name: 'name',
                     value: vendorForAllSites[0]['name'],
-                    placeholder: 'Name of the vendor',
+                    placeholder: 'Name of the vendor'|t("cookie-banner"),
                 }) }}
             </div>
 
@@ -33,25 +33,25 @@
                     name: 'fields[vendorForAllSites]',
                     cols: {
                         siteName: { 
-                            heading: "Site", 
+                            heading: "Site"|t("cookie-banner"), 
                             type: "singleline",
                             width: "15%"
                         },
                         name: { 
-                            heading: "Vendor Name", 
+                            heading: "Vendor Name"|t("cookie-banner"), 
                             type: "singleline",
                             width: "15%"
                         },
                         url: { 
-                            heading: "URL", 
+                            heading: "URL"|t("cookie-banner"), 
                             type: "singleline",
                         },
                         description: { 
-                            heading: "Description", 
+                            heading: "Description"|t("cookie-banner"), 
                             type: "singleline",
                         },
                         enabled: {
-                            heading: "Enabled for this site",
+                            heading: "Enabled for this site"|t("cookie-banner"),
                             type: "lightswitch",
                             width: "10%"
                         }
