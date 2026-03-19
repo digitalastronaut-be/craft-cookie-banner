@@ -10,4 +10,10 @@ abstract class CookieBanner {
         'marketingCookies',
         'uncategorizedCookies'
     ];
+
+    public const CONTROL_PANEL_COOKIES = [
+        "Craft-*",
+        "*_identity",
+        "*_username",
+    ];
 }

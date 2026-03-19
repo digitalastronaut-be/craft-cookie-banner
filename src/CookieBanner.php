@@ -11,20 +11,14 @@ use craft\helpers\UrlHelper;
 use digitalastronaut\craftcookiebanner\models\Settings;
 use digitalastronaut\craftcookiebanner\services\ServicesTrait;
 
-// TODO: implement a blacklist so unnessecary cookies detected from browser storage don't clutter the table
-// TODO: remove adding or removing rows from content page and centralize cookies and vendors on their own page (BASE)
+// TODO: make the appearance settings database and multisite capable so multisites with different styling can match the cookiebanners
+// TODO: fix blacklisted vendors showing up in the list
+// TODO: Enabled switches row laten disabelen als ze uit staan CSS bestaat al en heeft gewerkt weet niet waarom nu niet meer
 // TODO: add a language swicher to the cookie banner as an option (EXTRA)
-// TODO: rename create cookie to add cookie in the controllers and logic
 // TODO: Figure out hoe we consent records kunnen deleten zonder elke site/cp request cleanup te triggeren zonder persee een cron job... (BASE)
-// TODO: Permissions overal toepassen (BASE)
-// TODO: Badge met aantal cookies die nog niet in orde zijn tonen in sidenav (BASE)
-// TODO: Error handling in controllers verbetern (BASE)
-// TODO: All business logic veranderen naar services (BASE)
 // TODO: Styling en templates mooier opsplitsen (BASE) 
 // TODO: Cascade for content table fixen. (BASE)
 // TODO: Loading animation when saving consent so it's more clear to the user. (BASE)
-// TODO: Provide a way to insert the detected cookies in to all languages. (BASE)
-// TODO: rename consent records controller action view -> index and  edit -> view (BASE)
 // TODO: test creating sites and deleting sites since event refactoring couldn't at the time (BASE)
 // TODO: rename cookieGroups to vendors
 
@@ -61,38 +55,54 @@ class CookieBanner extends Plugin {
 	}
 
     public function getCpNavItem(): ?array {
-        $item = parent::getCpNavItem();
+        $currentUser = Craft::$app->getUser();
 
-        $item['icon'] = "@digitalastronaut/craftcookiebanner/web/icons/shield.svg";
-        $item['url'] = 'cookie-banner';
-        $item['badgeCount'] = 0;
-        $item['subnav'] = [
-            'gettingStarted' => [
+        $nav = parent::getCpNavItem();
+
+        $nav['icon'] = "@digitalastronaut/craftcookiebanner/web/icons/shield.svg";
+        $nav['url'] = 'cookie-banner';
+        $nav['badgeCount'] = CookieBanner::getInstance()->getCookieDetection()->getIssues();
+
+        if ($currentUser->checkPermission("cookie-banner:access-cookies-and-vendors")) {
+            $nav['subnav']['gettingStarted'] = [
                 'label' => Craft::t('cookie-banner', 'Getting started'), 
-                'url' => 'cookie-banner/getting-started'
-            ],
-            'cookiesAndVendors' => [
+                'url' => 'cookie-banner/getting-started',
+            ];
+
+            $nav['subnav']['cookiesAndVendors'] = [
                 'label' => Craft::t('cookie-banner', 'Cookies and vendors'), 
-                'url' => 'cookie-banner/cookies-and-vendors'
-            ],
-            'consentRecords' => [
+                'url' => 'cookie-banner/cookies-and-vendors',
+            ];
+        }
+
+        if ($currentUser->checkPermission("cookie-banner:access-consent-records")) {
+            $nav['subnav']['consentRecords'] = [
                 'label' => Craft::t('cookie-banner', 'Consent records'), 
                 'url' => 'cookie-banner/consent-records'
-            ],
-            'content' => [
+            ];
+        }
+                
+        if ($currentUser->checkPermission("cookie-banner:access-content")) {
+            $nav['subnav']['content'] = [
                 'label' => Craft::t('cookie-banner', 'Content'), 
                 'url' => 'cookie-banner/content'
-            ],
-            'appearance' => [
+            ];
+        }
+
+        if ($currentUser->checkPermission("cookie-banner:access-appearance")) {
+            $nav['subnav']['appearance'] = [
                 'label' => Craft::t('cookie-banner', 'Appearance'), 
                 'url' => 'cookie-banner/appearance'
-            ],
-            'settings' => [
+            ];
+        }
+        
+        if ($currentUser->checkPermission("cookie-banner:access-appearance")) {
+            $nav['subnav']['settings'] = [
                 'label' => Craft::t('cookie-banner', 'Settings'), 
                 'url' => 'cookie-banner/settings'
-            ],
-        ];
+            ];
+        }
 
-        return $item;
+        return $nav;
     }
 }

@@ -12,7 +12,6 @@
     { label: 'Add a new cookie'|t("cookie-banner") },
 ] %}
 
-
 {% block content %}
     <div class="ccb-create-cookie">
         <div class="flex-fields">
@@ -21,7 +20,7 @@
                     label: 'Cookie name'|t("cookie-banner"),
                     id: 'name',
                     name: 'name',
-                    value: cookieForAllSites|first['name'],
+                    value: cookieForEachSite|first['name'],
                     placeholder: 'Name of the cookie you want to add'|t("cookie-banner"),
                 }) }}
 
@@ -42,7 +41,7 @@
                         { 'label': 'Marketing cookies'|t("cookie-banner"), 'value': 'marketingCookies' },
                         { 'label': 'Uncategorized cookies'|t("cookie-banner"), 'value': 'uncategorizedCookies' }
                     ],
-                    value: cookieForAllSites|first['group'] ~ "Cookies",
+                    value: cookieForEachSite|first['group'] ~ "Cookies",
                 }) }}
             </div>
             
@@ -60,8 +59,8 @@
 
             <div class="field width-100">
                 {{ forms.editableTableField({
-                    id: 'cookieForAllSites',
-                    name: 'fields[cookieForAllSites]',
+                    id: 'cookieForEachSite',
+                    name: 'fields[cookieForEachSite]',
                     cols: {
                         siteName: { 
                             heading: "Site"|t("cookie-banner"), 
@@ -91,7 +90,7 @@
                             width: '10%',
                         }
                     },
-                    rows: cookieForAllSites,
+                    rows: cookieForEachSite,
                     allowAdd: false,
                     allowDelete: false,
                     allowReorder: false,
@@ -112,8 +111,10 @@
                     const value = this.value;
 
                     const tableInputs = document.querySelectorAll(
-                        '[name^="fields[cookieForAllSites]"][name$="[name]"]'
+                        '[name^="fields[cookieForEachSite]"][name$="[name]"]'
                     );
+
+                    console.log(tableInputs);
 
                     await renderCookieSearchResults(value);
 
@@ -126,7 +127,7 @@
                     const value = this.value;
 
                     const tableSelects = document.querySelectorAll(
-                        'select[name^="fields[cookieForAllSites]"][name$="[group]"]'
+                        'select[name^="fields[cookieForEachSite]"][name$="[group]"]'
                     );
 
                     tableSelects.forEach(select => select.value = value);

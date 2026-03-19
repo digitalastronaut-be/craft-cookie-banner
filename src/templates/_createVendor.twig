@@ -20,7 +20,7 @@
                     label: 'Vendor name'|t("cookie-banner"),
                     id: 'name',
                     name: 'name',
-                    value: vendorForAllSites|first['name'],
+                    value: vendorForEachSite|first['name'],
                     placeholder: 'Name of the vendor you want to add'|t("cookie-banner"),
                 }) }}
 
@@ -33,8 +33,8 @@
 
             <div class="field width-100">
                 {{ forms.editableTableField({
-                    id: 'vendorForAllSites',
-                    name: 'fields[vendorForAllSites]',
+                    id: 'vendorForEachSite',
+                    name: 'fields[vendorForEachSite]',
                     cols: {
                         siteName: { 
                             heading: "Site"|t("cookie-banner"), 
@@ -60,7 +60,7 @@
                             width: "10%"
                         }
                     },
-                    rows: vendorForAllSites,
+                    rows: vendorForEachSite,
                     allowAdd: false,
                     allowDelete: false,
                     allowReorder: false,
@@ -80,7 +80,7 @@
                     const value = this.value;
 
                     const tableInputs = document.querySelectorAll(
-                        '[name^="fields[vendorForAllSites]"][name$="[name]"]'
+                        '[name^="fields[vendorForEachSite]"][name$="[name]"]'
                     );
 
                     await renderVendorSearchResults(value);

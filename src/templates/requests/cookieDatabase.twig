@@ -5,7 +5,10 @@
 <ul class="group">
     {% for cookie in results %}
         <li>
-            <a class="menu-item" href="{{ url('cookie-banner/cookies-and-vendors/create?autoFillCookie=' ~ cookie.item.name) }}">
+            <a 
+                class="menu-item" 
+                href="{{ url('cookie-banner/cookies-and-vendors/create-cookie?autoFillCookie=' ~ cookie.item.name) }}"
+            >
                 <h3>
                     <span>{{ cookie.item.name }}</span> 
                     {% if cookie.item.vendor %}

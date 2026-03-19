@@ -5,6 +5,7 @@ class DefenitionStatusChips extends HTMLElement {
 		this.chipElements = null;
 	}
 
+	// Implement a toggle for many chips so only max 5 show initially and when toggled the rest show just like craft cms chips
 	connectedCallback() {
 		this.chipElements = [...this.querySelectorAll(":scope > .status-chip")];
 

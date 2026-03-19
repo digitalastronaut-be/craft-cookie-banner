@@ -401,6 +401,8 @@ var DefenitionStatusChips = /*#__PURE__*/function (_HTMLElement) {
     _this.chipElements = null;
     return _this;
   }
+
+  // Implement a toggle for many chips so only max 5 show initially and when toggled the rest show just like craft cms chips
   _inherits(DefenitionStatusChips, _HTMLElement);
   return _createClass(DefenitionStatusChips, [{
     key: "connectedCallback",

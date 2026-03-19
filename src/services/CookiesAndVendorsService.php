@@ -4,7 +4,9 @@ namespace digitalastronaut\craftcookiebanner\services;
 
 use Craft;
 use craft\base\Component;
-use digitalastronaut\craftcookiebanner\helpers\CookieBanner;
+
+use digitalastronaut\craftcookiebanner\CookieBanner;
+use digitalastronaut\craftcookiebanner\helpers\CookieBanner as CookieBannerHelper;
 use digitalastronaut\craftcookiebanner\records\Content;
 
 use yii\db\Exception;
@@ -15,9 +17,12 @@ class CookiesAndVendorsService extends Component {
      * @param bool $categorized
      * @return array|mixed[]
      */
-    public function getAllCookies(bool $categorized = false) {
-        $content = Content::find()->one();
-        $categorizedCookies = $content->getAttributes(CookieBanner::COOKIE_GROUPS);
+    public function getAllCookies(bool $categorized = false, ?int $siteId = null) {
+        if (!$siteId) $siteId = Craft::$app->sites->getPrimarySite()->id;
+
+        $content = Content::find()->where(['siteId' => $siteId])->one();
+
+        $categorizedCookies = $content->getAttributes(CookieBannerHelper::COOKIE_GROUPS);
 
         if (!$content) return [];
 
@@ -35,59 +40,670 @@ class CookiesAndVendorsService extends Component {
         return $categorized ? $categorizedCookies : $uncategorizedCookies;
     }
 
-    public function createCookie() {
-        $sites = Craft::$app->getSites()->getAllSites();
-
+    /**
+     * @param $cookieName
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function autoCreateCookieForEachSite($cookieName): void {
+        $sites = Craft::$app->sites->getAllSites();
         $database = Craft::$app->getDb();
         $transaction = $database->beginTransaction();
 
         try {
             foreach ($sites as $site) {
-                $category = $this->request->bodyParams["category"];
-                $newCookie = $this->request->bodyParams['fields']['cookieForAllSites'][$site->id];
+                $data = CookieBanner::getInstance()
+                    ->getCookieDetection()
+                    ->getCookieDataFromDatabase($cookieName, explode("-", $site->language)[0]);
 
-                if (!$newCookie['name']) {
-                    return new BadRequestHttpException("Cookie name param missing for " . $site->name);
+                $content = Content::find()->where(['siteId' => $site->id])->one();
+    
+                if (!$content) {
+                    throw new Exception("Content record missing for site {$site->id}");
+                }
+
+                $existingCookies = array_column($this->getAllCookies(), null, "name");
+
+                if (in_array($data['cookie']['name'], $existingCookies)) {
+                    throw new Exception("This cookie is already defined");
+                }
+
+                if ($data['cookie']['category']) {
+                    // We need to add a Cookies suffix because the cookies.json doesn't match our db schema
+                    $cookiesForCategory = $content->getAttribute($data['cookie']['category'] . 'Cookies');
+
+                    if (!is_array($cookiesForCategory)) $cookiesForCategory = [];
+
+                    $cookiesForCategory[] = [
+                        "name" => $data['languageMatch'] ? $data['cookie']['name'] : $cookieName,
+                        "group" => 'default',
+                        "purpose" => $data['languageMatch'] ? $data['cookie']['description'] : null,
+                        "expiration" => $data['languageMatch'] ? $data['cookie']['retention'] : null,
+                        "enabled" => true,
+                    ];
+
+                    $content->setAttribute($data['cookie']['category'] . 'Cookies', $cookiesForCategory);
+
+                    if (!$content->save()) {
+                        throw new Exception(sprintf(
+                            'Failed saving content for site "%s": %s',
+                            $site->name,
+                            json_encode($content->getErrors())
+                        ));
+                    }
+                }
+            }
+
+            $transaction->commit();
+        } catch (Exception $error) {
+            $transaction->rollBack();
+            throw $error;
+        }
+    }
+
+    /**
+     * @param array  $cookieForEachSite
+     * @param string $category
+     *
+     * @return void
+     * @throws BadRequestHttpException
+     * @throws Exception
+     */
+    public function createCookieForEachSite (array $cookieForEachSite, string $category): void {
+        $sites = Craft::$app->getSites()->getAllSites();
+        $database = Craft::$app->getDb();
+        $transaction = $database->beginTransaction();
+
+        try {
+            foreach ($sites as $site) {
+                $cookie = $cookieForEachSite[$site->id];
+
+                if (!$cookie['name']) {
+                    throw new BadRequestHttpException("Cookie name attribute missing for " . $site->name);
                 }
                 
                 $content = Content::find()->where(['siteId' => $site->id])->one();
 
                 if (!$content) {
-                    throw new \Exception("Content record missing for site {$site->id}");
+                    throw new Exception("Content record missing for site {$site->id}");
                 }
 
                 $cookies = $content->getAttribute($category) ?? [];
 
                 $cookies[] = [
-                    'name' => $newCookie['name'],
-                    'group' => $newCookie['group'],
-                    'purpose' => $newCookie['purpose'],
-                    'expiration' => $newCookie['expiration'],
-                    'enabled' => $newCookie['enabled'],
+                    'name' => $cookie['name'],
+                    'group' => $cookie['group'],
+                    'purpose' => $cookie['purpose'],
+                    'expiration' => $cookie['expiration'],
+                    'enabled' => $cookie['enabled'],
                 ];
 
                 $content->setAttribute($category, $cookies);
 
                 if (!$content->save()) {
-                    throw new Exception(
-                        'Failed saving content for site: ' .
-                        $site->name .
+                    throw new Exception(sprintf(
+                        'Failed saving content for site "%s": %s',
+                        $site->name,
                         json_encode($content->getErrors())
-                    );
+                    ));
                 }
             }
 
             $transaction->commit();
-
-            Craft::$app->getSession()->setSuccess($newCookie['name'] . ' cookie created for all sites.');
-            return $this->redirect('cookie-banner/cookies-and-vendors');
         } catch (Exception $error) {
             $transaction->rollBack();
-
-            Craft::error($error->getMessage(), __METHOD__);
-            Craft::$app->getSession()->setError('Failed to create cookie ' . $error->getMessage());
-
-            return $this->redirectToPostedUrl();
+            throw $error;
         }
+    }
+
+    /**
+     * @param string|null $autoFillCookieName
+     *
+     * @return array
+     */
+    public function getCreateCookieTableFieldData(string|null $autoFillCookieName = '') {
+        $sites = Craft::$app->getSites()->getAllSites();
+
+        $cookieForEachSite = [];
+
+        foreach ($sites as $site) {
+            if ($autoFillCookieName) {
+                $data = CookieBanner::getInstance()
+                    ->getCookieDetection()
+                    ->getCookieDataFromDatabase($autoFillCookieName, explode("-", $site->language)[0]);
+
+                $cookieForEachSite[$site->id] = [
+                    'siteName' => $site->name,
+                    'name' => $data['cookie']['name'],
+                    'group' => $data['cookie']['category'],
+                    'purpose' => $data['languageMatch'] ? $data['cookie']['description'] : "",
+                    'expiration' => $data['languageMatch'] ? $data['cookie']['retention'] : "",
+                    'enabled' => true,
+                ];
+            } else {
+                $cookieForEachSite[$site->id] = [
+                    'siteName' => $site->name,
+                    'name' => "",
+                    'group' => null,
+                    'purpose' => "",
+                    'expiration' => "",
+                    'enabled' => true,
+                ];
+            }
+        }
+
+        return $cookieForEachSite;
+    }
+
+    /**
+     * @param array  $cookieForEachSite
+     * @param string $currentCategory
+     * @param string $newCategory
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function editCookieForEachSite(
+        array $cookieForEachSite, 
+        string $currentCategory, 
+        string $newCategory
+    ): void {
+        $database = Craft::$app->getDb();
+        $transaction = $database->beginTransaction();
+
+        try {
+            foreach($cookieForEachSite as $cookie) {
+                $site = Craft::$app->sites->getSiteByHandle($cookie['siteHandle']);
+                $content = Content::find()->where(['siteId' => $site->id])->one();
+
+                if (!$content) {
+                    throw new Exception("Content record missing for site {$site->id}");
+                }
+
+                if ($currentCategory !== $newCategory) {
+                    $currentCategoryCookies = $content->getAttribute($currentCategory) ?? [];
+
+                    $filteredCurrentCategoryCookies = array_values(array_filter(
+                        $currentCategoryCookies,
+                        fn($currentCategoryCookie) => $currentCategoryCookie['name'] !== $cookie['name']
+                    ));
+
+                    $content->setAttribute($currentCategory, $filteredCurrentCategoryCookies);
+                }
+
+                $newCategoryCookies = $content->getAttribute($newCategory) ?? [];
+                $newCategoryCookiesByName = array_column($newCategoryCookies, null, 'name');
+
+                $newCategoryCookiesByName[$cookie['name']] = [
+                    'name' => $cookie['name'],
+                    'group' => $cookie['group'],
+                    'purpose' => $cookie['purpose'],
+                    'expiration' => $cookie['expiration'],
+                    'enabled' => (bool)($cookie['enabled'] ?? false),
+                ];
+
+                $content->setAttribute($newCategory, array_values($newCategoryCookiesByName));
+
+                if (!$content->save()) {
+                    throw new Exception(sprintf(
+                        'Failed saving content for site "%s": %s',
+                        $site->name,
+                        json_encode($content->getErrors())
+                    ));
+                }
+            }
+
+            $transaction->commit();
+        } catch (Exception $error) {
+            $transaction->rollBack();
+            throw $error;
+        }
+    }
+
+    /**
+     * @param string|null $cookieName
+     *
+     * @return array
+     */
+    public function getEditCookieTableFieldData(string|null $cookieName): array {
+        $contentForEachSite = Content::find()->all();
+        
+        foreach ($contentForEachSite as $content) {
+            $site = Craft::$app->getSites()->getSiteById($content->siteId);
+            $cookieGroups = CookieBannerHelper::COOKIE_GROUPS;
+
+            foreach ($cookieGroups as $groupField) {
+                $cookies = empty($content->$groupField) ? [] : $content->$groupField;
+
+                foreach ($cookies as $cookie) {
+                    if ($cookie['name'] !== $cookieName) continue;
+
+                    $cookieForEachSite[] = [
+                        'siteName' => $site->name,
+                        'name' => $cookie['name'] ?? null,
+                        'group' => $cookie['group'] ?? null,
+                        'purpose' => $cookie['purpose'] ?? null,
+                        'expiration' => $cookie['expiration'] ?? null,
+                        'enabled' => $cookie['enabled'] ?? true,
+                        'category' => $groupField ?? null,
+                        'hiddenInputs' => [
+                            'siteHandle' => $site->handle,
+                        ],
+                    ];
+                }
+            }
+        }
+
+        return $cookieForEachSite;
+    }
+
+    /**
+     * @param string|null $cookieName
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function deleteCookieForEachSite(string|null $cookieName) {
+        $contentForEachSite = Content::find()->all();
+        $database = Craft::$app->getDb();
+        $transaction = $database->beginTransaction();
+
+        try {
+            foreach ($contentForEachSite as $content) {            
+                $cookieGroups = CookieBannerHelper::COOKIE_GROUPS;
+                
+                foreach ($cookieGroups as $group) {
+                    $cookies = $content->$group ?? [];
+    
+                    if (!is_array($cookies)) continue;
+                    
+                    $filteredCookies = array_values(array_filter(
+                        $cookies,
+                        fn($cookie) => ($cookie['name'] ?? null) !== $cookieName
+                    ));
+    
+                    $content->setAttribute($group, $filteredCookies);
+                }
+    
+                if (!$content->save()) {
+                    throw new Exception(sprintf(
+                        'Failed to save content: %s',
+                        json_encode($content->getErrors())
+                    ));
+                }
+            }
+
+            $transaction->commit();
+        } catch (Exception $error) {
+            $transaction->rollBack();
+            throw $error;
+        }
+    }
+
+    /**
+     * @param string|null $cookieName
+     *
+     * @return void
+     */
+    public function blacklistCookieForEachSite(string|null $cookieName): void {
+        $settings = CookieBanner::getInstance()->getSettings();
+
+        if (!in_array($cookieName, $settings->blacklistedCookies)) {
+            $settings->blacklistedCookies[] = ['name' => $cookieName];
+        }
+
+        Craft::$app->plugins->savePluginSettings(
+            CookieBanner::getInstance(),
+            $settings->toArray()
+        );
+    }
+
+    public function checkCookieDefinitionForEachSite(string|null $cookieName): array {
+        $sites = Craft::$app->getSites()->getAllSites();
+
+        foreach ($sites as $site) {
+            $siteKey = $site->name . ' (' . $site->language . ')';
+
+            $content = Content::find()->where(['siteId' => $site->id])->one();
+
+            if (!$content) {
+                $result[$siteKey] = 'not-defined';
+                continue;
+            }
+
+            $matchingCookie = null;
+            $existingCookies = array_column($this->getAllCookies(false, $site->id), null, 'name');
+
+            if (isset($existingCookies[$cookieName])) {
+                $matchingCookie = $existingCookies[$cookieName];
+            }
+
+            if ($matchingCookie === null) {
+                $result[$siteKey] = "not-defined";
+            } elseif (!$matchingCookie['enabled']) {
+                $result[$siteKey] = "disabled";
+            } else {
+                $hasPurpose = !empty($matchingCookie['purpose']);
+                $hasExpiration = !empty($matchingCookie['expiration']);
+                
+                if ($hasPurpose && $hasExpiration) $result[$siteKey] = "defined";
+                else $result[$siteKey] = "defined-incomplete";
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param string|null $vendorName
+     *
+     * @return void
+     * @throws BadRequestHttpException
+     * @throws Exception
+     */
+    public function autoCreateVendorForEachSite(string|null $vendorName): void {
+        $sites = Craft::$app->sites->getAllSites();
+        $database = Craft::$app->getDb();
+        $transaction = $database->beginTransaction();
+
+        try {
+            foreach ($sites as $site) {
+                $data = CookieBanner::getInstance()
+                    ->getCookieDetection()
+                    ->getVendorDataFromDatabase($vendorName, explode("-", $site->language)[0]);
+            
+                $content = Content::find()->where(['siteId' => $site->id])->one();
+
+                if (!$content) {
+                    throw new Exception("Content record missing for site {$site->id}");
+                }
+
+                $vendors = $content->getAttribute('cookieGroups');
+
+                $vendors[] = [
+                    'name' => $data['languageMatch'] ? $data['vendor']['name'] : $vendorName, 
+                    'url' => $data['vendor']['homePage'], 
+                    'description' => $data['languageMatch'] ? $data['vendor']['description'] : null, 
+                    'enabled' => true, 
+                ];
+
+                $content->setAttribute('cookieGroups', $vendors);
+                
+                if (!$content->save()) {
+                    throw new Exception(sprintf(
+                        'Failed saving content for site "%s": %s',
+                        $site->name,
+                        json_encode($content->getErrors())
+                    ));
+                }
+            }
+
+            $transaction->commit();
+        } catch (Exception $error) {
+            $transaction->rollBack();
+            throw $error;
+        }
+    }
+
+    /**
+     * @param array $vendorForEachSite
+     *
+     * @return void
+     * @throws BadRequestHttpException
+     * @throws Exception
+     */
+    public function createVendorForEachSite(array $vendorForEachSite): void {
+        $sites = Craft::$app->getSites()->getAllSites();
+        $database = Craft::$app->getDb();
+        $transaction = $database->beginTransaction();
+
+        try {
+            foreach ($sites as $site) {
+                $vendor = $vendorForEachSite[$site->id];
+
+                if (!$vendor['name']) {
+                    throw new BadRequestHttpException("Vendor name attribute missing for " . $site->name);
+                }
+
+                $content = Content::find()->where(['siteId' => $site->id])->one();
+
+                if (!$content) {
+                    throw new Exception("Content record missing for site {$site->id}");
+                }
+
+                $vendors = $content->getAttribute("cookieGroups") ?? [];
+
+                $vendors[] = [
+                    'name' => $vendor['name'],
+                    'url' => $vendor['url'],
+                    'description' => $vendor['description'],
+                    'enabled' => $vendor['enabled'],
+                ];
+
+                $content->setAttribute("cookieGroups", $vendors);
+
+                if (!$content->save()) {
+                    throw new Exception(sprintf(
+                        'Failed saving content for site "%s": %s',
+                        $site->name,
+                        json_encode($content->getErrors())
+                    ));
+                }
+            }
+
+            $transaction->commit();
+        } catch (Exception $error) {
+            $transaction->rollBack();
+            throw $error;
+        }
+    }
+
+    /**
+     * @param string|null $autoFillVendorName
+     *
+     * @return array
+     */
+    public function getCreateVendorTableFieldData(string|null $autoFillVendorName = ""): array {
+        $sites = Craft::$app->getSites()->getAllSites();
+
+        $vendorForEachSite = [];
+
+        foreach ($sites as $site) {
+            if ($autoFillVendorName) {
+                $data = CookieBanner::getInstance()
+                    ->getCookieDetection()
+                    ->getVendorDataFromDatabase($autoFillVendorName, explode("-", $site->language)[0]);
+
+                $vendorForEachSite[$site->id] = [
+                    'siteName' => $site->name,
+                    'name' => $data['languageMatch'] ? $data['vendor']['name'] : $autoFillVendorName,
+                    'url' => $data['languageMatch'] ? $data['vendor']['homePage'] : "",
+                    'description' => $data['languageMatch'] ? $data['vendor']['description'] : "",
+                    'enabled' => true,
+                ];
+            } else {
+                $vendorForEachSite[$site->id] = [
+                    'siteName' => $site->name,
+                    'name' => "",
+                    'url' => "",
+                    'description' => "",
+                    'enabled' => true,
+                ];
+            }
+        }
+
+        return $vendorForEachSite;
+    }
+
+    /**
+     * @param array $vendorForEachSite
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function editVendorForEachSite(array $vendorForEachSite): void {
+        $database = Craft::$app->getDb();
+        $transaction = $database->beginTransaction();
+
+        try {
+            foreach ($vendorForEachSite as $vendor) {
+                $site = Craft::$app->sites->getSiteByHandle($vendor['siteHandle']);
+                $content = Content::find()->where(['siteId' => $site->id])->one();
+    
+                if (!$content) {
+                    throw new Exception("Content record missing for site {$site->id}");
+                }
+    
+                $vendors = $content->getAttribute('cookieGroups');
+                $vendorsByName = array_column($vendors, null, 'name');
+    
+                $vendorsByName[$vendor['name']] = [
+                    'name' => $vendor['name'], 
+                    'url' => $vendor['url'], 
+                    'description' => $vendor['description'], 
+                    'enabled' => $vendor['enabled'], 
+                ];
+    
+                $content->setAttribute('cookieGroups', array_values($vendorsByName));
+    
+                if (!$content->save()) {
+                    throw new Exception(sprintf(
+                        'Failed saving content for site "%s": %s',
+                        $site->name,
+                        json_encode($content->getErrors())
+                    ));
+                }
+            }
+
+            $transaction->commit();
+        } catch (Exception $error) {
+            $transaction->rollBack();
+            throw $error;
+        }
+    }
+
+    /**
+     * @param string|null $vendorName
+     *
+     * @return array
+     */
+    public function getEditVendorTableFieldData(string|null $vendorName): array {
+        $contentForEachSite = Content::find()->all();
+
+        $vendorForEachSite = [];
+    
+        foreach ($contentForEachSite as $content) {
+            $site = Craft::$app->getSites()->getSiteById($content->siteId);
+            $vendors = $content->getAttribute("cookieGroups");
+
+            foreach ($vendors as $vendor) {
+                if ($vendor['name'] !== $vendorName) continue;
+
+                $vendorForEachSite[] = [
+                    'siteName' => $site->name,
+                    'name' => $vendor['name'],
+                    'url' => $vendor['url'],
+                    'description' => $vendor['description'],
+                    'enabled' => $vendor['enabled'],
+                    'hiddenInputs' => [
+                        'siteHandle' => $site->handle,
+                    ],
+                ];
+            }
+        }
+
+        return $vendorForEachSite;
+    }
+
+    /**
+     * @param string|null $vendorName
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function deleteVendorForEachSite(string|null $vendorName): void {
+        $contentForEachSite = Content::find()->all();
+        $database = Craft::$app->getDb();
+        $transaction = $database->beginTransaction();
+
+        try {
+            foreach ($contentForEachSite as $content) {
+                $filteredVendors = array_values(array_filter(
+                    $content['cookieGroups'],
+                    fn($vendor) => ($vendor['name'] ?? null) !== $vendorName
+                ));
+    
+                $content->setAttribute('cookieGroups', $filteredVendors);
+    
+                if (!$content->save()) {
+                    throw new Exception(sprintf(
+                        'Failed to save content: %s',
+                        json_encode($content->getErrors())
+                    ));
+                }
+            }
+
+            $transaction->commit();
+        } catch (Exception $error) {
+            $transaction->rollBack();
+            throw $error;
+        }
+    }
+
+    /**
+     * @param string|null $vendorName
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function blacklistVendorForEachSite(string|null $vendorName): void {
+        $settings = CookieBanner::getInstance()->getSettings();
+
+        if (array_column($settings->blacklistedVendors, null, 'name')[$vendorName]) {
+            throw new Exception("Vendor is already blacklisted");
+        };
+
+        $settings->blacklistedVendors[] = ['name' => $vendorName];
+
+        Craft::$app->plugins->savePluginSettings(
+            CookieBanner::getInstance(),
+            $settings->toArray()
+        );
+    }
+
+    public function checkVendorDefinitionForEachSite(string|null $vendorName): array {
+        $cookieBannerContentAllLanguages = Content::find()->all();
+
+        $result = [];
+
+        foreach ($cookieBannerContentAllLanguages as $content) {
+            $site = Craft::$app->getSites()->getSiteById($content->siteId);
+            $siteKey = $site->name . ' (' . $site->language . ')';
+
+            $vendors = $content['cookieGroups'];
+
+            $matchedVendor = null;
+            foreach ($vendors as $vendor) {
+                if (isset($vendor['name']) && $vendor['name'] === $vendorName) {
+                    $matchedVendor = $vendor;
+                    break;
+                }
+            }
+
+            if ($matchedVendor === null) {
+                $result[$siteKey] = "not-defined";
+            } elseif (empty($matchedVendor['enabled']) || $matchedVendor['enabled'] === "0") {
+                $result[$siteKey] = "disabled";
+            } else {
+                $hasUrl = !empty($matchedVendor['url']);
+                $hasDescription = !empty($matchedVendor['description']);
+
+                if ($hasUrl && $hasDescription) $result[$siteKey] = "defined";
+                else $result[$siteKey] = "defined-incomplete";
+            }
+        }
+
+        return $result;
     }
 }

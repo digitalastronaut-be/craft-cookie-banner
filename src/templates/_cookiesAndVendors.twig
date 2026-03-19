@@ -24,7 +24,7 @@
 } %}
 
 {% set additionalButtons %}
-    <a href="{{ url('cookie-banner/cookies-and-vendors/create') }}" class="btn add icon">
+    <a href="{{ url('cookie-banner/cookies-and-vendors/create-cookie') }}" class="btn add icon">
         {{ "Add a new cookie"|t('cookie-banner') }}
     </a>
 
@@ -78,7 +78,7 @@
                                                         <li class="ccb-actions-menu-option">
                                                             <form method="post">
                                                                 {{ csrfInput() }}
-                                                                {{ actionInput("cookie-banner/content/add-cookie") }}
+                                                                {{ actionInput("cookie-banner/cookies-and-vendors/auto-add-cookie") }}
                                                                 {{ hiddenInput('cookieName', cookie.name) }}
 
                                                                 <button>{{ "Automatically add this cookie"|t("cookie-banner") }}</button>
@@ -90,7 +90,7 @@
                                                         <li class="ccb-actions-menu-option">
                                                             <a 
                                                                 title="Manually edit this cookie for all sites"
-                                                                href="{{ cpUrl('cookie-banner/cookies-and-vendors/edit/' ~ cookie.name )}}"
+                                                                href="{{ cpUrl('cookie-banner/cookies-and-vendors/edit-cookie' ~ cookie.name )}}"
                                                             >
                                                                 {{ "Manually add this cookie"|t("cookie-banner") }}
                                                             </a>
@@ -101,7 +101,7 @@
                                                         <li class="ccb-actions-menu-option">
                                                             <a 
                                                                 title="Manually edit this cookie for all sites"
-                                                                href="{{ cpUrl('cookie-banner/cookies-and-vendors/edit/' ~ cookie.name )}}"
+                                                                href="{{ cpUrl('cookie-banner/cookies-and-vendors/edit-cookie/' ~ cookie.name )}}"
                                                             >
                                                                 {{ "Edit this cookie for all sites"|t('cookie-banner') }}
                                                             </a>
@@ -112,7 +112,7 @@
                                                         <li class="ccb-actions-menu-option danger">
                                                             <form method="post">
                                                                 {{ csrfInput() }}
-                                                                {{ actionInput("cookie-banner/content/delete-cookie-for-all-sites") }}
+                                                                {{ actionInput("cookie-banner/cookies-and-vendors/delete-cookie-for-all-sites") }}
                                                                 {{ hiddenInput('cookieName', cookie.name) }}
 
                                                                 <button>{{ "Remove this cookie for all sites"|t("cookie-banner") }}</button>
@@ -124,7 +124,7 @@
                                                         <li class="ccb-actions-menu-option danger">
                                                             <form method="post">
                                                                 {{ csrfInput() }}
-                                                                {{ actionInput("cookie-banner/content/blacklist-cookie") }}
+                                                                {{ actionInput("cookie-banner/cookies-and-vendors/blacklist-cookie") }}
                                                                 {{ hiddenInput('cookieName', cookie.name) }}
 
                                                                 <button>{{ "Blacklist this cookie"|t("cookie-banner") }}</button>
@@ -161,7 +161,7 @@
                                 {% else %}
                                     <td>
                                         <defenition-status-chips class="inline-chips">
-                                            {% for language, isDefined in checkCookiesDefenitionForLanguages(cookie.name) %}
+                                            {% for language, isDefined in checkCookieDefinitionForEachSite(cookie.name) %}
                                                 <div class="status-chip {{ isDefined }}">{{ language }}</div>
                                             {% endfor %}
                                         </defenition-status-chips>
@@ -207,7 +207,7 @@
                                 <td>
                                     <div class="ccb-actions-menu">
                                         <button class="btn btn-submit">
-                                            {{ "Actions"|t }}
+                                            {{ "Actions"|t("cookie-banner") }}
 
                                             {{ svg("@digitalastronaut/craftcookiebanner/web/icons/chevron-down.svg") }}
                                         </button>
@@ -241,7 +241,7 @@
                                                     <li class="ccb-actions-menu-option danger">
                                                         <form method="post">
                                                             {{ csrfInput() }}
-                                                            {{ actionInput("cookie-banner/content/delete-vendor-for-all-sites") }}
+                                                            {{ actionInput("cookie-banner/cookies-and-vendors/delete-vendor-for-all-sites") }}
                                                             {{ hiddenInput('vendorName', vendor.name) }}
 
                                                             <button>{{ "Remove this vendor for all sites"|t("cookie-banner") }}</button>
@@ -253,7 +253,7 @@
                                                     <li class="ccb-actions-menu-option danger">
                                                         <form method="post">
                                                             {{ csrfInput() }}
-                                                            {{ actionInput("cookie-banner/content/blacklist-vendor") }}
+                                                            {{ actionInput("cookie-banner/cookies-and-vendors/blacklist-vendor") }}
                                                             {{ hiddenInput('vendorName', vendor.name) }}
 
                                                             <button>{{ "Blacklist this vendor"|t("cookie-banner") }}</button>
@@ -281,13 +281,13 @@
                                     <td>
                                         <div class="inline-chips">
                                             <div class="status-chip not-defined">Not defined</div>
-                                            <div class="status-chip detected">Suggested based on existing cookie</div>
+                                            <div class="status-chip detected">{{ "Suggested based on existing cookie"|t("cookie-banner") }}</div>
                                         </div>
                                     </td>
                                 {% else %}
                                     <td>
                                         <defenition-status-chips class="inline-chips">
-                                            {% for language, isDefined in checkVendorDefenitionForLanguages(vendor.name) %}
+                                            {% for language, isDefined in checkVendorDefinitionForEachSite(vendor.name) %}
                                                 <div class="status-chip {{ isDefined }}">{{ language }}</div>
                                             {% endfor %}
                                         </defenition-status-chips>

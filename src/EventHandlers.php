@@ -186,10 +186,10 @@ class EventHandlers {
                 $event->rules['cookie-banner/getting-started/complete-legal-pages-step'] = 'cookie-banner/getting-started/complete-legal-pages-step';
 
                 $event->rules['cookie-banner/cookies-and-vendors'] = 'cookie-banner/cookies-and-vendors/index';
-                $event->rules['cookie-banner/cookies-and-vendors/create'] = 'cookie-banner/cookies-and-vendors/create';
-                $event->rules['cookie-banner/cookies-and-vendors/edit/<name>'] = 'cookie-banner/cookies-and-vendors/edit';
+                $event->rules['cookie-banner/cookies-and-vendors/create-cookie'] = 'cookie-banner/cookies-and-vendors/create-cookie';
+                $event->rules['cookie-banner/cookies-and-vendors/edit-cookie/<cookieName>'] = 'cookie-banner/cookies-and-vendors/edit-cookie';
                 $event->rules['cookie-banner/cookies-and-vendors/create-vendor'] = 'cookie-banner/cookies-and-vendors/create-vendor';
-                $event->rules['cookie-banner/cookies-and-vendors/edit-vendor/<name>'] = 'cookie-banner/cookies-and-vendors/edit-vendor';
+                $event->rules['cookie-banner/cookies-and-vendors/edit-vendor/<vendorName>'] = 'cookie-banner/cookies-and-vendors/edit-vendor';
 
                 $event->rules['cookie-banner/content'] = 'cookie-banner/content/index';
                 $event->rules['cookie-banner/content/add-cookie'] = 'cookie-banner/content/add-cookie';

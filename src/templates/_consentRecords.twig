@@ -15,7 +15,6 @@
 
 {% block content %}
     {% set result = craft.app.i18n.translate('cookie-banner', 'Introduction', {}, craft.app.language) %}
-    {{ dump(craft.app.i18n) }}
 
     <div class="ccb-consent-overview">
         <h2>{{ "Consent statistics"|t("cookie-banner") }}</h2>
