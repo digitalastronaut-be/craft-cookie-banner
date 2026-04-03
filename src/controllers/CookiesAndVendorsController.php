@@ -68,7 +68,7 @@ class CookiesAndVendorsController extends Controller {
         }
 
         $autoFillCookieName = $this->request->getQueryParam('autoFillCookie');
-        
+
         $settings = CookieBanner::getInstance()->getSettings();
         $cookieForEachSite = CookieBanner::getInstance()
             ->getCookiesAndVendors()

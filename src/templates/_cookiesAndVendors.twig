@@ -90,7 +90,7 @@
                                                         <li class="ccb-actions-menu-option">
                                                             <a 
                                                                 title="Manually edit this cookie for all sites"
-                                                                href="{{ cpUrl('cookie-banner/cookies-and-vendors/edit-cookie/' ~ cookie.name )}}"
+                                                                href="{{ cpUrl('cookie-banner/cookies-and-vendors/create-cookie?autoFillCookie=' ~ cookie.name) }}"
                                                             >
                                                                 {{ "Manually add this cookie"|t("cookie-banner") }}
                                                             </a>
