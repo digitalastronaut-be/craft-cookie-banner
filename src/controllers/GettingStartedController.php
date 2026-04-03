@@ -22,6 +22,10 @@ class GettingStartedController extends Controller {
         ]);
     }
 
+    public function actionSkipGuide(): Response {
+        return $this->redirectToPostedUrl();
+    }
+
     public function actionCompleteLegalPagesStep(): Response {
         $this->requirePostRequest();
         

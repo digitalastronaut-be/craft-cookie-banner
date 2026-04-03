@@ -16,16 +16,6 @@ use digitalastronaut\craftcookiebanner\records\Content;
 
 use Throwable;
 
-// Refactoring routes when all actions are ok functionality wise
-// actionIndex (GET) -> Load cookiesAndVendors.twig
-// actionManuallyAddCookie (GET) -> Load createCookie.twig
-// actionManuallyAddCookie (POST) -> Create cookie
-// actionAutoAddCookie (POST) -> Create cookie based on cookie DB data
-// actionEditCookie (GET) -> Load createCookie.twig
-// actionEditCookie (POST) -> Edit cookie
-// actionBlacklistCookie (POST) -> Blacklist a cookie
-// actionDeleteCookieForAllSites (DELETE) -> Delete cookie for all sites
-
 class CookiesAndVendorsController extends Controller {
     public $defaultAction = 'index';
     protected array|int|bool $allowAnonymous = self::ALLOW_ANONYMOUS_NEVER;
