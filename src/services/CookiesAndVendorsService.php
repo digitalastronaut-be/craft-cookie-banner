@@ -392,6 +392,9 @@ class CookiesAndVendorsService extends Component {
             }
         }
 
+        // Sort issues to the beginning of the array so they are not hidden when the bullets are collapsed
+        uasort($result, fn($a, $b) => ($b === 'defined-incomplete') <=> ($a === 'defined-incomplete'));
+
         return $result;
     }
 
@@ -660,7 +663,7 @@ class CookiesAndVendorsService extends Component {
     public function blacklistVendorForEachSite(string|null $vendorName): void {
         $settings = CookieBanner::getInstance()->getSettings();
 
-        if (array_column($settings->blacklistedVendors, null, 'name')[$vendorName]) {
+        if (in_array($vendorName, array_column($settings->blacklistedVendors, null, 'name'))) {
             throw new Exception("Vendor is already blacklisted");
         };
 
@@ -703,6 +706,9 @@ class CookiesAndVendorsService extends Component {
                 else $result[$siteKey] = "defined-incomplete";
             }
         }
+
+        // Sort issues to the beginning of the array so they are not hidden when the bullets are collapsed
+        uasort($result, fn($a, $b) => ($b === 'defined-incomplete') <=> ($a === 'defined-incomplete'));
 
         return $result;
     }

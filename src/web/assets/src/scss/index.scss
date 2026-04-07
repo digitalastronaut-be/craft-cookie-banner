@@ -520,6 +520,15 @@
 	white-space: nowrap;
 	background-color: rgb(from var(--gray-500) r g b / 15%);
 
+	&.chip-controls {
+		transition: all ease-out 150ms;
+
+		&:hover {
+			cursor: pointer;
+			background-color: rgb(from var(--gray-500) r g b / 25%);
+		}
+	}
+
 	&.detected {
 		background-color: rgb(from var(--blue-500) r g b / 15%);
 		color: var(--blue-900);
@@ -730,7 +739,6 @@
 	display: flex;
 
 	&-main {
-		max-width: 650px;
 		width: 100%;
 		height: 100%;
 
@@ -749,6 +757,7 @@
 		& > * {
 			margin-inline: auto;
 			text-align: center;
+			max-width: 650px;
 		}
 	}
 
@@ -766,6 +775,7 @@
 		border: 1px solid rgba(96, 125, 159, 0.25) !important;
 		box-shadow: none;
 		border-radius: 5px;
+		height: 100%;
 
 		&-title {
 			display: flex;
@@ -787,6 +797,7 @@
 			background-color: #009c8c;
 			color: white;
 			border: none !important;
+			height: unset;
 
 			.ccb-getting-started-goal-action {
 				display: none;
@@ -814,6 +825,7 @@
 		}
 
 		&-action {
+			margin-top: auto;
 			display: flex;
 			width: 100%;
 			padding: 0.875rem;

@@ -161,9 +161,15 @@
                                 {% else %}
                                     <td>
                                         <defenition-status-chips class="inline-chips">
-                                            {% for language, isDefined in checkCookieDefinitionForEachSite(cookie.name) %}
+                                            {% set result = checkCookieDefinitionForEachSite(cookie.name) %}
+
+                                            {% for language, isDefined in result %}
                                                 <div class="status-chip {{ isDefined }}">{{ language }}</div>
                                             {% endfor %}
+
+                                            {% if result|length > 5 %}
+                                                <div class="status-chip chip-controls">Show {{ result|length - 5 }} more</div>
+                                            {% endif %}
                                         </defenition-status-chips>
                                     </td>
                                 {% endif %}
@@ -287,9 +293,15 @@
                                 {% else %}
                                     <td>
                                         <defenition-status-chips class="inline-chips">
-                                            {% for language, isDefined in checkVendorDefinitionForEachSite(vendor.name) %}
+                                            {% set result = checkVendorDefinitionForEachSite(vendor.name) %}
+
+                                            {% for language, isDefined in result %}
                                                 <div class="status-chip {{ isDefined }}">{{ language }}</div>
                                             {% endfor %}
+
+                                            {% if result|length > 5 %}
+                                                <div class="status-chip chip-controls">Show {{ result|length - 5 }} more</div>
+                                            {% endif %}
                                         </defenition-status-chips>
                                     </td>
                                 {% endif %}

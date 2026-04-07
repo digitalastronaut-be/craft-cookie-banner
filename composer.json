@@ -1,6 +1,6 @@
 {
 	"name": "digitalastronaut/craft-cookie-banner",
-	"description": "A fully customizeable and GDPR compliant cookie banner",
+	"description": "A fully customizeable and GDPR compliant cookie banner for Craft CMS",
 	"type": "craft-plugin",
 	"license": "proprietary",
 	"support": {

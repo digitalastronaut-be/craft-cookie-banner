@@ -180,10 +180,10 @@ class EventHandlers {
             UrlManager::class,
             UrlManager::EVENT_REGISTER_CP_URL_RULES,
             function (RegisterUrlRulesEvent $event) {
-                $event->rules['cookie-banner'] = 'cookie-banner/getting-started';
+                $event->rules['cookie-banner'] = 'cookie-banner/dashboard';
 
-                $event->rules['cookie-banner/getting-started'] = 'cookie-banner/getting-started/index';
-                $event->rules['cookie-banner/getting-started/complete-legal-pages-step'] = 'cookie-banner/getting-started/complete-legal-pages-step';
+                $event->rules['cookie-banner/dashboard'] = 'cookie-banner/dashboard/index';
+                $event->rules['cookie-banner/dashboard/complete-legal-pages-step'] = 'cookie-banner/dashboard/complete-legal-pages-step';
 
                 $event->rules['cookie-banner/cookies-and-vendors'] = 'cookie-banner/cookies-and-vendors/index';
                 $event->rules['cookie-banner/cookies-and-vendors/create-cookie'] = 'cookie-banner/cookies-and-vendors/create-cookie';

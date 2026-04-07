@@ -3,11 +3,11 @@
 {% import '_includes/forms.twig' as forms %}
 
 {% set title = "Getting started"|t("cookie-banner") %}
-{% set selectedSubnavItem = 'gettingStarted' %}
+{% set selectedSubnavItem = 'dashboard' %}
 
 {% set crumbs = [
     { label: 'Cookie banner'|t("cookie-banner"), url: url('cookie-banner') },
-    { label: 'Getting started'|t("cookie-banner"), url: url('cookie-banner/getting-started') },
+    { label: 'Getting started'|t("cookie-banner"), url: url('cookie-banner/dashboard') },
 ] %}
 
 {% block content %}

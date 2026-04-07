@@ -4,25 +4,35 @@ namespace digitalastronaut\craftcookiebanner\controllers;
 
 use Craft;
 use craft\web\Controller;
-use digitalastronaut\craftcookiebanner\CookieBanner;
+
 use yii\web\Response;
+
+use digitalastronaut\craftcookiebanner\CookieBanner;
 
 /**
  * Getting Started controller
  */
-class GettingStartedController extends Controller {
+class DashboardController extends Controller {
     public $defaultAction = 'index';
     protected array|int|bool $allowAnonymous = self::ALLOW_ANONYMOUS_NEVER;
 
     public function actionIndex(): Response {
         $settings = CookieBanner::getInstance()->getSettings();
 
-        return $this->renderTemplate('cookie-banner/_gettingStarted.twig', [
+        return $this->renderTemplate('cookie-banner/_dashboard.twig', [
             "gettingStartedProgress" => $settings->gettingStartedProgress,
         ]);
     }
 
     public function actionSkipGuide(): Response {
+        $settings = CookieBanner::getInstance()->getSettings();
+
+        $settings->gettingStartedProgress['legalPagesStepCompleted'] = true;
+        $settings->gettingStartedProgress['deferScriptsStepCompleted'] = true;
+        $settings->gettingStartedProgress['contentStepCompleted'] = true;
+        $settings->gettingStartedProgress['appearanceStepCompleted'] = true;
+        $settings->gettingStartedProgress['finalSettingsStepCompleted'] = true;
+
         return $this->redirectToPostedUrl();
     }
 

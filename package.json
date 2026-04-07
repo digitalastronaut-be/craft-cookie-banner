@@ -1,11 +1,14 @@
 {
 	"name": "craft-cookie-banner",
 	"version": "1.0.0",
-	"description": "A fully customizeable and GDPR compliant cookie banner",
+	"description": "A fully customizeable and GDPR compliant cookie banner for Craft CMS",
 	"main": "index.js",
 	"scripts": {
-		"dev": "mix watch",
-		"build": "mix --production"
+		"plugin:dev": "mix watch",
+		"plugin:build": "mix --production",
+		"docs:dev": "vitepress dev docs",
+		"docs:build": "vitepress build docs",
+		"docs:preview": "vitepress preview docs"
 	},
 	"keywords": [],
 	"author": "",
@@ -16,6 +19,10 @@
 		"laravel-mix": "^6.0.49",
 		"resolve-url-loader": "^5.0.0",
 		"sass": "^1.93.2",
-		"sass-loader": "^12.6.0"
+		"sass-loader": "^12.6.0",
+		"vitepress": "^2.0.0-alpha.17"
+	},
+	"dependencies": {
+		"chart.js": "^4.5.1"
 	}
 }

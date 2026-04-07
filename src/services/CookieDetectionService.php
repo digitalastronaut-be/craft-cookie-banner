@@ -9,7 +9,6 @@ use digitalastronaut\craftcookiebanner\helpers\CookieBanner as CookieBannerHelpe
 use digitalastronaut\craftcookiebanner\records\Content;
 
 use Fuse\Fuse;
-use PhpOffice\PhpSpreadsheet\Calculation\Statistical\Distributions\F;
 
 class CookieDetectionService extends Component {
     /**
@@ -36,7 +35,7 @@ class CookieDetectionService extends Component {
         }
 
         $vendorsOverview = $this->getVendorsOverview();
-        
+
         foreach ($vendorsOverview as $vendor) {
             $definitions = CookieBanner::getInstance()
                 ->getCookiesAndVendors()
@@ -85,7 +84,7 @@ class CookieDetectionService extends Component {
             // Cookies in the database use the * wildcard for generated strings so we show this instead of the full name
             $wildCardName = $databaseCookie ? $databaseCookie['cookie']['name'] : $cookieName;
 
-            if ($this->isCookieBlacklisted($cookieName)) continue;
+            if ($this->isCookieBlacklisted($wildCardName)) continue;
 
             $result[$wildCardName] = [
                 'name' => $wildCardName,
@@ -152,7 +151,7 @@ class CookieDetectionService extends Component {
             if (
                 $vendorMatch &&
                 !in_array($vendorMatch['vendor']['name'], $existingVendorNames) &&
-                !in_array($vendorMatch['vendor']['name'], array_column($blacklistedVendors, null, 'name'))
+                !in_array($vendorMatch['vendor']['name'], array_column($blacklistedVendors, 'name'))
             ) {
                 $result[] = [
                     'name' => $vendorMatch['vendor']['name'],
@@ -314,8 +313,6 @@ class CookieDetectionService extends Component {
      */
     public function isVendorBlacklisted(string|null $vendorName): bool {
         $blacklistVendors = array_column(CookieBanner::getInstance()->getSettings()->blacklistedVendors, 'name');
-
-        dd($blacklistVendors);
 
         return in_array($vendorName, $blacklistVendors);
     }
