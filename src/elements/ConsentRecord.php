@@ -76,48 +76,60 @@ class ConsentRecord extends Element {
     }
 
     protected static function defineSources(string $context): array {
-        // $years = [];
-        // $yearSources = [];
+        $grouped = [];
 
-        // foreach (ConsentRecord::find()->all() as $consentRecord) {
-        //     $years[] = $consentRecord->consentTimestamp->format('Y');
-        // }
+        foreach (ConsentRecord::find()->all() as $consentRecord) {
+            $date = $consentRecord->consentTimestamp;
 
-        // $years = array_unique($years);
-        // rsort($years, SORT_NUMERIC);
+            $year = (int)$date->format('Y');
+            $month = (int)$date->format('m');
+            $monthLabel = $date->format('F');
 
-        // foreach ($years as $year) {
-        //     $nextYear = $year + 1;
+            if (!isset($grouped[$year])) {
+                $grouped[$year] = [];
+            }
 
-        //     $yearSources[] = [
-        //         'key' => "year:{$year}",
-        //         'label' => $year,
-        //         'criteria' => [
-        //             'consentTimestampFrom' => "{$year}-01-01",
-        //             'consentTimestampTo' => "{$nextYear}-01-01",
-        //         ],
-        //     ];
-        // }
+            $grouped[$year][$month] = $monthLabel;
+        }
+
+        krsort($grouped);
 
         $sources = [
             [
                 'key' => 'all',
                 'label' => Craft::t('cookie-banner', 'All consent records'),
-                // 'nested' => $yearSources,
             ],
-            // [
-            //     'key' => 'statusValid',
-            //     'label' => Craft::t('cookie-banner', 'Active records'),
-            //     'criteria' => ['isExpired' => false],
-            //     'status' => 'teal',
-            // ],
-            // [
-            //     'key' => 'statusExpired',
-            //     'label' => Craft::t('cookie-banner', 'Expired records'),
-            //     'criteria' => ['isExpired' => true],
-            //     'status' => 'red',
-            // ],
         ];
+
+        foreach ($grouped as $year => $months) {
+            krsort($months);
+
+            $monthSources = [];
+
+            foreach ($months as $monthNumber => $monthLabel) {
+                $from = sprintf('%04d-%02d-01', $year, $monthNumber);
+                $to = date('Y-m-d', strtotime("$from +1 month"));
+
+                $monthSources[] = [
+                    'key' => "month:{$year}-{$monthNumber}",
+                    'label' => $monthLabel,
+                    'criteria' => [
+                        'consentTimestampFrom' => $from,
+                        'consentTimestampTo' => $to,
+                    ],
+                ];
+            }
+
+            $sources[] = [
+                'key' => "year:{$year}",
+                'label' => (string)$year,
+                'criteria' => [
+                    'consentTimestampFrom' => "{$year}-01-01",
+                    'consentTimestampTo' => ($year + 1) . "-01-01",
+                ],
+                'nested' => $monthSources,
+            ];
+        }
 
         return $sources;
     }

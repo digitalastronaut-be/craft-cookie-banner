@@ -13,7 +13,8 @@ class Install extends Migration {
         $this->createForeignKeys();
         $this->createIndexes();
 
-        $this->seedCookieBannerContentTable();
+        $this->seedContentTable();
+        $this->seedAppearanceTable();
 
         return true;
     }
@@ -96,28 +97,91 @@ class Install extends Migration {
             'determinePreferencesButtonLabel' => $this->string(255)->null(),
             'detailedPreferencesButtonLabel' => $this->string(255)->null(),
         ]); 
+
+        $this->createTable(Table::COOKIE_BANNER_APPEARANCE, [
+            'id' => $this->primaryKey(),
+            'siteId' => $this->integer()->notNull(),
+
+            'cookieBannerPosition' => $this->string(50)->defaultValue('bottom-left'),
+            'preferencesAction' => $this->string(50)->defaultValue('button'),
+            'showCookieCategoriesPreview' => $this->boolean()->defaultValue(false),
+            'showCookieTables' => $this->boolean()->defaultValue(true),
+
+            'buttonSize' => $this->string(20)->defaultValue('small'),
+            'bannerStyle' => $this->string(20)->defaultValue('square'),
+            'cookieListStyle' => $this->string(20)->defaultValue('ungrouped'),
+
+            'titleFont' => $this->string(255)->defaultValue('"system-ui", sans-serif'),
+            'textFont' => $this->string(255)->defaultValue('"system-ui", sans-serif'),
+
+            'bannerBackground' => $this->string(20)->defaultValue('ffffff'),
+            'bannerBorderColor' => $this->string(20)->defaultValue('ffffff'),
+            'titleColor' => $this->string(20)->defaultValue('3F4d5a'),
+            'textColor' => $this->string(20)->defaultValue('596673'),
+            'linkColor' => $this->string(20)->defaultValue('2563eb'),
+            'linkHoverColor' => $this->string(20)->defaultValue('123a97'),
+            
+            'bannerBorderThickness' => $this->integer()->defaultValue(0),
+            'bannerOverlayOpacity' => $this->integer()->defaultValue(0),
+
+            'buttonBackground' => $this->string(20)->defaultValue('d9e0e8'),
+            'buttonColor' => $this->string(20)->defaultValue('3F4d5a'),
+            'buttonBorderColor' => $this->string(20)->defaultValue('d9e0e8'),
+            'buttonHoverBackground' => $this->string(20)->defaultValue('3F4d5a'),
+            'buttonHoverColor' => $this->string(20)->defaultValue('ffffff'),
+            'buttonHoverBorderColor' => $this->string(20)->defaultValue('404d5a'),
+            'buttonBorderThickness' => $this->integer()->defaultValue(0),
+
+            'toggleBackgroundOff' => $this->string(20)->defaultValue('e5e7eb'),
+            'toggleBackgroundOn' => $this->string(20)->defaultValue('009c8c'),
+            'toggleColor' => $this->string(20)->defaultValue('ffffff'),
+
+            'cookieGroupTitleColor' => $this->string(20)->defaultValue('3F4d5a'),
+            'cookieGroupTextColor' => $this->string(20)->defaultValue('596673'),
+            'cookieGroupLinkColor' => $this->string(20)->defaultValue('2663eb'),
+            'cookieGroupLinkHoverColor' => $this->string(20)->defaultValue('143a97'),
+            'cookieGroupBackground' => $this->string(20)->defaultValue('f3f7fb'),
+            'cookieGroupBorderColor' => $this->string(20)->defaultValue('e5e7eb'),
+            'cookieGroupHoverBackground' => $this->string(20)->defaultValue('f3f7fb'),
+            'cookieGroupHoverBorderColor' => $this->string(20)->defaultValue('afb6bf'),
+            'cookieGroupBorderThickness' => $this->integer()->defaultValue(1),
+
+            'cookieTableTitleColor' => $this->string(20)->defaultValue('3F4d5a'),
+            'cookieTableTextColor' => $this->string(20)->defaultValue('596673'),
+            'cookieTableBackground' => $this->string(20)->defaultValue('ffffff'),
+            'cookieTableBorderColor' => $this->string(20)->defaultValue('e5e7eb'),
+            'cookieTableBorderThickness' => $this->integer()->defaultValue(1),
+
+            'css' => $this->text()->null(),
+
+            'uid' => $this->uid(),
+        ]);
     }
 
     public function createForeignKeys(): void {
         $this->addForeignKey(null, Table::COOKIE_BANNER_CONSENT_RECORDS, 'id', Table::ELEMENTS, 'id', 'CASCADE', null);
         $this->addForeignKey(null, Table::COOKIE_BANNER_CONTENT, 'siteId', Table::SITES, 'id', 'CASCADE', null);
+        $this->addForeignKey(null, Table::COOKIE_BANNER_APPEARANCE, 'siteId', Table::SITES, 'id', 'CASCADE', null);
     }
 
     public function createIndexes(): void {
         $this->createIndex(null, Table::COOKIE_BANNER_CONTENT, 'siteId', true);
+        $this->createIndex(null, Table::COOKIE_BANNER_APPEARANCE, 'siteId', true);
     }
 
     public function dropTables(): void {
         $this->dropTableIfExists(Table::COOKIE_BANNER_CONSENT_RECORDS);
         $this->dropTableIfExists(Table::COOKIE_BANNER_CONTENT);
+        $this->dropTableIfExists(Table::COOKIE_BANNER_APPEARANCE);
     }
 
     public function dropForeignKeys(): void {
         $this->dropAllForeignKeysToTable(Table::COOKIE_BANNER_CONSENT_RECORDS);
         $this->dropAllForeignKeysToTable(Table::COOKIE_BANNER_CONTENT);
+        $this->dropAllForeignKeysToTable(Table::COOKIE_BANNER_APPEARANCE);
     }
 
-    public function seedCookieBannerContentTable() {
+    public function seedContentTable() {
         $sites = Site::find()->all();
         $basePath = CookieBanner::getInstance()->getBasePath() . '/static/content';
 
@@ -131,6 +195,16 @@ class Install extends Migration {
                 ['siteId' => $site->id],
                 json_decode(file_get_contents($filePath), true)
             ));
+        }
+    }
+
+    public function seedAppearanceTable() {
+        $sites = Site::find()->all();
+
+        foreach ($sites as $site) {
+            $this->insert(Table::COOKIE_BANNER_APPEARANCE, [
+                'siteId' => $site->id,
+            ]);
         }
     }
 }

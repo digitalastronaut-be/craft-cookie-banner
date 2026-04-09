@@ -2,7 +2,7 @@
 
 {% import '_includes/forms.twig' as forms %}
 
-{% set title = "Getting started"|t("cookie-banner") %}
+{% set title = "Dashboard"|t("cookie-banner") %}
 {% set selectedSubnavItem = 'dashboard' %}
 
 {% set crumbs = [
@@ -11,9 +11,70 @@
 ] %}
 
 {% block content %}
+    <div class="ccb-dashboard">
+        <div class="ccb-graph">
+            <h2>{{ "Consent records from the last 7 days"|t("cookie-banner") }}</h2>
+
+            <div class="ccb-graph-numbers">
+                <div class="ccb-graph-number">
+                    <h3 class="ccb-typo-body-md ccb-semi-bold">{{ "Total"|t("cookie-banner") }}</h3>
+
+                    <div class="ccb-graph-number-value">
+                        <p class="ccb-semi-bold">{{ consentRecordsChart.total }}</p>
+
+                        <div class="ccb-graph-number-relative-value">
+                            {{ svg("@digitalastronaut/craftcookiebanner/web/icons/arrow-up.svg") }}
+                            <p class="ccb-typo-body-md">7.6%</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ccb-graph-number">
+                    <h3 class="ccb-typo-body-md ccb-semi-bold">{{ "Average/day"|t("cookie-banner") }}</h3>
+
+                    <div class="ccb-graph-number-value">
+                        <p class="ccb-semi-bold">12.7</p>
+
+                        <div class="ccb-graph-number-relative-value">
+                            {{ svg("@digitalastronaut/craftcookiebanner/web/icons/arrow-up.svg") }}
+                            <p class="ccb-typo-body-md">12.1%</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ccb-graph-number">
+                    <h3 class="ccb-typo-body-md ccb-semi-bold">{{ "Accepted rate"|t("cookie-banner") }}</h3>
+
+                    <div class="ccb-graph-number-value">
+                        <p class="ccb-semi-bold">23.8%</p>
+
+                        <div class="ccb-graph-number-relative-value">
+                            {{ svg("@digitalastronaut/craftcookiebanner/web/icons/arrow-up.svg") }}
+                            <p class="ccb-typo-body-md">2.1%</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <consent-records-graph class="consent-records-graph">
+                <canvas id="consent-records-graph"></canvas>
+            </consent-records-graph>
+        </div>
+
+        <div class="ccb-graph">
+            <h2>{{ "Cookies and vendors status"|t("cookie-banner") }}</h2>
+        
+            <cookies-and-vendors-graph class="cookies-and-vendors-graph">
+                <canvas id="cookies-and-vendors-graph"></canvas>
+            </cookies-and-vendors-graph>
+        </div>
+    </div>
+
+    <hr>
+
     <div class="ccb-getting-started">
         <div class="ccb-getting-started-main">
-            <div class="ccb-getting-started-welcome">
+            {# <div class="ccb-getting-started-welcome">
                 {{ svg("@digitalastronaut/craftcookiebanner/web/icons/plugin-icon.svg") }}
 
                 <h2>{{ "Thanks for installing this cookie banner plugin!"|t("cookie-banner") }}</h2>
@@ -24,7 +85,7 @@
                     <a href="#" class="btn">{{ "Visit the documentation"|t("cookie-banner") }}</a>
                     <a href="#" class="btn">{{ "Skip this guide"|t("cookie-banner") }}</a>
                 </div>
-            </div>
+            </div> #}
 
             <ul class="ccb-getting-started-checklist">
                 <li class="ccb-getting-started-checklist-item">

@@ -379,7 +379,10 @@ class CookiesAndVendorsController extends Controller {
         return Content::find()->one()->cookieGroups;
     }
 
-    public function actionGetCookies() {
-        $content = Content::find()->one();
+    public function actionGetChartData() {
+        return $this->asJson(['data' => [
+            'cookies' => [3, 11, 6],
+            'vendors' => [1, 2],
+        ]]);
     }
 }

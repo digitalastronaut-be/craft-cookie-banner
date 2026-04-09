@@ -42,8 +42,8 @@ class SeedController extends Controller {
             $shortHash = substr($ipAddressHash, 0, 10);
 
             $now = new DateTime();
-            $twoYearsAgo = (new DateTime())->modify('-2 years');
-            $randomTimestamp = mt_rand($twoYearsAgo->getTimestamp(), $now->getTimestamp());
+            $oneMonthAgo = (new DateTime())->modify('-30 days');
+            $randomTimestamp = mt_rand($oneMonthAgo->getTimestamp(), $now->getTimestamp());
             $consentTimestamp = (new DateTime())->setTimestamp($randomTimestamp);
 
             $consentRecord->title = "Consent {$shortHash}";

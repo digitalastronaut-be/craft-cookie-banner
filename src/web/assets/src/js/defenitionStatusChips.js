@@ -5,7 +5,7 @@ class DefenitionStatusChips extends HTMLElement {
 		this.chipElements = [];
 		this.toggleElement = null;
 		this.expanded = false;
-		this.visibleCount = 4;
+		this.visibleCount = 3;
 	}
 
 	connectedCallback() {

@@ -1,19 +1,56 @@
 {% extends "_layouts/cp.twig" %}
 
 {% import '_includes/forms.twig' as forms %}
+{% import 'codeeditor/codeEditor.twig' as codeEditor %}
 
 {% set title = "Appearance"|t("cookie-banner") %}
 {% set selectedSubnavItem = 'appearance' %}
 {% set fullPageForm = true %}
 
-{% set crumbs = [
-    { label: 'Cookie banner'|t("cookie-banner"), url: url('cookie-banner') },
-    { label: 'Consent records'|t("cookie-banner"), url: url('cookie-banner/appearance') },
-] %}
+{% if selectableSites is not defined %}
+    {% if siteIds is defined %}
+        {% set selectableSites = craft.app.sites.getEditableSites()|filter(s => s.id in siteIds) %}
+    {% else %}
+        {% set selectableSites = craft.app.sites.getEditableSites() %}
+    {% endif %}
+{% endif %}
+
+{% if selectedSite is not defined %}
+    {% if selectedSiteId is defined %}
+        {% set selectedSite = craft.app.sites.getSiteById(selectedSiteId) %}
+    {% elseif requestedSite and requestedSite in selectableSites %}
+        {% set selectedSite = requestedSite %}
+    {% else %}
+        {% set selectedSite = selectableSites|length ? selectableSites|first : craft.app.sites.getPrimarySite() %}
+    {% endif %}
+{% endif %}
+
+{% if selectableSites|length > 1 %}
+    {% set crumbs = [
+        {
+            id: 'site-crumb',
+            icon: 'world',
+            iconAltText: 'Site'|t('app'),
+            label: selectedSite.name|t('site'),
+            menu: {
+                items: siteMenuItems(selectableSites, selectedSite),
+                label: 'Select site'|t('app')
+            }
+        },
+        { label: 'Cookie banner'|t("cookie-banner"), url: url('cookie-banner') },
+        { label: 'Appearance'|t("cookie-banner"), url: url('cookie-banner/appearance') },
+    ] %}
+{% else %}
+    {% set crumbs = [
+        { label: 'Cookie banner'|t("cookie-banner"), url: url('cookie-banner') },
+        { label: 'Appearance'|t("cookie-banner"), url: url('cookie-banner/appearance') },
+    ] %}
+{% endif %}
+
 
 {% block content %}
-    {{ actionInput('plugins/save-plugin-settings') }}
-    {{ hiddenInput('pluginHandle', 'cookie-banner') }}
+    {{ actionInput('cookie-banner/appearance/save') }}
+    {{ hiddenInput('siteId', selectedSite.id) }}
 
     <div class="flex-fields">
         <h2>{{ 'Layout options'|t("cookie-banner") }}</h2>
@@ -25,8 +62,8 @@
                 id: 'showCookieCategoriesPreview',
                 offLabel: 'Disabled'|t("cookie-banner"),
                 onLabel: 'Enabled'|t("cookie-banner"),
-                name: 'settings[showCookieCategoriesPreview]',
-                on: settings.showCookieCategoriesPreview,
+                name: 'fields[showCookieCategoriesPreview]',
+                on: appearance.showCookieCategoriesPreview,
             }) }}
         </div>
 
@@ -39,8 +76,8 @@
                 id: 'showCookieTables',
                 offLabel: 'Disabled'|t("cookie-banner"),
                 onLabel: 'Enabled'|t("cookie-banner"),
-                name: 'settings[showCookieTables]',
-                on: settings.showCookieTables,
+                name: 'fields[showCookieTables]',
+                on: appearance.showCookieTables,
             }) }}
         </div>
 
@@ -51,8 +88,8 @@
                 label: 'Banner position'|t("cookie-banner"),
                 instructions: 'Choose where the banner should be displayed'|t("cookie-banner"),
                 id: 'cookieBannerPosition',
-                name: 'settings[cookieBannerPosition]',
-                value: settings.cookieBannerPosition ?? 'bottom-left',
+                name: 'fields[cookieBannerPosition]',
+                value: appearance.cookieBannerPosition ?? 'bottom-left',
                 options: [
                     { label: 'Bottom Left'|t("cookie-banner"), value: 'bottom-left', icon: 'arrow-down-left' },
                     { label: 'Bottom Right'|t("cookie-banner"), value: 'bottom-right', icon: 'arrow-down-right' },
@@ -66,8 +103,8 @@
                 label: 'Preferences action'|t("cookie-banner"),
                 instructions: 'Show the determine/detailed preferences action as a button or a link'|t("cookie-banner"),
                 id: 'preferencesAction',
-                name: 'settings[preferencesAction]',
-                value: settings.preferencesAction ?? 'button',
+                name: 'fields[preferencesAction]',
+                value: appearance.preferencesAction ?? 'button',
                 options: [
                     { label: 'Button'|t("cookie-banner"), value: 'button', icon: 'square' },
                     { label: 'Link'|t("cookie-banner"), value: 'link', icon: 'link' },
@@ -79,8 +116,8 @@
             {{ forms.buttonGroupField({
                 label: 'Buttons size'|t("cookie-banner"),
                 id: 'buttonSize',
-                name: 'settings[buttonSize]',
-                value: settings.buttonSize ?? 'small',
+                name: 'fields[buttonSize]',
+                value: appearance.buttonSize ?? 'small',
                 options: [
                     { label: 'Small'|t("cookie-banner"), value: 'small', icon: 'square-small' },
                     { label: 'Medium'|t("cookie-banner"), value: 'medium', icon: 'stop' },
@@ -93,8 +130,8 @@
             {{ forms.buttonGroupField({
                 label: 'Banner style'|t("cookie-banner"),
                 id: 'bannerStyle',
-                name: 'settings[bannerStyle]',
-                value: settings.bannerStyle ?? 'square',
+                name: 'fields[bannerStyle]',
+                value: appearance.bannerStyle ?? 'square',
                 options: [
                     { label: 'Square'|t("cookie-banner"), value: 'square' },
                     { label: 'Rounded'|t("cookie-banner"), value: 'rounded' },
@@ -110,8 +147,8 @@
                 label: 'Cookie list style'|t("cookie-banner"),
                 instructions: 'Determines the way the cookie list is rendered when using the `{{ renderCookiesListHtml() }}`'|t("cookie-banner"),
                 id: 'cookieListStyle',
-                name: 'settings[cookieListStyle]',
-                value: settings.cookieListStyle ?? 'grouped',
+                name: 'fields[cookieListStyle]',
+                value: appearance.cookieListStyle ?? 'grouped',
                 options: [
                     { label: 'Ungrouped'|t("cookie-banner"), value: 'ungrouped' },
                     { label: 'Grouped'|t("cookie-banner"), value: 'grouped' },
@@ -125,9 +162,9 @@
             {{ forms.textField({
                 label: 'Title font'|t("cookie-banner"),
                 id: 'titleFont',
-                name: 'settings[titleFont]',
                 placeholder: '"system-ui", sans-serif',
-                value: settings.titleFont,
+                name: 'fields[titleFont]',
+                value: appearance.titleFont,
             }) }}
         </div>
 
@@ -135,9 +172,9 @@
             {{ forms.textField({
                 label: 'Text font'|t("cookie-banner"),
                 id: 'textFont',
-                name: 'settings[textFont]',
                 placeholder: '"system-ui", sans-serif',
-                value: settings.textFont,
+                name: 'fields[textFont]',
+                value: appearance.textFont,
             }) }}
         </div>
 
@@ -147,8 +184,8 @@
             {{ forms.colorField({
                 label: 'Banner background'|t("cookie-banner"),
                 id: 'bannerBackground',
-                name: 'settings[bannerBackground]',
-                value: settings.bannerBackground,
+                name: 'fields[bannerBackground]',
+                value: appearance.bannerBackground,
             }) }}
         </div>
 
@@ -156,8 +193,8 @@
             {{ forms.colorField({
                 label: 'Banner border color'|t("cookie-banner"),
                 id: 'bannerBorderColor',
-                name: 'settings[bannerBorderColor]',
-                value: settings.bannerBorderColor,
+                name: 'fields[bannerBorderColor]',
+                value: appearance.bannerBorderColor,
             }) }}
         </div>
 
@@ -166,8 +203,8 @@
                 label: 'Banner border thickness'|t("cookie-banner"),
                 type: 'number',
                 id: 'bannerBorderThickness',
-                name: 'settings[bannerBorderThickness]',
-                value: settings.bannerBorderThickness,
+                name: 'fields[bannerBorderThickness]',
+                value: appearance.bannerBorderThickness,
                 suffix: "px",
             }) }}
         </div>
@@ -176,8 +213,8 @@
             {{ forms.rangeField({
                 label: 'Banner overlay'|t("cookie-banner"),
                 id: 'bannerOverlayOpacity',
-                name: 'settings[bannerOverlayOpacity]',
-                value: settings.bannerOverlayOpacity,
+                name: 'fields[bannerOverlayOpacity]',
+                value: appearance.bannerOverlayOpacity,
                 min: 0,
                 max: 100,
                 suffix: "%",
@@ -190,8 +227,8 @@
             {{ forms.colorField({
                 label: 'Title color'|t("cookie-banner"),
                 id: 'titleColor',
-                name: 'settings[titleColor]',
-                value: settings.titleColor,
+                name: 'fields[titleColor]',
+                value: appearance.titleColor,
             }) }}
         </div>
 
@@ -199,8 +236,8 @@
             {{ forms.colorField({
                 label: 'Text color'|t("cookie-banner"),
                 id: 'textColor',
-                name: 'settings[textColor]',
-                value: settings.textColor,
+                name: 'fields[textColor]',
+                value: appearance.textColor,
             }) }}
         </div>
 
@@ -210,8 +247,8 @@
             {{ forms.colorField({
                 label: 'Link color'|t("cookie-banner"),
                 id: 'linkColor',
-                name: 'settings[linkColor]',
-                value: settings.linkColor,
+                name: 'fields[linkColor]',
+                value: appearance.linkColor,
             }) }}
         </div>
 
@@ -219,8 +256,8 @@
             {{ forms.colorField({
                 label: 'Link hover color'|t("cookie-banner"),
                 id: 'linkHoverColor',
-                name: 'settings[linkHoverColor]',
-                value: settings.linkHoverColor,
+                name: 'fields[linkHoverColor]',
+                value: appearance.linkHoverColor,
             }) }}
         </div>
 
@@ -230,8 +267,8 @@
             {{ forms.colorField({
                 label: 'Background'|t("cookie-banner"),
                 id: 'buttonBackground',
-                name: 'settings[buttonBackground]',
-                value: settings.buttonBackground,
+                name: 'fields[buttonBackground]',
+                value: appearance.buttonBackground,
             }) }}
         </div>
 
@@ -239,8 +276,8 @@
             {{ forms.colorField({
                 label: 'Text color'|t("cookie-banner"),
                 id: 'buttonColor',
-                name: 'settings[buttonColor]',
-                value: settings.buttonColor,
+                name: 'fields[buttonColor]',
+                value: appearance.buttonColor,
             }) }}
         </div>
 
@@ -248,8 +285,8 @@
             {{ forms.colorField({
                 label: 'Border color'|t("cookie-banner"),
                 id: 'buttonBorderColor',
-                name: 'settings[buttonBorderColor]',
-                value: settings.buttonBorderColor,
+                name: 'fields[buttonBorderColor]',
+                value: appearance.buttonBorderColor,
             }) }}
         </div>
 
@@ -258,8 +295,8 @@
                 label: 'Border thickness'|t("cookie-banner"),
                 type: 'number',
                 id: 'buttonBorderThickness',
-                name: 'settings[buttonBorderThickness]',
-                value: settings.buttonBorderThickness,
+                name: 'fields[buttonBorderThickness]',
+                value: appearance.buttonBorderThickness,
                 suffix: "px",
             }) }}
         </div>
@@ -270,8 +307,8 @@
             {{ forms.colorField({
                 label: 'Hover background'|t("cookie-banner"),
                 id: 'buttonHoverBackground',
-                name: 'settings[buttonHoverBackground]',
-                value: settings.buttonHoverBackground,
+                name: 'fields[buttonHoverBackground]',
+                value: appearance.buttonHoverBackground,
             }) }}
         </div>
 
@@ -279,8 +316,8 @@
             {{ forms.colorField({
                 label: 'Hover text color'|t("cookie-banner"),
                 id: 'buttonHoverColor',
-                name: 'settings[buttonHoverColor]',
-                value: settings.buttonHoverColor,
+                name: 'fields[buttonHoverColor]',
+                value: appearance.buttonHoverColor,
             }) }}
         </div>        
 
@@ -288,8 +325,8 @@
             {{ forms.colorField({
                 label: 'Hover border color'|t("cookie-banner"),
                 id: 'buttonHoverBorderColor',
-                name: 'settings[buttonHoverBorderColor]',
-                value: settings.buttonHoverBorderColor,
+                name: 'fields[buttonHoverBorderColor]',
+                value: appearance.buttonHoverBorderColor,
             }) }}
         </div>
 
@@ -299,8 +336,8 @@
             {{ forms.colorField({
                 label: 'Toggle background off'|t("cookie-banner"),
                 id: 'toggleBackgroundOff',
-                name: 'settings[toggleBackgroundOff]',
-                value: settings.toggleBackgroundOff,
+                name: 'fields[toggleBackgroundOff]',
+                value: appearance.toggleBackgroundOff,
             }) }}
         </div>
 
@@ -308,8 +345,8 @@
             {{ forms.colorField({
                 label: 'Toggle background on'|t("cookie-banner"),
                 id: 'toggleBackgroundOn',
-                name: 'settings[toggleBackgroundOn]',
-                value: settings.toggleBackgroundOn,
+                name: 'fields[toggleBackgroundOn]',
+                value: appearance.toggleBackgroundOn,
             }) }}
         </div>
 
@@ -317,20 +354,20 @@
             {{ forms.colorField({
                 label: 'Toggle color'|t("cookie-banner"),
                 id: 'toggleColor',
-                name: 'settings[toggleColor]',
-                value: settings.toggleColor,
+                name: 'fields[toggleColor]',
+                value: appearance.toggleColor,
             }) }}
         </div>
 
-        {% if settings.showCookieTables %}
+        {% if appearance.showCookieTables %}
             <h2>{{ 'Cookie groups'|t("cookie-banner") }}</h2>
 
             <div class="field width-25">
                 {{ forms.colorField({
                     label: 'Title color'|t("cookie-banner"),
                     id: 'cookieGroupTitleColor',
-                    name: 'settings[cookieGroupTitleColor]',
-                    value: settings.cookieGroupTitleColor,
+                    name: 'fields[cookieGroupTitleColor]',
+                    value: appearance.cookieGroupTitleColor,
                 }) }}
             </div>
 
@@ -338,8 +375,8 @@
                 {{ forms.colorField({
                     label: 'Text color'|t("cookie-banner"),
                     id: 'cookieGroupTextColor',
-                    name: 'settings[cookieGroupTextColor]',
-                    value: settings.cookieGroupTextColor,
+                    name: 'fields[cookieGroupTextColor]',
+                    value: appearance.cookieGroupTextColor,
                 }) }}
             </div>
 
@@ -349,8 +386,8 @@
                 {{ forms.colorField({
                     label: 'Link color'|t("cookie-banner"),
                     id: 'cookieGroupLinkColor',
-                    name: 'settings[cookieGroupLinkColor]',
-                    value: settings.cookieGroupLinkColor,
+                    name: 'fields[cookieGroupLinkColor]',
+                    value: appearance.cookieGroupLinkColor,
                 }) }}
             </div>
 
@@ -358,8 +395,8 @@
                 {{ forms.colorField({
                     label: 'Link hover color'|t("cookie-banner"),
                     id: 'cookieGroupLinkHoverColor',
-                    name: 'settings[cookieGroupLinkHoverColor]',
-                    value: settings.cookieGroupLinkHoverColor,
+                    name: 'fields[cookieGroupLinkHoverColor]',
+                    value: appearance.cookieGroupLinkHoverColor,
                 }) }}
             </div>
 
@@ -369,8 +406,8 @@
                 {{ forms.colorField({
                     label: 'background'|t("cookie-banner"),
                     id: 'cookieGroupBackground',
-                    name: 'settings[cookieGroupBackground]',
-                    value: settings.cookieGroupBackground,
+                    name: 'fields[cookieGroupBackground]',
+                    value: appearance.cookieGroupBackground,
                 }) }}
             </div>
 
@@ -378,8 +415,8 @@
                 {{ forms.colorField({
                     label: 'border color'|t("cookie-banner"),
                     id: 'cookieGroupBorderColor',
-                    name: 'settings[cookieGroupBorderColor]',
-                    value: settings.cookieGroupBorderColor,
+                    name: 'fields[cookieGroupBorderColor]',
+                    value: appearance.cookieGroupBorderColor,
                 }) }}
             </div>
 
@@ -388,8 +425,8 @@
                     label: 'border thickness'|t("cookie-banner"),
                     type: 'number',
                     id: 'cookieGroupBorderThickness',
-                    name: 'settings[cookieGroupBorderThickness]',
-                    value: settings.cookieGroupBorderThickness,
+                    name: 'fields[cookieGroupBorderThickness]',
+                    value: appearance.cookieGroupBorderThickness,
                     suffix: "px",
                 }) }}
             </div>
@@ -400,8 +437,8 @@
                 {{ forms.colorField({
                     label: 'Hover background'|t("cookie-banner"),
                     id: 'cookieGroupHoverBackground',
-                    name: 'settings[cookieGroupHoverBackground]',
-                    value: settings.cookieGroupHoverBackground,
+                    name: 'fields[cookieGroupHoverBackground]',
+                    value: appearance.cookieGroupHoverBackground,
                 }) }}
             </div>
 
@@ -409,8 +446,8 @@
                 {{ forms.colorField({
                     label: 'Hover border color'|t("cookie-banner"),
                     id: 'cookieGroupHoverBorderColor',
-                    name: 'settings[cookieGroupHoverBorderColor]',
-                    value: settings.cookieGroupHoverBorderColor,
+                    name: 'fields[cookieGroupHoverBorderColor]',
+                    value: appearance.cookieGroupHoverBorderColor,
                 }) }}
             </div>
 
@@ -420,8 +457,8 @@
                 {{ forms.colorField({
                     label: 'Title color'|t("cookie-banner"),
                     id: 'cookieTableTitleColor',
-                    name: 'settings[cookieTableTitleColor]',
-                    value: settings.cookieTableTitleColor,
+                    name: 'fields[cookieTableTitleColor]',
+                    value: appearance.cookieTableTitleColor,
                 }) }}
             </div>
 
@@ -429,8 +466,8 @@
                 {{ forms.colorField({
                     label: 'Text color'|t("cookie-banner"),
                     id: 'cookieTableTextColor',
-                    name: 'settings[cookieTableTextColor]',
-                    value: settings.cookieTableTextColor,
+                    name: 'fields[cookieTableTextColor]',
+                    value: appearance.cookieTableTextColor,
                 }) }}
             </div>
 
@@ -440,8 +477,8 @@
                 {{ forms.colorField({
                     label: 'Background'|t("cookie-banner"),
                     id: 'cookieTableBackground',
-                    name: 'settings[cookieTableBackground]',
-                    value: settings.cookieTableBackground,
+                    name: 'fields[cookieTableBackground]',
+                    value: appearance.cookieTableBackground,
                 }) }}
             </div>
 
@@ -449,8 +486,8 @@
                 {{ forms.colorField({
                     label: 'Border color'|t("cookie-banner"),
                     id: 'cookieTableBorderColor',
-                    name: 'settings[cookieTableBorderColor]',
-                    value: settings.cookieTableBorderColor,
+                    name: 'fields[cookieTableBorderColor]',
+                    value: appearance.cookieTableBorderColor,
                 }) }}
             </div>
 
@@ -459,10 +496,34 @@
                     label: 'border thickness'|t("cookie-banner"),
                     type: 'number',
                     id: 'cookieTableBorderThickness',
-                    name: 'settings[cookieTableBorderThickness]',
-                    value: settings.cookieTableBorderThickness,
+                    name: 'fields[cookieTableBorderThickness]',
+                    value: appearance.cookieTableBorderThickness,
                     suffix: "px",
                 }) }}
+            </div>
+
+            <hr>
+
+            <div class="field width-100">
+                {{ codeEditor.textareaField(
+                    {
+                        label: "Custom styles"|t("cookie-banner"),
+                        instructions: "Define CSS styles that should be registered for the cookie banner for this site"|t("cookie-banner"),
+                        id: "custom-styles",
+                        name: "fields[css]",
+                        value: appearance.css,
+                    }, 
+                    "Code Editor", 
+                    {
+                        tabSize: 2,
+                        showUnused: false,
+                        language: 'css',
+                    }, 
+                    {
+                        wrapperClass: "monaco-editor-background-frame",
+                        placeholderText: "Custom cookie banner styling for"|t("cookie-banner") ~ " " ~ currentSite.name,
+                    })
+                }}
             </div>
         {% endif %}
     </div>

@@ -5,9 +5,12 @@ namespace digitalastronaut\craftcookiebanner\services;
 use Craft;
 use craft\base\Component;
 
-use Carbon\Carbon;
+use yii\base\Exception;
+
 use digitalastronaut\craftcookiebanner\CookieBanner;
 use digitalastronaut\craftcookiebanner\elements\ConsentRecord;
+
+use Carbon\Carbon;
 
 class ConsentRecordsService extends Component {
     public function cleanup() {
@@ -20,6 +23,37 @@ class ConsentRecordsService extends Component {
         foreach ($records as $record) {
             Craft::$app->elements->deleteElement($record, true);
         }
+    }
+
+    public function createConsentRecord($consentRecord) {
+        try {
+            
+        } catch (Exception $error) {
+            throw $error;
+        }
+    }
+
+    public function getCategorizedConsentRecordStats(): array {
+        $consentRecordsCount = ConsentRecord::find()->count();
+
+        $acceptedEssentialCookiesCount = ConsentRecord::find()->where(["essentialCookies" => true])->count(); 
+        $acceptedFunctionalCookiesCount = ConsentRecord::find()->where(["functionalCookies" => true])->count(); 
+        $acceptedAnalyticalCookiesCount = ConsentRecord::find()->where(["analyticalCookies" => true])->count(); 
+        $acceptedAdvertisementCookiesCount = ConsentRecord::find()->where(["advertisementCookies" => true])->count(); 
+        $acceptedPersonalizationCookiesCount = ConsentRecord::find()->where(["personalizationCookies" => true])->count(); 
+        
+        return [
+            "acceptedEssentialCookiesPercentage" => 
+                $acceptedFunctionalCookiesCount != 0 ? round((($acceptedEssentialCookiesCount / $consentRecordsCount) * 100), 1) : 0,
+            "acceptedFunctionalCookiesPercentage" => 
+                $acceptedFunctionalCookiesCount != 0 ? round((($acceptedFunctionalCookiesCount / $consentRecordsCount) * 100), 1) : 0,
+            "acceptedAnalyticsCookiesPercentage" => 
+                $acceptedAnalyticalCookiesCount != 0 ? round((($acceptedAnalyticalCookiesCount / $consentRecordsCount) * 100), 1) : 0,
+            "acceptedAdvertisementCookiesPercentage" => 
+                $acceptedAdvertisementCookiesCount != 0 ? round((($acceptedAdvertisementCookiesCount / $consentRecordsCount) * 100), 1) : 0,
+            "acceptedPersonalizationCookiesPercentage" => 
+                $acceptedPersonalizationCookiesCount != 0 ? round((($acceptedPersonalizationCookiesCount / $consentRecordsCount) * 100), 1) : 0,
+        ];
     }
 
     private function getExpiredDate(): Carbon {

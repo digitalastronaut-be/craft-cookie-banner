@@ -8,6 +8,7 @@ use craft\web\Controller;
 use yii\web\Response;
 
 use digitalastronaut\craftcookiebanner\CookieBanner;
+use digitalastronaut\craftcookiebanner\elements\ConsentRecord;
 
 /**
  * Getting Started controller
@@ -20,6 +21,9 @@ class DashboardController extends Controller {
         $settings = CookieBanner::getInstance()->getSettings();
 
         return $this->renderTemplate('cookie-banner/_dashboard.twig', [
+            "consentRecordsChart" => [
+                "total" => ConsentRecord::find()->count(),
+            ],
             "gettingStartedProgress" => $settings->gettingStartedProgress,
         ]);
     }

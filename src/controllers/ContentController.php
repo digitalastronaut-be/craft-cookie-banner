@@ -4,13 +4,15 @@ namespace digitalastronaut\craftcookiebanner\controllers;
 
 use Craft;
 use craft\errors\MissingComponentException;
-use craft\helpers\UrlHelper;
 use craft\web\Controller;
 
 use yii\db\Exception;
 use yii\web\Response;
+use yii\web\BadRequestHttpException;
 
 use digitalastronaut\craftcookiebanner\records\Content;
+
+use Throwable;
 
 class ContentController extends Controller {
     public $defaultAction = 'index';
@@ -24,27 +26,51 @@ class ContentController extends Controller {
         $content = Content::find()->where(['siteId' => $currentSiteId])->one();
         
         return $this->renderTemplate('cookie-banner/_content.twig', [
-            'banner' => $content
+            'content' => $content
         ]);
     }
 
     /**
      * @return Response
+     * @throws BadRequestHttpException
+     * @throws ForbiddenHttpException
      * @throws MissingComponentException
      * @throws Exception
      */
     public function actionSave(): Response {
-        $body = $this->request->bodyParams;
-        $content = Content::find()->where(['siteId' => $body['siteId']])->one();
+        $this->requirePostRequest();
+        $this->requirePermission("cookie-banner:edit-content");
 
-        $content->setAttributes($body['fields']);
+        try {
+            $siteId = $this->request->getBodyParam("siteId");
+            $fields = $this->request->getBodyParam("fields");
 
-        if (!$content->save()) {
-            Craft::$app->getSession()->setError(Craft::t('cookie-banner', 'Could not save content.'));
+            if (!$siteId || !$fields) throw new BadRequestHttpException('Missing body params');
+
+            $site = Craft::$app->getSites()->getSiteById($siteId);
+            $content = Content::find()->where(['siteId' => $siteId])->one();
+
+            if (!$content || !$site) throw new Exception("Content settings not found for siteId: {$siteId}");
+
+            $content->setAttributes($fields);
+
+            if (!$content->save()) {
+                throw new Exception(sprintf(
+                    'Failed saving content for site "%s": %s',
+                    $site->name,
+                    json_encode($content->getErrors())
+                ));
+            }
+
+            Craft::$app->getSession()->setSuccess(Craft::t('cookie-banner', "Content saved successfully for {$site->name}"));
+            return $this->redirectToPostedUrl();
+
+        } catch(Throwable $error) {
+            Craft::error($error->getMessage(), __METHOD__);
+            Craft::$app->getSession()->setError('Error saving content: ' . $error->getMessage());
+
+            return $this->redirectToPostedUrl();
         }
 
-        Craft::$app->getSession()->setNotice(Craft::t('cookie-banner', 'Content saved successfully.'));
-
-        return $this->redirect(UrlHelper::cpUrl('cookie-banner/content'));
     }
 }

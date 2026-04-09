@@ -22,6 +22,7 @@ use craft\web\View;
 
 use digitalastronaut\craftcookiebanner\CookieBanner as CookieBannerPlugin;
 use digitalastronaut\craftcookiebanner\elements\ConsentRecord;
+use digitalastronaut\craftcookiebanner\records\Appearance;
 use digitalastronaut\craftcookiebanner\records\Content;
 use digitalastronaut\craftcookiebanner\variables\CookieBannerVariable;
 use digitalastronaut\craftcookiebanner\web\assets\CookieBannerAssets;
@@ -50,6 +51,8 @@ class EventHandlers {
         self::registerPermissions();
         self::registerCpRoutes();
         self::registerSiteModelEvents();
+        
+        CookieBannerPlugin::getInstance()->getConsentRecords()->cleanup();
     }
 
     private static function registerSiteEvents(): void {
@@ -199,6 +202,7 @@ class EventHandlers {
                 $event->rules['cookie-banner/consent-records'] = 'cookie-banner/consent-records/view';
                 $event->rules['cookie-banner/consent-records/create'] = 'cookie-banner/consent-records/create';
                 $event->rules['cookie-banner/consent-records/<id:\d+>'] = 'cookie-banner/consent-records/edit';
+                $event->rules['cookie-banner/consent-records/get-chart-data'] = 'cookie-banner/consent-records/get-chart-data';
 
                 $event->rules['cookie-banner/settings'] = 'cookie-banner/settings/index';             
             }
@@ -222,6 +226,11 @@ class EventHandlers {
                     $content->siteId = $event->site->id;
                     $content->attributes = json_decode($baseContent, true);
                     $content->save(false); 
+
+                    $appearance = new Appearance();
+
+                    $appearance->siteId = $event->site->id;
+                    $appearance->save(false);
                 }
             }
         );
@@ -231,6 +240,7 @@ class EventHandlers {
             Sites::EVENT_AFTER_DELETE_SITE,
             function (SiteEvent $event) {
                 Content::deleteAll(['siteId' => $event->site->id]);
+                Appearance::deleteAll(['siteId' => $event->site->id]);
             }
         );
     }
