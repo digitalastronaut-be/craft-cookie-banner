@@ -208,6 +208,12 @@ class CookiesAndVendorsController extends Controller {
         }
     }
 
+    public function actionGetCookiesChartData(): Response {
+        $data = CookieBanner::getInstance()->getCookiesAndVendors()->getCookieChartData();
+
+        return $this->asJson($data);
+    }
+
     /**
      * @return Response
      * @throws BadRequestHttpException
@@ -379,10 +385,9 @@ class CookiesAndVendorsController extends Controller {
         return Content::find()->one()->cookieGroups;
     }
 
-    public function actionGetChartData() {
-        return $this->asJson(['data' => [
-            'cookies' => [3, 11, 6],
-            'vendors' => [1, 2],
-        ]]);
+    public function actionGetVendorsChartData(): Response {
+        $data = CookieBanner::getInstance()->getCookiesAndVendors()->getVendorsChartData();
+
+        return $this->asJson($data);
     }
 }

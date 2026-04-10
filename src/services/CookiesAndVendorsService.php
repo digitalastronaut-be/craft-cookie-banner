@@ -399,6 +399,47 @@ class CookiesAndVendorsService extends Component {
     }
 
     /**
+     * @return array
+     */
+    public function getCookieChartData(): array {
+        $cookies = CookieBanner::getInstance()->getCookieDetection()->getCookiesOverview();
+
+        $data = [];
+
+        foreach ($cookies as $cookie) {
+            if ($cookie['isControlPanelCookie']) {
+                $data[] = [
+                    'label' => $cookie['name'],
+                    'data' => 'Control panel',
+                    'backgroundColor' => '#d8e2ee',
+                ];
+
+                continue;
+            }
+
+            if ($cookie['onlyInBrowserCookies']) {
+                $data[] = [
+                    'label' => $cookie['name'],
+                    'data' => 'Suggested',
+                    'backgroundColor' => '#4299E1',
+                ];
+
+                continue;
+            }
+
+            $result = CookieBanner::getInstance()->getCookiesAndVendors()->checkCookieDefinitionForEachSite($cookie['name']);
+            
+            $data[] = [
+                'label' => $cookie['name'],
+                'data' => in_array('defined-incomplete', $result, true) ? "Defined incomplete" : "Defined",
+                'backgroundColor' => in_array('defined-incomplete', $result, true) ? "#facc15" : "#10b981",
+            ];
+        }
+
+        return $data;
+    }
+
+    /**
      * @param string|null $vendorName
      *
      * @return void
@@ -675,6 +716,11 @@ class CookiesAndVendorsService extends Component {
         );
     }
 
+    /**
+     * @param string|null $vendorName
+     * 
+     * @return array
+     */
     public function checkVendorDefinitionForEachSite(string|null $vendorName): array {
         $cookieBannerContentAllLanguages = Content::find()->all();
 
@@ -711,5 +757,36 @@ class CookiesAndVendorsService extends Component {
         uasort($result, fn($a, $b) => ($b === 'defined-incomplete') <=> ($a === 'defined-incomplete'));
 
         return $result;
+    }
+
+    /**
+     * @return array
+     */
+    public function getVendorsChartData(): array {
+        $vendors = CookieBanner::getInstance()->getCookieDetection()->getVendorsOverview();
+
+        $data = [];
+
+        foreach ($vendors as $vendor) {
+            if ($vendor['isSuggestion']) {
+                $data[] = [
+                    'label' => $vendor['name'],
+                    'data' => 'Suggested',
+                    'backgroundColor' => '#4299E1',
+                ];
+
+                continue;
+            }
+
+            $result = CookieBanner::getInstance()->getCookiesAndVendors()->checkVendorDefinitionForEachSite($vendor['name']);
+            
+            $data[] = [
+                'label' => $vendor['name'],
+                'data' => in_array('defined-incomplete', $result, true) ? "Defined incomplete" : "Defined",
+                'backgroundColor' => in_array('defined-incomplete', $result, true) ? "#facc15" : "#10b981",
+            ];
+        }
+
+        return $data;
     }
 }

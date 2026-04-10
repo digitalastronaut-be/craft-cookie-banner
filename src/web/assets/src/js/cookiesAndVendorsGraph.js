@@ -1,82 +1,91 @@
 import Chart from "chart.js/auto";
 
-function createUnitDatasets(label, values, color) {
-	const datasets = [];
-
-	values.forEach((value, index) => {
-		for (let i = 0; i < value; i++) {
-			const data = [0, 0];
-			data[index] = 1;
-
-			datasets.push({
-				label,
-				data,
-				backgroundColor: color,
-				stack: index === 0 ? "cookies" : "vendors",
-			});
-		}
-	});
-
-	return datasets;
-}
-
 class CookiesAndVendorsGraph extends HTMLElement {
 	constructor() {
 		super();
-		this.chartElement = null;
+
+		this.cookiesChartElement = null;
+		this.vendorsChartElement = null;
 	}
 
 	async connectedCallback() {
-		this.chartElement = this.querySelector(":scope > #cookies-and-vendors-graph");
+		this.cookiesChartElement = this.querySelector(":scope #cookies-graph");
+		this.vendorsChartElement = this.querySelector(":scope #vendors-graph");
 
-		if (!this.chartElement) {
-			throw new Error("Component must define a valid chart canvas element");
+		if (!this.cookiesChartElement && this.vendorsChartElement) {
+			throw new Error("Component must define a valid chart canvas elements");
 		}
 
-		// const response = await fetch("/admin/cookie-banner/cookies-and-vendors/get-chart-data");
-		// const json = await response.json();
+		const cookiesResponse = await fetch("/admin/cookie-banner/cookies-and-vendors/get-cookies-chart-data");
+		const cookiesRawData = await cookiesResponse.json();
 
-		new Chart(this.chartElement, {
-			type: "bar",
-			data: {
-				labels: ["Cookies", "Vendors"],
-				datasets: [
-					...createUnitDatasets("Disabled", [3, 2], "#d8e2ee"),
-					...createUnitDatasets("Defined", [11, 1], "#10b981"),
-					...createUnitDatasets("Defined incomplete", [6, 0], "#facc15"),
-					...createUnitDatasets("Detected automatically", [4, 1], "#4299E1"),
-				],
-			},
+		const cookiesChartData = {
+			labels: cookiesRawData.map((item) => item.label),
+			datasets: [
+				{
+					label: "Cookies",
+					data: cookiesRawData.map(() => 1),
+					backgroundColor: cookiesRawData.map((item) => item.backgroundColor),
+					hoverOffset: 4,
+					borderRadius: 4,
+					borderWidth: 0,
+					spacing: 12,
+				},
+			],
+		};
 
-			options: {
-				datasets: {
-					bar: {
-						barThickness: 64,
-						borderWidth: 2,
-						borderColor: "#f3f7fc",
-					},
+		const vendorsResponse = await fetch("/admin/cookie-banner/cookies-and-vendors/get-vendors-chart-data");
+		const vendorsRawData = await vendorsResponse.json();
+
+		const vendorsChartData = {
+			labels: vendorsRawData.map((item) => item.label),
+			datasets: [
+				{
+					label: "Vendors",
+					data: vendorsRawData.map(() => 1),
+					backgroundColor: vendorsRawData.map((item) => item.backgroundColor),
+					hoverOffset: 4,
+					borderRadius: 4,
+					borderWidth: 0,
+					spacing: 12,
 				},
-				layout: {
-					padding: 4,
+			],
+		};
+
+		const createChartOptions = (dataSource, titleText) => ({
+			responsive: true,
+			maintainAspectRatio: false,
+			cutout: "65%",
+
+			plugins: {
+				legend: {
+					display: false,
 				},
-				plugins: {
-					legend: {
-						display: false,
-					},
+				title: {
+					display: true,
+					text: titleText,
 				},
-				responsive: true,
-				maintainAspectRatio: false,
-				scales: {
-					x: {
-						stacked: true,
-						display: false,
-					},
-					y: {
-						stacked: true,
-						display: false,
+				tooltip: {
+					callbacks: {
+						label: function (context) {
+							const item = dataSource[context.dataIndex];
+							return item.data;
+						},
 					},
 				},
 			},
+		});
+
+		new Chart(this.cookiesChartElement, {
+			type: "doughnut",
+			data: cookiesChartData,
+			options: createChartOptions(cookiesRawData, "Cookie definitions"),
+		});
+
+		new Chart(this.vendorsChartElement, {
+			type: "doughnut",
+			data: vendorsChartData,
+			options: createChartOptions(vendorsRawData, "Vendor definitions"),
 		});
 	}
 }

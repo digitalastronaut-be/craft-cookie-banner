@@ -65,8 +65,50 @@
             <h2>{{ "Cookies and vendors status"|t("cookie-banner") }}</h2>
         
             <cookies-and-vendors-graph class="cookies-and-vendors-graph">
-                <canvas id="cookies-and-vendors-graph"></canvas>
+                <div class="cookies-and-vendors-graph-container">
+                    <canvas id="cookies-graph"></canvas>
+                </div>
+
+                <div class="cookies-and-vendors-graph-container">
+                    <canvas id="vendors-graph"></canvas>
+                </div>
             </cookies-and-vendors-graph>
+
+            <div class="ccb-graph-legend">
+                <ul class="ccb-graph-sub-legend">
+                    <li class="ccb-graph-legend-item">
+                        <div style="background-color: #10b981;"></div>
+                        <span>1 Defined</span>
+                    </li>
+                    <li class="ccb-graph-legend-item">
+                        <div style="background-color: #facc15;"></div>
+                        <span>3 Defined incomplete</span>
+                    </li>
+                    <li class="ccb-graph-legend-item">
+                        <div style="background-color: #4299E1;"></div>
+                        <span>2 Suggested</span>
+                    </li>
+                    <li class="ccb-graph-legend-item">
+                        <div style="background-color: #d8e2ee;"></div>
+                        <span>3 Control panel</span>
+                    </li>
+                </ul>
+
+                <ul class="ccb-graph-sub-legend">
+                    <li class="ccb-graph-legend-item">
+                        <div style="background-color: #10b981"></div>
+                        <span>1 Defined</span>
+                    </li>
+                    <li class="ccb-graph-legend-item">
+                        <div style="background-color: #facc15"></div>
+                        <span>3 Defined incomplete</span>
+                    </li>
+                    <li class="ccb-graph-legend-item">
+                        <div style="background-color: #4299E1"></div>
+                        <span>1 Suggested</span>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 
