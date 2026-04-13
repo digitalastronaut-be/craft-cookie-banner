@@ -265,14 +265,15 @@ class EventHandlers {
                 $currentSiteId = Craft::$app->getSites()->getCurrentSite()->id;
 
                 $settings = CookieBannerPlugin::getInstance()->getSettings();
+                $appearance = Appearance::find()->where(['siteId' => $currentSiteId])->one();
                 $content = Content::find()->where(['siteId' => $currentSiteId])->one();
 
                 if (!$settings->cookieBannerEnabled) return;
 
                 $dataLayerScript = Craft::$app->getView()->renderTemplate('cookie-banner/components/_dataLayerScript');
                 $bannerHtml = Craft::$app->getView()->renderTemplate('cookie-banner/components/_banner.twig', [
-                    'settings' => $settings,
-                    'banner' => $content
+                    'appearance' => $appearance,
+                    'content' => $content
                 ]);
 
                 Craft::$app->getView()->registerHtml($bannerHtml, View::POS_BEGIN);

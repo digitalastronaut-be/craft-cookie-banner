@@ -18,6 +18,7 @@ use digitalastronaut\craftcookiebanner\services\ServicesTrait;
 // TODO: rename cookieGroups to vendors
 // TODO: overview maken van consent records stats (bar chart) en cookies (circle diagram)
 // TODO: JS translatinos for chip component
+// TODO: change banner and settings in banner.twig to content and appearance
 
 /**
  * Punten om te vragen aan Mitchel

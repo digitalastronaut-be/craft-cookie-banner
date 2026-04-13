@@ -18,8 +18,12 @@ class SeedController extends Controller {
         $this->stdout("Use this controller to seed data for cookie banner related tables" . PHP_EOL, Console::FG_CYAN);
     }
 
-    public function actionConsentRecords(int $count = 5, bool $fixedIpAddress = false): int {
-        $this->stdout("Preparing fake consent records..." . PHP_EOL, Console::FG_CYAN);
+    public function actionConsentRecords(
+        int $count = 5,
+        bool $fixedIpAddress = false,
+        string $period = '30 days'
+    ): int {
+        $this->stdout("Preparing fake consent records over period: {$period}..." . PHP_EOL, Console::FG_CYAN);
 
         $languages = ['en-US', 'de-DE', 'fr-FR', 'es-ES', 'nl-NL'];
         $userAgents = [
@@ -31,19 +35,23 @@ class SeedController extends Controller {
         ];
         $actions = ['Accept all', 'Accept selected', 'Refuse all'];
 
+        $now = new DateTime();
+        $startDate = (new DateTime())->modify("-{$period}");
+
         for ($i = 0; $i < $count; $i++) {
             $consentRecord = new ConsentRecord();
 
             $fakeIp = rand(1, 255) . '.' . rand(0, 255) . '.' . rand(0, 255) . '.' . rand(0, 255);
-            if ($fixedIpAddress) $fakeIp = '178.119.216.167';
+            if ($fixedIpAddress) {
+                $fakeIp = '178.119.216.167';
+            }
 
             $secret = Craft::$app->getConfig()->getGeneral()->securityKey;
             $ipAddressHash = hash_hmac('sha256', $fakeIp, $secret);
             $shortHash = substr($ipAddressHash, 0, 10);
 
-            $now = new DateTime();
-            $oneMonthAgo = (new DateTime())->modify('-30 days');
-            $randomTimestamp = mt_rand($oneMonthAgo->getTimestamp(), $now->getTimestamp());
+            // random timestamp within chosen period
+            $randomTimestamp = mt_rand($startDate->getTimestamp(), $now->getTimestamp());
             $consentTimestamp = (new DateTime())->setTimestamp($randomTimestamp);
 
             $consentRecord->title = "Consent {$shortHash}";
@@ -66,7 +74,6 @@ class SeedController extends Controller {
 
             Craft::$app->elements->saveElement($consentRecord);
 
-            // progress output
             $progress = intval((($i + 1) / $count) * 100);
             $this->stdout("\rInserting: {$progress}% (" . ($i + 1) . "/{$count})");
         }

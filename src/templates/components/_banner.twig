@@ -1,7 +1,7 @@
 {# ======================= #}
 {# PROPERTIES              #}
 {# ======================= #}
-{% set settings = settings|default("") %}
+{% set appearance = appearance|default("") %}
 {% set banner = banner|default("") %}
 
 {# ======================= #}
@@ -9,39 +9,39 @@
 {# ======================= #}
 <cookie-banner
     id="ccb-cookie-banner" 
-    class="ccb-cookie-banner {{ settings.cookieBannerPosition }}"
-    data-show-cookie-categories="{{ settings.showCookieCategoriesPreview }}"
-    data-preferences-action="{{ settings.preferencesAction }}"
+    class="ccb-cookie-banner {{ appearance.cookieBannerPosition }}"
+    data-show-cookie-categories="{{ appearance.showCookieCategoriesPreview }}"
+    data-preferences-action="{{ appearance.preferencesAction }}"
     data-lenis-prevent
 >
     <div class="ccb-cookie-banner-preview">
         <div class="ccb-cookie-banner-intro">
-            <h2 class="ccb-typo-h2">{{ banner.title }}</h2>
+            <h2 class="ccb-typo-h2">{{ content.title }}</h2>
 
-            <p class="ccb-typo-body-md">{{ banner.text }}</p>
+            <p class="ccb-typo-body-md">{{ content.text }}</p>
 
             <ul class="ccb-cookie-banner-legal-links-list">
                 <li class="ccb-cookie-banner-legal-links-list-item">
                     <a 
-                        href="{{ banner.privacyPolicyLinkURL }}" 
+                        href="{{ content.privacyPolicyLinkURL }}" 
                         class="ccb-typo-body-md"
                     >
-                        {{ banner.privacyPolicyLinkLabel|default("Privacy policy"|t("cookie-banner")) }}
+                        {{ content.privacyPolicyLinkLabel|default("Privacy policy"|t("cookie-banner")) }}
                     </a>
                 </li>
 
                 <li class="ccb-cookie-banner-legal-links-list-item">
                     <a 
-                        href="{{ banner.cookiePolicyLinkURL }}" 
+                        href="{{ content.cookiePolicyLinkURL }}" 
                         class="ccb-typo-body-md"
                     >
-                        {{ banner.cookiePolicyLinkLabel|default("Cookie policy"|t("cookie-banner")) }}
+                        {{ content.cookiePolicyLinkLabel|default("Cookie policy"|t("cookie-banner")) }}
                     </a>
                 </li>
 
                 <li class="ccb-cookie-banner-legal-links-list-item">
                     <a data-determine-preferences-link class="ccb-typo-body-md">
-                        {{ settings.showCookieCategoriesPreview ? banner.detailedPreferencesButtonLabel : banner.determinePreferencesButtonLabel }}
+                        {{ appearance.showCookieCategoriesPreview ? content.detailedPreferencesButtonLabel : content.determinePreferencesButtonLabel }}
                     </a>
                 </li>
             </ul>
@@ -49,7 +49,7 @@
 
         <ul data-cookie-categories class="ccb-cookie-banner-categories-list">
             <li class="ccb-cookie-banner-categories-list-item">
-                <p class="ccb-typo-h3">{{ banner.necessaryCookiesLabel }}</p>
+                <p class="ccb-typo-h3">{{ content.necessaryCookiesLabel }}</p>
 
                 <label class="ccb-lightswitch">
                     <input type="checkbox" data-model="essentialCookies" disabled checked>
@@ -57,7 +57,7 @@
             </li>
 
             <li class="ccb-cookie-banner-categories-list-item">
-                <p class="ccb-typo-h3">{{ banner.preferenceCookiesLabel }}</p>
+                <p class="ccb-typo-h3">{{ content.preferenceCookiesLabel }}</p>
 
                 <label class="ccb-lightswitch">
                     <input type="checkbox" data-model="functionalCookies">
@@ -65,7 +65,7 @@
             </li>
 
             <li class="ccb-cookie-banner-categories-list-item">
-                <p class="ccb-typo-h3">{{ banner.analyticalCookiesLabel }}</p>
+                <p class="ccb-typo-h3">{{ content.analyticalCookiesLabel }}</p>
 
                 <label class="ccb-lightswitch">
                     <input type="checkbox" data-model="analyticalCookies">
@@ -73,7 +73,7 @@
             </li>
 
             <li class="ccb-cookie-banner-categories-list-item">
-                <p class="ccb-typo-h3">{{ banner.marketingCookiesLabel }}</p>
+                <p class="ccb-typo-h3">{{ content.marketingCookiesLabel }}</p>
 
                 <label class="ccb-lightswitch">
                     <input type="checkbox" data-model="advertisementCookies">
@@ -81,7 +81,7 @@
             </li>
 
             <li class="ccb-cookie-banner-categories-list-item">
-                <p class="ccb-typo-h3">{{ banner.uncategorizedCookiesLabel }}</p>
+                <p class="ccb-typo-h3">{{ content.uncategorizedCookiesLabel }}</p>
 
                 <label class="ccb-lightswitch">
                     <input type="checkbox" data-model="personalizationCookies">
@@ -91,9 +91,9 @@
 
         <div data-detailed-settings class="ccb-cookie-banner-details">
             {% embed "cookie-banner/components/_cookiesCategory" with { 
-                title: banner.necessaryCookiesTitle,
-                description: banner.necessaryCookiesDefinition,
-                cookies: banner.necessaryCookies
+                title: content.necessaryCookiesTitle,
+                description: content.necessaryCookiesDefinition,
+                cookies: content.necessaryCookies
             } %}
                 {% block lightswitch %}
                     <label class="ccb-lightswitch">
@@ -109,9 +109,9 @@
             {% endembed %}
 
             {% embed "cookie-banner/components/_cookiesCategory" with { 
-                title: banner.preferenceCookiesTitle,
-                description: banner.preferenceCookiesDefinition,
-                cookies: banner.preferenceCookies
+                title: content.preferenceCookiesTitle,
+                description: content.preferenceCookiesDefinition,
+                cookies: content.preferenceCookies
             } %}
                 {% block lightswitch %}
                     <label class="ccb-lightswitch">
@@ -125,9 +125,9 @@
             {% endembed %}
 
             {% embed "cookie-banner/components/_cookiesCategory" with { 
-                title: banner.analyticalCookiesTitle,
-                description: banner.analyticalCookiesDefinition,
-                cookies: banner.analyticalCookies
+                title: content.analyticalCookiesTitle,
+                description: content.analyticalCookiesDefinition,
+                cookies: content.analyticalCookies
             } %}
                 {% block lightswitch %}
                     <label class="ccb-lightswitch">
@@ -141,9 +141,9 @@
             {% endembed %}
 
             {% embed "cookie-banner/components/_cookiesCategory" with { 
-                title: banner.marketingCookiesTitle,
-                description: banner.marketingCookiesDefinition,
-                cookies: banner.marketingCookies
+                title: content.marketingCookiesTitle,
+                description: content.marketingCookiesDefinition,
+                cookies: content.marketingCookies
             } %}
                 {% block lightswitch %}
                     <label class="ccb-lightswitch">
@@ -157,9 +157,9 @@
             {% endembed %}
 
             {% embed "cookie-banner/components/_cookiesCategory" with { 
-                title: banner.uncategorizedCookiesTitle,
-                description: banner.uncategorizedCookiesDefinition,
-                cookies: banner.uncategorizedCookies
+                title: content.uncategorizedCookiesTitle,
+                description: content.uncategorizedCookiesDefinition,
+                cookies: content.uncategorizedCookies
             } %}
                 {% block lightswitch %}
                     <label class="ccb-lightswitch">
@@ -176,112 +176,117 @@
 
     <div class="ccb-cookie-banner-action-buttons">
         <button data-refuse-all-button class="ccb-button ccb-typo-button">
-            {{ banner.refuseAllButtonLabel }}
+            {{ content.refuseAllButtonLabel }}
         </button>
 
         <button 
             data-determine-preferences-button
             class="ccb-button ccb-typo-button"
         >
-            {{ settings.showCookieCategoriesPreview ? banner.detailedPreferencesButtonLabel : banner.determinePreferencesButtonLabel }}
+            {{ appearance.showCookieCategoriesPreview ? content.detailedPreferencesButtonLabel : content.determinePreferencesButtonLabel }}
         </button>
 
         <button 
             data-accept-selected-button 
             class="ccb-button ccb-typo-button"
         >
-            {{ banner.acceptSelectedButtonLabel }}
+            {{ content.acceptSelectedButtonLabel }}
         </button>
 
         <button data-accept-all-button class="ccb-button ccb-typo-button">
-            {{ banner.acceptAllButtonLabel }}
+            {{ content.acceptAllButtonLabel }}
         </button>
     </div>
+    
+    {# ======================= #}
+    {# SCRIPT                  #}
+    {# ======================= #}
+    <script>
+        window.craftCookieBanner = {
+            siteId: {{ currentSite.id }},
+            siteHandle: `{{ currentSite.handle }}`,
+            siteName: `{{ currentSite.handle }}`,
+            csrfTokenValue: `{{ craft.app.request.getCsrfToken() }}`
+        }
+    </script>
+
+    {# ======================= #}
+    {# THEME                   #}
+    {# ======================= #}
+    {% set bannerBorderRadiusOptions = {
+        "square": "0px",
+        "rounded": "10px",
+        "extra-rounded": "25px"
+    } %}
+
+    {% set bannerElementBorderRadiusOptions = {
+        "square": "0px",
+        "rounded": "8px",
+        "extra-rounded": "15px"
+    } %}
+
+    {% set controlRadiusOptions = {
+        "square": "0px",
+        "rounded": "5px",
+        "extra-rounded": "50px"
+    } %}
+
+    {% set buttonSizeOptions = {
+        "small": "6px 16px",
+        "medium": "8px 20px",
+        "large": "12px 24px"
+    } %}
+
+    <style>
+        :root {
+            --ccb-banner-title-font: {{ appearance.titleFont|raw }};
+            --ccb-banner-text-font: {{ appearance.textFont|raw }};
+            --ccb-banner-border-radius: {{ bannerBorderRadiusOptions[appearance.bannerStyle] }};
+            --ccb-banner-background: {{ "#" ~ appearance.bannerBackground }};
+            --ccb-banner-border-thickness: {{ appearance.bannerBorderThickness ~ "px" }};
+            --ccb-banner-border-color: {{ "#" ~ appearance.bannerBorderColor }};
+
+            --ccb-title-color: {{ "#" ~ appearance.titleColor }};
+            --ccb-text-color: {{ "#" ~ appearance.textColor }};
+
+            --ccb-link-color: {{ "#" ~ appearance.linkColor }};
+            --ccb-link-hover-color: {{ "#" ~ appearance.linkHoverColor }};
+
+            --ccb-button-background: {{ "#" ~ appearance.buttonBackground }};
+            --ccb-button-color: {{ "#" ~ appearance.buttonColor }};
+            --ccb-button-border-radius: {{ controlRadiusOptions[appearance.bannerStyle] }};
+            --ccb-button-border-thickness: {{ appearance.buttonBorderThickness ~ "px" }};
+            --ccb-button-padding: {{ buttonSizeOptions[appearance.buttonSize] }};
+            --ccb-button-border-color: {{ "#" ~ appearance.buttonBorderColor }};
+            --ccb-button-hover-background: {{ "#" ~ appearance.buttonHoverBackground }};
+            --ccb-button-hover-color: {{ "#" ~ appearance.buttonHoverColor }};
+            --ccb-button-hover-border-color: {{ "#" ~ appearance.buttonHoverBorderColor }};
+
+            --ccb-toggle-border-radius: {{ controlRadiusOptions[appearance.bannerStyle] }};
+            --ccb-toggle-background-color-off: {{ "#" ~ appearance.toggleBackgroundOff }};
+            --ccb-toggle-background-color-on: {{ "#" ~ appearance.toggleBackgroundOn }};
+            --ccb-toggle-color: {{ "#" ~ appearance.toggleColor }};
+
+            --ccb-cookie-group-title-color: {{ "#" ~ appearance.cookieGroupTitleColor }};
+            --ccb-cookie-group-text-color: {{ "#" ~ appearance.cookieGroupTextColor }};
+
+            --ccb-cookie-group-link-color: {{ "#" ~ appearance.cookieGroupLinkColor }};
+            --ccb-cookie-group-link-hover-color: {{ "#" ~ appearance.cookieGroupLinkHoverColor }};
+            --ccb-cookie-group-background: {{ "#" ~ appearance.cookieGroupBackground }};
+            --ccb-cookie-group-border-thickness: {{ appearance.cookieGroupBorderThickness ~ "px" }};
+            --ccb-cookie-group-border-color: {{ "#" ~ appearance.cookieGroupBorderColor }};
+            --ccb-cookie-group-border-radius: {{ bannerElementBorderRadiusOptions[appearance.bannerStyle] }};
+            --ccb-cookie-group-hover-background: {{ "#" ~ appearance.cookieGroupHoverBackground }};
+            --ccb-cookie-group-hover-border-color: {{ "#" ~ appearance.cookieGroupHoverBorderColor }};
+
+            --ccb-cookie-table-title-color: {{ "#" ~ appearance.cookieTableTitleColor }};
+            --ccb-cookie-table-text-color: {{ "#" ~ appearance.cookieTableTextColor }};
+            --ccb-cookie-table-background: {{ "#" ~ appearance.cookieTableBackground }};
+            --ccb-cookie-table-border-thickness: {{ appearance.cookieTableBorderThickness ~ "px" }};
+            --ccb-cookie-table-border-color: {{ "#" ~ appearance.cookieTableBorderColor }};
+            --ccb-cookie-table-border-radius: {{ bannerElementBorderRadiusOptions[appearance.bannerStyle] }};
+
+            {{ appearance.css|raw }}
+        }
+    </style>
 </cookie-banner>
-
-<script>
-    window.craftCookieBanner = {
-        siteId: {{ currentSite.id }},
-        siteHandle: `{{ currentSite.handle }}`,
-        siteName: `{{ currentSite.handle }}`,
-        csrfTokenValue: `{{ craft.app.request.getCsrfToken() }}`
-    }
-</script>
-
-{# ======================= #}
-{# THEME                   #}
-{# ======================= #}
-{% set bannerBorderRadiusOptions = {
-    "square": "0px",
-    "rounded": "10px",
-    "extra-rounded": "25px"
-} %}
-
-{% set bannerElementBorderRadiusOptions = {
-    "square": "0px",
-    "rounded": "8px",
-    "extra-rounded": "15px"
-} %}
-
-{% set controlRadiusOptions = {
-    "square": "0px",
-    "rounded": "5px",
-    "extra-rounded": "50px"
-} %}
-
-{% set buttonSizeOptions = {
-    "small": "6px 16px",
-    "medium": "8px 20px",
-    "large": "12px 24px"
-} %}
-
-<style>
-    :root {
-        --ccb-banner-title-font: {{ settings.titleFont|raw }};
-        --ccb-banner-text-font: {{ settings.textFont|raw }};
-        --ccb-banner-border-radius: {{ bannerBorderRadiusOptions[settings.bannerStyle] }};
-        --ccb-banner-background: {{ "#" ~ settings.bannerBackground }};
-        --ccb-banner-border-thickness: {{ settings.bannerBorderThickness ~ "px" }};
-        --ccb-banner-border-color: {{ "#" ~ settings.bannerBorderColor }};
-
-        --ccb-title-color: {{ "#" ~ settings.titleColor }};
-        --ccb-text-color: {{ "#" ~ settings.textColor }};
-
-        --ccb-link-color: {{ "#" ~ settings.linkColor }};
-        --ccb-link-hover-color: {{ "#" ~ settings.linkHoverColor }};
-
-        --ccb-button-background: {{ "#" ~ settings.buttonBackground }};
-        --ccb-button-color: {{ "#" ~ settings.buttonColor }};
-        --ccb-button-border-radius: {{ controlRadiusOptions[settings.bannerStyle] }};
-        --ccb-button-border-thickness: {{ settings.buttonBorderThickness ~ "px" }};
-        --ccb-button-padding: {{ buttonSizeOptions[settings.buttonSize] }};
-        --ccb-button-border-color: {{ "#" ~ settings.buttonBorderColor }};
-        --ccb-button-hover-background: {{ "#" ~ settings.buttonHoverBackground }};
-        --ccb-button-hover-color: {{ "#" ~ settings.buttonHoverColor }};
-        --ccb-button-hover-border-color: {{ "#" ~ settings.buttonHoverBorderColor }};
-
-        --ccb-toggle-border-radius: {{ controlRadiusOptions[settings.bannerStyle] }};
-        --ccb-toggle-background-color-off: {{ "#" ~ settings.toggleBackgroundOff }};
-        --ccb-toggle-background-color-on: {{ "#" ~ settings.toggleBackgroundOn }};
-        --ccb-toggle-color: {{ "#" ~ settings.toggleColor }};
-
-        --ccb-cookie-group-title-color: {{ "#" ~ settings.cookieGroupTitleColor }};
-        --ccb-cookie-group-text-color: {{ "#" ~ settings.cookieGroupTextColor }};
-
-        --ccb-cookie-group-link-color: {{ "#" ~ settings.cookieGroupLinkColor }};
-        --ccb-cookie-group-link-hover-color: {{ "#" ~ settings.cookieGroupLinkHoverColor }};
-        --ccb-cookie-group-background: {{ "#" ~ settings.cookieGroupBackground }};
-        --ccb-cookie-group-border-thickness: {{ settings.cookieGroupBorderThickness ~ "px" }};
-        --ccb-cookie-group-border-color: {{ "#" ~ settings.cookieGroupBorderColor }};
-        --ccb-cookie-group-border-radius: {{ bannerElementBorderRadiusOptions[settings.bannerStyle] }};
-        --ccb-cookie-group-hover-background: {{ "#" ~ settings.cookieGroupHoverBackground }};
-        --ccb-cookie-group-hover-border-color: {{ "#" ~ settings.cookieGroupHoverBorderColor }};
-
-        --ccb-cookie-table-title-color: {{ "#" ~ settings.cookieTableTitleColor }};
-        --ccb-cookie-table-text-color: {{ "#" ~ settings.cookieTableTextColor }};
-        --ccb-cookie-table-background: {{ "#" ~ settings.cookieTableBackground }};
-        --ccb-cookie-table-border-thickness: {{ settings.cookieTableBorderThickness ~ "px" }};
-        --ccb-cookie-table-border-color: {{ "#" ~ settings.cookieTableBorderColor }};
-        --ccb-cookie-table-border-radius: {{ bannerElementBorderRadiusOptions[settings.bannerStyle] }};
-    }
-</style>

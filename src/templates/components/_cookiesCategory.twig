@@ -4,7 +4,7 @@
 {% set title = title|default("") %}
 {% set description = description|default("") %}
 {% set cookies = cookies|default([]) %}
-{% set groups = banner.cookieGroups|merge([{
+{% set groups = content.cookieGroups|merge([{
     "name": "Default",
     "description": "",
     "url": "",
@@ -35,7 +35,7 @@
         <div class="ccb-cookies-category-content-inner">
             <p class="ccb-typo-body-sm">{{ description }}</p>
 
-            {% if cookies|length and settings.showCookieTables %}
+            {% if cookies|length and appearance.showCookieTables %}
                 <ul class="ccb-cookies-category-groups-list">
                     {% for group in groupedCookies %}
                         {% set name = group.name|default("") %}
