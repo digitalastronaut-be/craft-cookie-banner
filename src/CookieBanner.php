@@ -14,16 +14,8 @@ use digitalastronaut\craftcookiebanner\services\ServicesTrait;
 // TODO: Enabled switches row laten disabelen als ze uit staan CSS bestaat al en heeft gewerkt weet niet waarom nu niet meer
 // TODO: Figure out hoe we consent records kunnen deleten zonder elke site/cp request cleanup te triggeren zonder persee een cron job... (BASE)
 // TODO: Styling en templates mooier opsplitsen (BASE) 
-// TODO: test creating sites and deleting sites since event refactoring couldn't at the time (BASE)
 // TODO: rename cookieGroups to vendors
-// TODO: overview maken van consent records stats (bar chart) en cookies (circle diagram)
 // TODO: JS translatinos for chip component
-// TODO: change banner and settings in banner.twig to content and appearance
-
-/**
- * Punten om te vragen aan Mitchel
- * Language switcher selected sites en crumbs lijkt echt bulky 
- */
 
 /**
  * Cookie banner plugin
