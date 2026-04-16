@@ -18,11 +18,11 @@ class CookieBanner extends HTMLElement {
 		this.consentCheckboxElements = [];
 
 		this.consent = {
-			essentialCookies: true,
-			functionalCookies: false,
+			necessaryCookies: true,
+			preferenceCookies: false,
 			analyticalCookies: false,
-			advertisementCookies: false,
-			personalizationCookies: false,
+			marketingCookies: false,
+			uncategorizedCookies: false,
 		};
 	}
 
@@ -65,11 +65,11 @@ class CookieBanner extends HTMLElement {
 
 	acceptAll() {
 		this.consent = {
-			essentialCookies: true,
-			functionalCookies: true,
+			necessaryCookies: true,
+			preferenceCookies: true,
 			analyticalCookies: true,
-			advertisementCookies: true,
-			personalizationCookies: true,
+			marketingCookies: true,
+			uncategorizedCookies: true,
 		};
 
 		this.hideBanner();
@@ -100,11 +100,11 @@ class CookieBanner extends HTMLElement {
 
 	refuseAll() {
 		this.consent = {
-			essentialCookies: true,
-			functionalCookies: false,
+			necessaryCookies: true,
+			preferenceCookies: false,
 			analyticalCookies: false,
-			advertisementCookies: false,
-			personalizationCookies: false,
+			marketingCookies: false,
+			uncategorizedCookies: false,
 		};
 
 		this.hideBanner();

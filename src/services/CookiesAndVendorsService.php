@@ -122,10 +122,13 @@ class CookiesAndVendorsService extends Component {
                 if (!$cookie['name']) {
                     throw new BadRequestHttpException("Cookie name attribute missing for " . $site->name);
                 }
-                    
-                if (array_column($this->getAllCookies(), null, "name")[$cookie['name']]) {
-                    throw new Exception("Cookie name {$cookie['name']} Already exists");
-                };
+                
+                // TODO: fix check for duplicates
+                // $existingCookies = array_column($this->getAllCookies(), null, 'name');
+
+                // if (isset($existingCookies[$cookie['name']])) {
+                //     throw new Exception("Cookie name '{$cookie['name']}' already exists.");
+                // }
                 
                 $content = Content::find()->where(['siteId' => $site->id])->one();
 

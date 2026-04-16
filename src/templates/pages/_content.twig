@@ -135,7 +135,10 @@
                     label: 'Vendors'|t('cookie-banner'),
                     id: 'vendors',
                     name: 'fields[vendors]',
-                    tip: 'Adding or removing vendors can be done via the [cookies & vendors tab](/cookie-banner/cookies-and-vendors)'|t('cookie-banner'),
+                    tip: 'Adding or removing vendors can be done via the [cookies & vendors tab]({url})'
+                        |t('cookie-banner', {
+                            url: cpUrl('cookie-banner/cookies-and-vendors#vendors')
+                        }),
                     cols: {
                         name: { heading: "Name"|t('cookie-banner'), type: "singleline" },
                         description: { heading: "Description"|t('cookie-banner'), type: "multiline"},
@@ -191,10 +194,13 @@
                     label: 'List'|t('cookie-banner'),
                     id: 'necessaryCookies',
                     name: 'fields[necessaryCookies]',
-                    tip: 'Adding or removing cookies can be done via the [cookies & vendors tab](/cookie-banner/cookies-and-vendors)'|t('cookie-banner'),
+                    tip: 'Adding or removing cookies can be done via the [cookies & vendors tab]({url})'
+                        |t('cookie-banner', {
+                            url: cpUrl('cookie-banner/cookies-and-vendors#cookies')
+                        }),
                     cols: {
                         name: { heading: "Name"|t('cookie-banner'), type: "singleline" },
-                        group: { heading: "Vendor"|t('cookie-banner'), type: "select", options: vendors },
+                        vendor: { heading: "Vendor"|t('cookie-banner'), type: "select", options: vendors },
                         purpose: { heading: "Purpose"|t('cookie-banner'), type: "multiline" },
                         expiration: { heading: "Expiration"|t('cookie-banner'), type: "singleline" },
                         enabled: { heading: "Enabled"|t('cookie-banner'), type: "lightswitch" },
@@ -248,10 +254,13 @@
                     label: 'List'|t('cookie-banner'),
                     id: 'preferenceCookies',
                     name: 'fields[preferenceCookies]',
-                    tip: 'Adding or removing cookies can be done via the [cookies & vendors tab](/cookie-banner/cookies-and-vendors)'|t('cookie-banner'),
+                    tip: 'Adding or removing cookies can be done via the [cookies & vendors tab]({url})'
+                        |t('cookie-banner', {
+                            url: cpUrl('cookie-banner/cookies-and-vendors#cookies')
+                        }),
                     cols: {
                         name: { heading: "Name"|t('cookie-banner'), type: "singleline" },
-                        group: { heading: "Vendor"|t('cookie-banner'), type: "select", options: vendors },
+                        vendor: { heading: "Vendor"|t('cookie-banner'), type: "select", options: vendors },
                         purpose: { heading: "Purpose"|t('cookie-banner'), type: "multiline" },
                         expiration: { heading: "Expiration"|t('cookie-banner'), type: "singleline" },
                         enabled: { heading: "Enabled"|t('cookie-banner'), type: "lightswitch" },
@@ -305,10 +314,13 @@
                     label: 'List'|t('cookie-banner'),
                     id: 'analyticalCookies',
                     name: 'fields[analyticalCookies]',
-                    tip: 'Adding or removing cookies can be done via the [cookies & vendors tab](/cookie-banner/cookies-and-vendors)'|t('cookie-banner'),
+                    tip: 'Adding or removing cookies can be done via the [cookies & vendors tab]({url})'
+                        |t('cookie-banner', {
+                            url: cpUrl('cookie-banner/cookies-and-vendors#cookies')
+                        }),
                     cols: {
                         name: { heading: "Name"|t('cookie-banner'), type: "singleline" },
-                        group: { heading: "Vendor"|t('cookie-banner'), type: "select", options: vendors },
+                        vendor: { heading: "Vendor"|t('cookie-banner'), type: "select", options: vendors },
                         purpose: { heading: "Purpose"|t('cookie-banner'), type: "multiline" },
                         expiration: { heading: "Expiration"|t('cookie-banner'), type: "singleline" },
                         enabled: { heading: "Enabled"|t('cookie-banner'), type: "lightswitch" },
@@ -362,10 +374,13 @@
                     label: 'List'|t('cookie-banner'),
                     id: 'marketingCookies',
                     name: 'fields[marketingCookies]',
-                    tip: 'Adding or removing cookies can be done via the [cookies & vendors tab](/cookie-banner/cookies-and-vendors)'|t('cookie-banner'),
+                    tip: 'Adding or removing cookies can be done via the [cookies & vendors tab]({url})'
+                        |t('cookie-banner', {
+                            url: cpUrl('cookie-banner/cookies-and-vendors#cookies')
+                        }),
                     cols: {
                         name: { heading: "Name"|t('cookie-banner'), type: "singleline" },
-                        group: { heading: "Vendor"|t('cookie-banner'), type: "select", options: vendors },
+                        vendor: { heading: "Vendor"|t('cookie-banner'), type: "select", options: vendors },
                         purpose: { heading: "Purpose"|t('cookie-banner'), type: "multiline" },
                         expiration: { heading: "Expiration"|t('cookie-banner'), type: "singleline" },
                         enabled: { heading: "Enabled"|t('cookie-banner'), type: "lightswitch" },
@@ -419,10 +434,13 @@
                     label: 'List'|t('cookie-banner'),
                     id: 'uncategorizedCookies',
                     name: 'fields[uncategorizedCookies]',
-                    tip: 'Adding or removing cookies can be done via the [cookies & vendors tab](/cookie-banner/cookies-and-vendors)'|t('cookie-banner'),
+                    tip: 'Adding or removing cookies can be done via the [cookies & vendors tab]({url})'
+                        |t('cookie-banner', {
+                            url: cpUrl('cookie-banner/cookies-and-vendors#cookies')
+                        }),
                     cols: {
                         name: { heading: "Name"|t('cookie-banner'), type: "singleline" },
-                        group: { heading: "Vendor"|t('cookie-banner'), type: "select", options: vendors },
+                        vendor: { heading: "Vendor"|t('cookie-banner'), type: "select", options: vendors },
                         purpose: { heading: "Purpose"|t('cookie-banner'), type: "multiline" },
                         expiration: { heading: "Expiration"|t('cookie-banner'), type: "singleline" },
                         enabled: { heading: "Enabled"|t('cookie-banner'), type: "lightswitch" },

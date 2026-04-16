@@ -56,23 +56,27 @@ class ConsentRecordsService extends Component {
     public function getCategorizedConsentRecordStats(): array {
         $consentRecordsCount = ConsentRecord::find()->count();
 
-        $acceptedEssentialCookiesCount = ConsentRecord::find()->where(["essentialCookies" => true])->count(); 
-        $acceptedFunctionalCookiesCount = ConsentRecord::find()->where(["functionalCookies" => true])->count(); 
-        $acceptedAnalyticalCookiesCount = ConsentRecord::find()->where(["analyticalCookies" => true])->count(); 
-        $acceptedAdvertisementCookiesCount = ConsentRecord::find()->where(["advertisementCookies" => true])->count(); 
-        $acceptedPersonalizationCookiesCount = ConsentRecord::find()->where(["personalizationCookies" => true])->count(); 
+        $necessaryCookiesCount = ConsentRecord::find()->where(["necessaryCookies" => true])->count(); 
+        $preferenceCookiesCount = ConsentRecord::find()->where(["preferenceCookies" => true])->count(); 
+        $analyticalCookiesCount = ConsentRecord::find()->where(["analyticalCookies" => true])->count(); 
+        $marketingCookiesCount = ConsentRecord::find()->where(["marketingCookies" => true])->count(); 
+        $uncategorizedCookiesCount = ConsentRecord::find()->where(["uncategorizedCookies" => true])->count(); 
         
         return [
-            "acceptedEssentialCookiesPercentage" => 
-                $acceptedFunctionalCookiesCount != 0 ? round((($acceptedEssentialCookiesCount / $consentRecordsCount) * 100), 1) : 0,
-            "acceptedFunctionalCookiesPercentage" => 
-                $acceptedFunctionalCookiesCount != 0 ? round((($acceptedFunctionalCookiesCount / $consentRecordsCount) * 100), 1) : 0,
-            "acceptedAnalyticsCookiesPercentage" => 
-                $acceptedAnalyticalCookiesCount != 0 ? round((($acceptedAnalyticalCookiesCount / $consentRecordsCount) * 100), 1) : 0,
-            "acceptedAdvertisementCookiesPercentage" => 
-                $acceptedAdvertisementCookiesCount != 0 ? round((($acceptedAdvertisementCookiesCount / $consentRecordsCount) * 100), 1) : 0,
-            "acceptedPersonalizationCookiesPercentage" => 
-                $acceptedPersonalizationCookiesCount != 0 ? round((($acceptedPersonalizationCookiesCount / $consentRecordsCount) * 100), 1) : 0,
+            "acceptedNecessaryCookiesPercentage" => 
+                $consentRecordsCount != 0 ? round((($necessaryCookiesCount / $consentRecordsCount) * 100), 1) : 0,
+
+            "acceptedPreferenceCookiesPercentage" => 
+                $consentRecordsCount != 0 ? round((($preferenceCookiesCount / $consentRecordsCount) * 100), 1) : 0,
+
+            "acceptedAnalyticalCookiesPercentage" => 
+                $consentRecordsCount != 0 ? round((($analyticalCookiesCount / $consentRecordsCount) * 100), 1) : 0,
+
+            "acceptedMarketingCookiesPercentage" => 
+                $consentRecordsCount != 0 ? round((($marketingCookiesCount / $consentRecordsCount) * 100), 1) : 0,
+
+            "acceptedUncategorizedCookiesPercentage" => 
+                $consentRecordsCount != 0 ? round((($uncategorizedCookiesCount / $consentRecordsCount) * 100), 1) : 0,
         ];
     }
 
@@ -98,11 +102,11 @@ class ConsentRecordsService extends Component {
                 'count' => new Expression('COUNT(*)'),
                 'accepted' => new Expression("
                     SUM(
-                        cr.essentialCookies = 1 AND
-                        cr.functionalCookies = 1 AND
+                        cr.necessaryCookies = 1 AND
+                        cr.preferenceCookies = 1 AND
                         cr.analyticalCookies = 1 AND
-                        cr.advertisementCookies = 1 AND
-                        cr.personalizationCookies = 1
+                        cr.marketingCookies = 1 AND
+                        cr.uncategorizedCookies = 1
                     )
                 "),
             ])

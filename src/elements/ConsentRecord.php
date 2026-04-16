@@ -27,11 +27,11 @@ class ConsentRecord extends Element {
     public ?string $language = null;
     public ?DateTime $consentTimestamp = null;
     public ?string $consentAction = null;
-    public ?bool $essentialCookies = null;
-    public ?bool $functionalCookies = null;
+    public ?bool $necessaryCookies = null;
+    public ?bool $preferenceCookies = null;
     public ?bool $analyticalCookies = null;
-    public ?bool $advertisementCookies = null;
-    public ?bool $personalizationCookies = null;
+    public ?bool $marketingCookies = null;
+    public ?bool $uncategorizedCookies = null;
     public ?string $consentMethod = null;
     public ?string $bannerVersion = null;
     public ?string $privacyPolicyVersion = null;
@@ -149,11 +149,11 @@ class ConsentRecord extends Element {
             'consentTimestamp' => ['label' => 'Timestamp'],
             'consentAction' => ['label' => 'Action'],
             'consentMethod' => ['label' => 'Method'],
-            'essentialCookies' => ['label' => 'Necessary'],
-            'functionalCookies' => ['label' => 'Preference'],
+            'necessaryCookies' => ['label' => 'Necessary'],
+            'preferenceCookies' => ['label' => 'Preference'],
             'analyticalCookies' => ['label' => 'Analytical'],
-            'advertisementCookies' => ['label' => 'Marketing'],
-            'personalizationCookies' => ['label' => 'Uncategorized'],
+            'marketingCookies' => ['label' => 'Marketing'],
+            'uncategorizedCookies' => ['label' => 'Uncategorized'],
             'bannerVersion' => ['label' => 'Banner Version'],
             'privacyPolicyVersion' => ['label' => 'Privacy Policy Version'],
             'cookiePolicyVersion' => ['label' => 'Cookie Policy Version'],
@@ -163,11 +163,11 @@ class ConsentRecord extends Element {
     protected static function defineDefaultTableAttributes(string $source): array {
         return [
             'consentTimestamp', 
-            'essentialCookies', 
-            'functionalCookies', 
+            'necessaryCookies', 
+            'preferenceCookies', 
             'analyticalCookies', 
-            'advertisementCookies', 
-            'personalizationCookies'
+            'marketingCookies', 
+            'uncategorizedCookies'
         ];
     }
 
@@ -192,11 +192,11 @@ class ConsentRecord extends Element {
             ],
             [
                 [
-                    'essentialCookies', 
-                    'functionalCookies', 
+                    'necessaryCookies', 
+                    'preferenceCookies', 
                     'analyticalCookies', 
-                    'advertisementCookies', 
-                    'personalizationCookies'
+                    'marketingCookies', 
+                    'uncategorizedCookies'
                 ], 
                 'boolean'
             ],
@@ -264,11 +264,11 @@ class ConsentRecord extends Element {
                 'consentTimestamp' => Db::prepareDateForDb($this->consentTimestamp),
                 'consentAction' => $this->consentAction,
                 'consentMethod' => $this->consentMethod,
-                'essentialCookies' => $this->essentialCookies,
-                'functionalCookies' => $this->functionalCookies,
+                'necessaryCookies' => $this->necessaryCookies,
+                'preferenceCookies' => $this->preferenceCookies,
                 'analyticalCookies' => $this->analyticalCookies,
-                'advertisementCookies' => $this->advertisementCookies,
-                'personalizationCookies' => $this->personalizationCookies,
+                'marketingCookies' => $this->marketingCookies,
+                'uncategorizedCookies' => $this->uncategorizedCookies,
                 'bannerVersion' => $this->bannerVersion,
                 'privacyPolicyVersion' => $this->privacyPolicyVersion,
                 'cookiePolicyVersion' => $this->cookiePolicyVersion,
@@ -279,11 +279,11 @@ class ConsentRecord extends Element {
                 'language' => $this->language,
                 'consentTimestamp' => Db::prepareDateForDb($this->consentTimestamp),
                 'consentAction' => $this->consentAction,
-                'essentialCookies' => $this->essentialCookies,
-                'functionalCookies' => $this->functionalCookies,
+                'necessaryCookies' => $this->necessaryCookies,
+                'preferenceCookies' => $this->preferenceCookies,
                 'analyticalCookies' => $this->analyticalCookies,
-                'advertisementCookies' => $this->advertisementCookies,
-                'personalizationCookies' => $this->personalizationCookies,
+                'marketingCookies' => $this->marketingCookies,
+                'uncategorizedCookies' => $this->uncategorizedCookies,
                 'consentMethod' => $this->consentMethod,
                 'bannerVersion' => $this->bannerVersion,
                 'privacyPolicyVersion' => $this->privacyPolicyVersion,

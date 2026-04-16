@@ -39,11 +39,11 @@ class Install extends Migration {
             'consentAction' => $this->enum('consentAction', ['Accept all', 'Accept selected', 'Refuse all'])->null(),
             'consentMethod' => $this->string(255)->notNull(),
             
-            'essentialCookies' => $this->boolean()->null(),
-            'functionalCookies' => $this->boolean()->null(),
+            'necessaryCookies' => $this->boolean()->null(),
+            'preferenceCookies' => $this->boolean()->null(),
             'analyticalCookies' => $this->boolean()->null(),
-            'advertisementCookies' => $this->boolean()->null(),
-            'personalizationCookies' => $this->boolean()->null(),
+            'marketingCookies' => $this->boolean()->null(),
+            'uncategorizedCookies' => $this->boolean()->null(),
 
             'bannerVersion' => $this->string(50)->null(),
             'privacyPolicyVersion' => $this->string(50)->null(),

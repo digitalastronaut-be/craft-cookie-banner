@@ -19,11 +19,11 @@ class ConsentRecordQuery extends ElementQuery {
     public mixed $consentTimestamp = null;
     public mixed $consentAction = null;
     public mixed $consentMethod = null;
-    public ?bool $essentialCookies = null;
-    public ?bool $functionalCookies = null;
+    public ?bool $necessaryCookies = null;
+    public ?bool $preferenceCookies = null;
     public ?bool $analyticalCookies = null;
-    public ?bool $advertisementCookies = null;
-    public ?bool $personalizationCookies = null;
+    public ?bool $marketingCookies = null;
+    public ?bool $uncategorizedCookies = null;
     public mixed $bannerVersion = null;
     public mixed $privacyPolicyVersion = null;
     public mixed $cookiePolicyVersion = null;
@@ -63,11 +63,11 @@ class ConsentRecordQuery extends ElementQuery {
             'cookie_banner_consent_records.language',
             'cookie_banner_consent_records.consentTimestamp',
             'cookie_banner_consent_records.consentAction',
-            'cookie_banner_consent_records.essentialCookies',
-            'cookie_banner_consent_records.functionalCookies',
+            'cookie_banner_consent_records.necessaryCookies',
+            'cookie_banner_consent_records.preferenceCookies',
             'cookie_banner_consent_records.analyticalCookies',
-            'cookie_banner_consent_records.advertisementCookies',
-            'cookie_banner_consent_records.personalizationCookies',
+            'cookie_banner_consent_records.marketingCookies',
+            'cookie_banner_consent_records.uncategorizedCookies',
             'cookie_banner_consent_records.consentMethod',
             'cookie_banner_consent_records.bannerVersion',
             'cookie_banner_consent_records.privacyPolicyVersion',

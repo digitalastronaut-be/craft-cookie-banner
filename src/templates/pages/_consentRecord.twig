@@ -28,10 +28,10 @@
                 <td class="ccb-semi-bold">{{ "Necessary"|t("cookie-banner") }}</td>
                 <td><span class="status-chip granted">{{ "granted"|t("cookie-banner") }}</span></td>
                 {% for consentRecord in recentConsentRecords %}
-                    {% set essentialCookiesConsent = consentRecord.essentialCookies ? 'granted' : 'denied' %}
-                    <td><span class="status-chip {{ essentialCookiesConsent }}">{{ essentialCookiesConsent }}</span></td>
+                    {% set necessaryCookiesConsent = consentRecord.necessaryCookies ? 'granted' : 'denied' %}
+                    <td><span class="status-chip {{ necessaryCookiesConsent }}">{{ necessaryCookiesConsent }}</span></td>
                     {% if loop.last %}
-                        <td><span class="status-chip {{ essentialCookiesConsent }}">{{ essentialCookiesConsent }}</span></td>
+                        <td><span class="status-chip {{ necessaryCookiesConsent }}">{{ necessaryCookiesConsent }}</span></td>
                     {% endif %}
                 {% endfor %}
             </tr>
@@ -39,10 +39,10 @@
                 <td class="ccb-semi-bold">{{ "Preference"|t("cookie-banner") }}</td>
                 <td><span class="status-chip denied">{{ "denied"|t("cookie-banner") }}</span></td>
                 {% for consentRecord in recentConsentRecords %}
-                    {% set functionalCookiesConsent = consentRecord.functionalCookies ? 'granted' : 'denied' %}
-                    <td><span class="status-chip {{ functionalCookiesConsent }}">{{ functionalCookiesConsent }}</span></td>
+                    {% set preferenceCookiesConsent = consentRecord.preferenceCookies ? 'granted' : 'denied' %}
+                    <td><span class="status-chip {{ preferenceCookiesConsent }}">{{ preferenceCookiesConsent }}</span></td>
                     {% if loop.last %}
-                        <td><span class="status-chip {{ functionalCookiesConsent }}">{{ functionalCookiesConsent }}</span></td>
+                        <td><span class="status-chip {{ preferenceCookiesConsent }}">{{ preferenceCookiesConsent }}</span></td>
                     {% endif %}
                 {% endfor %}
             </tr>
@@ -61,10 +61,10 @@
                 <td class="ccb-semi-bold">{{ "Marketing"|t("cookie-banner") }}</td>
                 <td><span class="status-chip denied">{{ "denied"|t("cookie-banner") }}</span></td>
                 {% for consentRecord in recentConsentRecords %}
-                    {% set advertisementCookiesConsent = consentRecord.advertisementCookies ? 'granted' : 'denied' %}
-                    <td><span class="status-chip {{ advertisementCookiesConsent }}">{{ advertisementCookiesConsent }}</span></td>
+                    {% set marketingCookiesConsent = consentRecord.marketingCookies ? 'granted' : 'denied' %}
+                    <td><span class="status-chip {{ marketingCookiesConsent }}">{{ marketingCookiesConsent }}</span></td>
                     {% if loop.last %}
-                        <td><span class="status-chip {{ advertisementCookiesConsent }}">{{ advertisementCookiesConsent }}</span></td>
+                        <td><span class="status-chip {{ marketingCookiesConsent }}">{{ marketingCookiesConsent }}</span></td>
                     {% endif %}
                 {% endfor %}
             </tr>
@@ -72,10 +72,10 @@
                 <td class="ccb-semi-bold">{{ "Uncategorized"|t("cookie-banner") }}</td>
                 <td><span class="status-chip denied">{{ "denied"|t("cookie-banner") }}</span></td>
                 {% for consentRecord in recentConsentRecords %}
-                    {% set personalizationCookiesConsent = consentRecord.personalizationCookies ? 'granted' : 'denied' %}
-                    <td><span class="status-chip {{ personalizationCookiesConsent }}">{{ personalizationCookiesConsent }}</span></td>
+                    {% set uncategorizedCookiesConsent = consentRecord.uncategorizedCookies ? 'granted' : 'denied' %}
+                    <td><span class="status-chip {{ uncategorizedCookiesConsent }}">{{ uncategorizedCookiesConsent }}</span></td>
                     {% if loop.last %}
-                        <td><span class="status-chip {{ personalizationCookiesConsent }}">{{ personalizationCookiesConsent }}</span></td>
+                        <td><span class="status-chip {{ uncategorizedCookiesConsent }}">{{ uncategorizedCookiesConsent }}</span></td>
                     {% endif %}
                 {% endfor %}
             </tr>
@@ -91,7 +91,6 @@
     <p><strong>{{ 'User Agent'|t('cookie-banner') }}:</strong> {{ element.userAgent }}</p>
     <p><strong>{{ 'Language'|t('cookie-banner') }}:</strong> {{ element.language }}</p>
     <p><strong>{{ 'Consent Timestamp'|t('cookie-banner') }}:</strong> {{ element.consentTimestamp ? element.consentTimestamp|date("d F Y H:i") }}</p>
-    <p><strong>{{ 'Consent Expiry'|t('cookie-banner') }}:</strong> {{ element.consentExpiry ? element.consentExpiry|date("d F Y H:i") }}</p>
     <p><strong>{{ 'Consent Action'|t('cookie-banner') }}:</strong> {{ element.consentAction }}</p>
     <p><strong>{{ 'Consent Method'|t('cookie-banner') }}:</strong> {{ element.consentMethod }}</p>
 

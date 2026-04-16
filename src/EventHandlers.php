@@ -3,7 +3,6 @@
 namespace digitalastronaut\craftcookiebanner;
 
 use Craft;
-
 use craft\events\DefineBehaviorsEvent;
 use craft\events\RegisterComponentTypesEvent;
 use craft\events\RegisterTemplateRootsEvent;
@@ -20,6 +19,8 @@ use craft\web\twig\variables\CraftVariable;
 use craft\web\UrlManager;
 use craft\web\View;
 
+use yii\base\Event;
+
 use digitalastronaut\craftcookiebanner\CookieBanner as CookieBannerPlugin;
 use digitalastronaut\craftcookiebanner\elements\ConsentRecord;
 use digitalastronaut\craftcookiebanner\records\Appearance;
@@ -27,8 +28,6 @@ use digitalastronaut\craftcookiebanner\records\Content;
 use digitalastronaut\craftcookiebanner\variables\CookieBannerVariable;
 use digitalastronaut\craftcookiebanner\web\assets\CookieBannerAssets;
 use digitalastronaut\craftcookiebanner\web\twig\CookieBannerTwigExtension;
-
-use yii\base\Event;
 
 class EventHandlers {
     public static function register(): void {
@@ -279,7 +278,7 @@ class EventHandlers {
                 ]);
 
                 Craft::$app->getView()->registerHtml($bannerHtml, View::POS_BEGIN);
-                // Craft::$app->getView()->registerHtml($dataLayerScript, View::POS_HEAD);
+                Craft::$app->getView()->registerHtml($dataLayerScript, View::POS_HEAD);
             }
         );
     }
