@@ -5,7 +5,7 @@
 <ul class="group">
     {% for vendor in results %}
         <li>
-            <a class="menu-item" href="{{ url('cookie-banner/cookies-and-vendors/create-vendor?autoFillVendor=' ~ vendor.item.name) }}">
+            <a class="menu-item" href="{{ cpUrl('cookie-banner/cookies-and-vendors/create-vendor?autoFillVendor=' ~ vendor.item.name) }}">
                 <h3>
                     <span>{{ vendor.item.name }}</span> 
                     <span>{{ vendor.item.description|default("")|truncate(40) }}</span>

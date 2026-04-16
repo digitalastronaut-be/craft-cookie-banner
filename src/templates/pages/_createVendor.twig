@@ -102,7 +102,7 @@
             };
 
             const renderVendorSearchResults = async (searchTerm) => {
-                const { content } = await templateRequest(`/admin/cookie-banner/requests/vendorDatabase?searchTerm=${searchTerm}`);
+                const { content } = await templateRequest(`/actions/cookie-banner/cookies-and-vendors/search-vendors?searchTerm=${searchTerm}`);
 
                 vendorSearchResults.innerHTML = content;
             }

@@ -16,6 +16,7 @@ use digitalastronaut\craftcookiebanner\services\ServicesTrait;
 // TODO: Styling en templates mooier opsplitsen (BASE) 
 // TODO: JS translatinos for chip component
 // TODO: improve rules for active records
+// TODO: rename consent record cookie categories
 
 /**
  * Cookie banner plugin

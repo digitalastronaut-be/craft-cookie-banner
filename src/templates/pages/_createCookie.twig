@@ -146,7 +146,7 @@
             };
 
             const renderCookieSearchResults = async (searchTerm) => {
-                const { content } = await templateRequest(`/admin/cookie-banner/requests/cookieDatabase?searchTerm=${searchTerm}`);
+                const { content } = await templateRequest(`/actions/cookie-banner/cookies-and-vendors/search-cookies?searchTerm=${searchTerm}`);
 
                 cookieSearchResults.innerHTML = content;
             }

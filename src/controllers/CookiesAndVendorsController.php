@@ -390,4 +390,20 @@ class CookiesAndVendorsController extends Controller {
 
         return $this->asJson($data);
     }
+
+    public function actionSearchCookies() {
+        $searchTerm = $this->request->getQueryParam("searchTerm");
+
+        return $this->renderTemplate("cookie-banner/requests/_cookieDatabase", [
+            'searchTerm' => $searchTerm,
+        ]);
+    }
+        
+    public function actionSearchVendors() {
+        $searchTerm = $this->request->getQueryParam("searchTerm");
+
+        return $this->renderTemplate("cookie-banner/requests/_vendorDatabase", [
+            'searchTerm' => $searchTerm,
+        ]);
+    }
 }
