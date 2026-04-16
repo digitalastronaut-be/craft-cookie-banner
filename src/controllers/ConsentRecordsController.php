@@ -12,6 +12,7 @@ use digitalastronaut\craftcookiebanner\elements\ConsentRecord;
 use yii\web\BadRequestHttpException;
 
 use DateTime;
+use Throwable;
 
 class ConsentRecordsController extends Controller {
     public $defaultAction = 'index';
@@ -45,39 +46,58 @@ class ConsentRecordsController extends Controller {
 
     public function actionCreate(): Response {
         $settings = CookieBanner::getInstance()->getSettings();
-        $body = $this->request->bodyParams;
-
-        $consentRecord = new ConsentRecord();
-
         $secret = Craft::$app->getConfig()->getGeneral()->securityKey;
-        $ipAddress = $this->request->getHeaders()['x-forwarded-for'] ?? "Unknown";
-        $ipAddressHash = hash_hmac('sha256', $ipAddress, $secret);
-        $shortHash = substr($ipAddressHash, 0, 10);
+        $sessionId = Craft::$app->getSession()->getId();
 
-        $consentRecord->title = "Consent {$shortHash}";
-        $consentRecord->ipAddressHash = $ipAddressHash;
-        $consentRecord->sessionId = Craft::$app->getSession()->getId();
-        $consentRecord->userAgent = $this->request->getHeaders()->get('User-agent') ?? "Unknown";
-        $consentRecord->language = $body['language'];
-        $consentRecord->consentTimestamp = new DateTime();
-        // TODO: remove expiry field as expired records cannot be stored
-        $consentRecord->consentExpiry = (new DateTime())->modify('+12 months');
-        $consentRecord->consentAction = $body['consentAction'];
+        $this->requirePermission("cookie-banner:create-consent-records");
+        $this->requirePostRequest();
 
-        $consentRecord->essentialCookies = $body['consentCategories']['essentialCookies'];
-        $consentRecord->functionalCookies = $body['consentCategories']['functionalCookies'];
-        $consentRecord->analyticalCookies = $body['consentCategories']['analyticalCookies'];
-        $consentRecord->advertisementCookies = $body['consentCategories']['advertisementCookies'];
-        $consentRecord->personalizationCookies = $body['consentCategories']['personalizationCookies'];
+        try {
+            $body = $this->request->bodyParams;
+            $userAgent = $this->request->getHeaders()->get('User-agent') ?? "Unknown";
+            $ipAddress = $this->request->getHeaders()['x-forwarded-for'] ?? "Unknown";
 
-        $consentRecord->consentMethod = 'Cookie banner';
-        $consentRecord->bannerVersion = $settings->cookieBannerVersion;
-        $consentRecord->privacyPolicyVersion = $settings->privacyPolicyVersion;
-        $consentRecord->cookiePolicyVersion = $settings->cookiePolicyVersion;
+            if (
+                !$body['consentAction'] &&
+                !$body['consentCategories'] &&
+                !$body['language']
+            ) throw new BadRequestHttpException('Missing body params');
 
-        $succes = Craft::$app->elements->saveElement($consentRecord);
+            $ipAddressHash = hash_hmac('sha256', $ipAddress, $secret);
+            $shortHash = substr($ipAddressHash, 0, 10);
 
-        return $this->asJson(["succes" => true]);
+            CookieBanner::getInstance()
+                ->getConsentRecords()
+                ->createConsentRecord([
+                    'title' => "Consent {$shortHash}",
+                    'ipAddressHash' => $ipAddressHash,
+                    'sessionId' => $sessionId,
+                    'userAgent' => $userAgent,
+                    'language' => $body['language'],
+                    'consentAction' => $body['consentAction'],
+                    'essentialCookies' => $body['consentCategories']['essentialCookies'],
+                    'functionalCookies' => $body['consentCategories']['functionalCookies'],
+                    'analyticalCookies' => $body['consentCategories']['analyticalCookies'],
+                    'advertisementCookies' => $body['consentCategories']['advertisementCookies'],
+                    'personalizationCookies' => $body['consentCategories']['personalizationCookies'],
+                    'consentTimestamp' => new DateTime(),
+                    'consentMethod' => 'Cookie banner',
+                    'bannerVersion' => $settings->bannerVersion,
+                    'privacyPolicyVersion' => $settings->privacyPolicyVersion,
+                    'cookiePolicyVersion' => $settings->cookiePolicyVersion,
+                ]);
+
+            return $this->asJson(["succes" => true]);
+            
+        } catch(Throwable $error) {
+            Craft::error($error->getMessage(), __METHOD__);
+
+            $this->response->statusCode = 500;
+            return $this->asJson([
+                "succes" => false,
+                "error" => $error->getMessage(),
+            ]);
+        }
     }
 
     public function actionGetChartData(): Response {

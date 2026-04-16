@@ -5,11 +5,14 @@ namespace digitalastronaut\craftcookiebanner\console\controllers;
 use DateTime;
 
 use Craft;
+
 use craft\console\Controller;
+
+use digitalastronaut\craftcookiebanner\CookieBanner;
+use digitalastronaut\craftcookiebanner\helpers\CookieBanner as CookieBannerHelper;
+
 use yii\console\ExitCode;
 use yii\helpers\Console;
-
-use digitalastronaut\craftcookiebanner\elements\ConsentRecord;
 
 class SeedController extends Controller {
     public $defaultAction = 'index';
@@ -18,68 +21,59 @@ class SeedController extends Controller {
         $this->stdout("Use this controller to seed data for cookie banner related tables" . PHP_EOL, Console::FG_CYAN);
     }
 
-    public function actionConsentRecords(
-        int $count = 5,
-        bool $fixedIpAddress = false,
-        string $period = '30 days'
-    ): int {
-        $this->stdout("Preparing fake consent records over period: {$period}..." . PHP_EOL, Console::FG_CYAN);
+public function actionConsentRecords(
+    int $count = 5,
+    bool $fixedIpAddress = false,
+    string $period = '30 days'
+): int {
+    $this->stdout("Preparing fake consent records over period: {$period}..." . PHP_EOL, Console::FG_CYAN);
 
-        $languages = ['en-US', 'de-DE', 'fr-FR', 'es-ES', 'nl-NL'];
-        $userAgents = [
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
-            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)',
-            'Mozilla/5.0 (X11; Linux x86_64)',
-            'Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X)',
-            'Mozilla/5.0 (Android 11; Mobile; rv:90.0)',
-        ];
-        $actions = ['Accept all', 'Accept selected', 'Refuse all'];
+    $languages = ['en-US', 'de-DE', 'fr-FR', 'es-ES', 'nl-NL'];
+    $actions = ['Accept all', 'Accept selected', 'Refuse all'];
+    $userAgents = CookieBannerHelper::EXAMPLE_USER_AGENTS;
 
-        $now = new DateTime();
-        $startDate = (new DateTime())->modify("-{$period}");
+    $now = new DateTime();
+    $startDate = (new DateTime())->modify("-{$period}");
 
-        for ($i = 0; $i < $count; $i++) {
-            $consentRecord = new ConsentRecord();
+    $secret = Craft::$app->getConfig()->getGeneral()->securityKey;
 
-            $fakeIp = rand(1, 255) . '.' . rand(0, 255) . '.' . rand(0, 255) . '.' . rand(0, 255);
-            if ($fixedIpAddress) {
-                $fakeIp = '178.119.216.167';
-            }
+    for ($i = 0; $i < $count; $i++) {
+        $fakeIp = rand(1, 255) . '.' . rand(0, 255) . '.' . rand(0, 255) . '.' . rand(0, 255);
+        if ($fixedIpAddress) $fakeIp = '178.119.216.167';
 
-            $secret = Craft::$app->getConfig()->getGeneral()->securityKey;
-            $ipAddressHash = hash_hmac('sha256', $fakeIp, $secret);
-            $shortHash = substr($ipAddressHash, 0, 10);
+        $ipAddressHash = hash_hmac('sha256', $fakeIp, $secret);
+        $shortHash = substr($ipAddressHash, 0, 10);
 
-            // random timestamp within chosen period
-            $randomTimestamp = mt_rand($startDate->getTimestamp(), $now->getTimestamp());
-            $consentTimestamp = (new DateTime())->setTimestamp($randomTimestamp);
+        $randomTimestamp = mt_rand($startDate->getTimestamp(), $now->getTimestamp());
+        $consentTimestamp = (new DateTime())->setTimestamp($randomTimestamp);
 
-            $consentRecord->title = "Consent {$shortHash}";
-            $consentRecord->ipAddressHash = $ipAddressHash;
-            $consentRecord->sessionId = uniqid("", true);
-            $consentRecord->userAgent = $userAgents[array_rand($userAgents)];
-            $consentRecord->language = $languages[array_rand($languages)];
-            $consentRecord->consentTimestamp = $consentTimestamp;
-            $consentRecord->consentExpiry = (clone $consentTimestamp)->modify('+12 months');
-            $consentRecord->consentAction = $actions[array_rand($actions)];
-            $consentRecord->essentialCookies = true;
-            $consentRecord->functionalCookies = (bool)rand(0, 1);
-            $consentRecord->analyticalCookies = (bool)rand(0, 1);
-            $consentRecord->advertisementCookies = (bool)rand(0, 1);
-            $consentRecord->personalizationCookies = (bool)rand(0, 1);
-            $consentRecord->consentMethod = 'Seeder script';
-            $consentRecord->bannerVersion = 'v' . rand(1, 2) . '.' . rand(0, 9) . '.' . rand(0, 99);
-            $consentRecord->privacyPolicyVersion = 'v' . rand(1, 3) . '.' . rand(0, 20) . '.' . rand(0, 99);
-            $consentRecord->cookiePolicyVersion = 'v' . rand(1, 2) . '.' . rand(0, 15) . '.' . rand(0, 99);
+        CookieBanner::getInstance()
+            ->getConsentRecords()
+            ->createConsentRecord([
+                'title' => "Consent {$shortHash}",
+                'ipAddressHash' => $ipAddressHash,
+                'sessionId' => uniqid("", true),
+                'userAgent' => $userAgents[array_rand($userAgents)],
+                'language' => $languages[array_rand($languages)],
+                'consentTimestamp' => $consentTimestamp,
+                'consentAction' => $actions[array_rand($actions)],
+                'essentialCookies' => true,
+                'functionalCookies' => (bool)rand(0, 1),
+                'analyticalCookies' => (bool)rand(0, 1),
+                'advertisementCookies' => (bool)rand(0, 1),
+                'personalizationCookies' => (bool)rand(0, 1),
+                'consentMethod' => 'Seeder script',
+                'bannerVersion' => 'v' . rand(1, 2) . '.' . rand(0, 9) . '.' . rand(0, 99),
+                'privacyPolicyVersion' => 'v' . rand(1, 3) . '.' . rand(0, 20) . '.' . rand(0, 99),
+                'cookiePolicyVersion' => 'v' . rand(1, 2) . '.' . rand(0, 15) . '.' . rand(0, 99),
+            ]);
 
-            Craft::$app->elements->saveElement($consentRecord);
-
-            $progress = intval((($i + 1) / $count) * 100);
-            $this->stdout("\rInserting: {$progress}% (" . ($i + 1) . "/{$count})");
-        }
-
-        $this->stdout(PHP_EOL . "Done seeding {$count} fake consent-record(s)." . PHP_EOL, Console::FG_GREEN);
-
-        return ExitCode::OK;
+        $progress = intval((($i + 1) / $count) * 100);
+        $this->stdout("\rInserting: {$progress}% (" . ($i + 1) . "/{$count})");
     }
+
+    $this->stdout(PHP_EOL . "Done seeding {$count} fake consent-record(s)." . PHP_EOL, Console::FG_GREEN);
+
+    return ExitCode::OK;
+}
 }

@@ -26,7 +26,6 @@ class ConsentRecord extends Element {
     public ?string $userAgent = null;
     public ?string $language = null;
     public ?DateTime $consentTimestamp = null;
-    public ?DateTime $consentExpiry = null;
     public ?string $consentAction = null;
     public ?bool $essentialCookies = null;
     public ?bool $functionalCookies = null;
@@ -53,14 +52,7 @@ class ConsentRecord extends Element {
     public static function statuses(): array {
         return [
             'valid' => ['label' => 'Valid', 'color' => Color::Teal],
-            'expired' => ['label' => 'Expired', 'color' => Color::Red],
         ];
-    }
-
-    public function getStatus(): ?string {
-        if (new DateTime() < $this->consentExpiry) return 'valid';
-
-        return 'expired';
     }
 
     public static function find(): ElementQueryInterface {
@@ -141,7 +133,10 @@ class ConsentRecord extends Element {
     }
 
     protected static function defineSortOptions(): array {
-        return ['title' => Craft::t('app', 'Title')];
+        return [
+            'title' => Craft::t('app', 'Title'),
+            'consentTimestamp' => Craft::t('app', 'Title')
+        ];
     }
 
     protected static function defineTableAttributes(): array {
@@ -152,7 +147,6 @@ class ConsentRecord extends Element {
             'userAgent' => ['label' => 'User Agent'],
             'language' => ['label' => 'Language'],
             'consentTimestamp' => ['label' => 'Timestamp'],
-            'consentExpiry' => ['label' => 'Expiry'],
             'consentAction' => ['label' => 'Action'],
             'consentMethod' => ['label' => 'Method'],
             'essentialCookies' => ['label' => 'Necessary'],
@@ -168,7 +162,6 @@ class ConsentRecord extends Element {
 
     protected static function defineDefaultTableAttributes(string $source): array {
         return [
-            'status',
             'consentTimestamp', 
             'essentialCookies', 
             'functionalCookies', 
@@ -269,7 +262,6 @@ class ConsentRecord extends Element {
                 'userAgent' => $this->userAgent,
                 'language' => $this->language,
                 'consentTimestamp' => Db::prepareDateForDb($this->consentTimestamp),
-                'consentExpiry' => Db::prepareDateForDb($this->consentExpiry),
                 'consentAction' => $this->consentAction,
                 'consentMethod' => $this->consentMethod,
                 'essentialCookies' => $this->essentialCookies,
@@ -286,7 +278,6 @@ class ConsentRecord extends Element {
                 'userAgent' => $this->userAgent,
                 'language' => $this->language,
                 'consentTimestamp' => Db::prepareDateForDb($this->consentTimestamp),
-                'consentExpiry' => Db::prepareDateForDb($this->consentExpiry),
                 'consentAction' => $this->consentAction,
                 'essentialCookies' => $this->essentialCookies,
                 'functionalCookies' => $this->functionalCookies,

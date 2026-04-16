@@ -17,7 +17,6 @@ class ConsentRecordQuery extends ElementQuery {
     public mixed $userAgent = null;
     public mixed $language = null;
     public mixed $consentTimestamp = null;
-    public mixed $consentExpiry = null;
     public mixed $consentAction = null;
     public mixed $consentMethod = null;
     public ?bool $essentialCookies = null;
@@ -30,27 +29,11 @@ class ConsentRecordQuery extends ElementQuery {
     public mixed $cookiePolicyVersion = null;
 
     public array|string|null $status = null;
-    public ?bool $isExpired = null;
     public ?string $consentTimestampFrom = null;
     public ?string $consentTimestampTo = null;
 
     public function ipAddressHash(string $value): static {
         $this->ipAddressHash = $value;
-        return $this;
-    }
-
-    public function isExpired(?bool $value): static {
-        $this->isExpired = $value;
-        return $this;
-    }
-
-    public function valid(): static {
-        $this->isExpired = false;
-        return $this;
-    }
-
-    public function expired(): static {
-        $this->isExpired = true;
         return $this;
     }
 
@@ -63,9 +46,7 @@ class ConsentRecordQuery extends ElementQuery {
     protected function statusCondition(string $status): mixed {
         switch ($status) {
             case 'valid':
-                return ['>=', 'cookie_banner_consent_records.consentExpiry', Db::prepareDateForDb(new \DateTime())];
-            case 'expired':
-                return ['<', 'cookie_banner_consent_records.consentExpiry', Db::prepareDateForDb(new \DateTime())];
+                return true;
             default:
                 return parent::statusCondition($status);
         }
@@ -81,7 +62,6 @@ class ConsentRecordQuery extends ElementQuery {
             'cookie_banner_consent_records.userAgent',
             'cookie_banner_consent_records.language',
             'cookie_banner_consent_records.consentTimestamp',
-            'cookie_banner_consent_records.consentExpiry',
             'cookie_banner_consent_records.consentAction',
             'cookie_banner_consent_records.essentialCookies',
             'cookie_banner_consent_records.functionalCookies',
@@ -96,11 +76,6 @@ class ConsentRecordQuery extends ElementQuery {
 
         if ($this->ipAddressHash !== null) {
             $this->subQuery->andWhere(Db::parseParam('cookie_banner_consent_records.ipAddressHash', $this->ipAddressHash));
-        }
-
-        if ($this->isExpired !== null) {
-            if ($this->isExpired) $this->subQuery->andWhere(['<', 'cookie_banner_consent_records.consentExpiry', Db::prepareDateForDb(new \DateTime())]);
-            if (!$this->isExpired) $this->subQuery->andWhere(['>=', 'cookie_banner_consent_records.consentExpiry', Db::prepareDateForDb(new \DateTime())]);
         }
 
         if ($this->consentTimestampFrom !== null && $this->consentTimestampTo !== null) {

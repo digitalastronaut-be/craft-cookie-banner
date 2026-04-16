@@ -800,6 +800,7 @@ var CookieBanner = /*#__PURE__*/function (_HTMLElement) {
               return response.json();
             case 2:
               data = _context.v;
+              console.log(data);
             case 3:
               return _context.a(2);
           }

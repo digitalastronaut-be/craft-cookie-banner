@@ -135,6 +135,7 @@ class CookieBanner extends HTMLElement {
 		});
 
 		const data = await response.json();
+		console.log(data);
 	}
 
 	dispatchConsentUpdate() {

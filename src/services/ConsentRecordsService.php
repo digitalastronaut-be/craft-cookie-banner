@@ -33,8 +33,20 @@ class ConsentRecordsService extends Component {
         }
     }
 
-    public function createConsentRecord($consentRecord) {
+    public function createConsentRecord(array $data) {
         try {
+            $consentRecord = new ConsentRecord();
+
+            foreach ($data as $key => $value) {
+                $consentRecord->$key = $value;
+            }
+
+            if (!Craft::$app->elements->saveElement($consentRecord)) {
+                throw new Exception(sprintf(
+                    'Failed the create consent record',
+                    json_encode($consentRecord->getErrors())
+                ));
+            }
             
         } catch (Exception $error) {
             throw $error;

@@ -10,7 +10,7 @@ use craft\base\Model;
  */
 class Settings extends Model {
     public bool $cookieBannerEnabled = true;
-    public string $cookieBannerVersion = 'v1.0.0';
+    public string $bannerVersion = 'v1.0.0';
     public string $privacyPolicyVersion = 'v1.0.0';
     public string $cookiePolicyVersion = 'v1.0.0';
     public string $consentRecordRetention = 'sixMonths';
