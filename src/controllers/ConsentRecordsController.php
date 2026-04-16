@@ -49,7 +49,6 @@ class ConsentRecordsController extends Controller {
         $secret = Craft::$app->getConfig()->getGeneral()->securityKey;
         $sessionId = Craft::$app->getSession()->getId();
 
-        $this->requirePermission("cookie-banner:create-consent-records");
         $this->requirePostRequest();
 
         try {
