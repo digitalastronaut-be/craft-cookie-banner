@@ -24,7 +24,7 @@ class AppearanceController extends Controller {
         $currentSiteId = Craft::$app->getSites()->getSiteByHandle($this->request->queryParams['site'] ?? Craft::$app->sites->primarySite->handle)->id;
         $appearance = Appearance::find()->where(['siteId' => $currentSiteId])->one();
 
-        return $this->renderTemplate("cookie-banner/_appearance", [
+        return $this->renderTemplate("cookie-banner/pages/_appearance", [
             'appearance' => $appearance,
         ]);
     }

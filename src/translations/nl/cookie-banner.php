@@ -190,6 +190,10 @@ return [
   'consent records' => 'toestemmingsrecords',
   'denied' => 'geweigerd',
   'granted' => 'verleend',
+  'Name' => 'Naam',
+  'Type' => 'Type',
+  'Purpose' => 'Doel',
+  'Expiration' => 'Vervaltijd',
 
   // Nog over te nemen voor andere talen
   "Manage your cookies" => "Beheer jouw cookies",

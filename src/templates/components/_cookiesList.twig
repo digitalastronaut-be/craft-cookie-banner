@@ -1,52 +1,52 @@
-{% set cookieGroups = [
+{% set categories = [
     {
-        title: banner.necessaryCookiesTitle,
-        label: banner.necessaryCookiesLabel,
-        definition: banner.necessaryCookiesDefinition,
-        cookies: banner.necessaryCookies
+        title: content.necessaryCookiesTitle,
+        label: content.necessaryCookiesLabel,
+        definition: content.necessaryCookiesDefinition,
+        cookies: content.necessaryCookies
     },
     {
-        title: banner.preferenceCookiesTitle,
-        label: banner.preferenceCookiesLabel,
-        definition: banner.preferenceCookiesDefinition,
-        cookies: banner.preferenceCookies
+        title: content.preferenceCookiesTitle,
+        label: content.preferenceCookiesLabel,
+        definition: content.preferenceCookiesDefinition,
+        cookies: content.preferenceCookies
     },
     {
-        title: banner.analyticalCookiesTitle,
-        label: banner.analyticalCookiesLabel,
-        definition: banner.analyticalCookiesDefinition,
-        cookies: banner.analyticalCookies
+        title: content.analyticalCookiesTitle,
+        label: content.analyticalCookiesLabel,
+        definition: content.analyticalCookiesDefinition,
+        cookies: content.analyticalCookies
     },
     {
-        title: banner.marketingCookiesTitle,
-        label: banner.marketingCookiesLabel,
-        definition: banner.marketingCookiesDefinition,
-        cookies: banner.marketingCookies
+        title: content.marketingCookiesTitle,
+        label: content.marketingCookiesLabel,
+        definition: content.marketingCookiesDefinition,
+        cookies: content.marketingCookies
     },
     {
-        title: banner.uncategorizedCookiesTitle,
-        label: banner.uncategorizedCookiesLabel,
-        definition: banner.uncategorizedCookiesDefinition,
-        cookies: banner.uncategorizedCookies
+        title: content.uncategorizedCookiesTitle,
+        label: content.uncategorizedCookiesLabel,
+        definition: content.uncategorizedCookiesDefinition,
+        cookies: content.uncategorizedCookies
     }
 ] %}
 
-{% if settings.cookieListStyle == "grouped" %}
+{% if appearance.cookieListStyle == "grouped" %}
     {# Multiple tables with headers #}
-    {% for group in cookieGroups %}
-        {% if group.cookies is not empty %}
-            <h3>{{ group.title }}</h3>
-            <p>{{ group.definition }}</p>
+    {% for category in categories %}
+        {% if category.cookies is not empty %}
+            <h3>{{ category.title }}</h3>
+            <p>{{ category.definition }}</p>
             <table class="ccb-cookies-list">
                 <thead>
                     <tr>
-                        <th>{{ "Name"|t('cookie-banner') }}</th>
-                        <th>{{ "Type"|t('cookie-banner') }}</th>
-                        <th>{{ "Purpose"|t('cookie-banner') }}</th>
+                        <th>{{ "name"|t('cookie-banner') }}</th>
+                        <th>{{ "purpose"|t('cookie-banner') }}</th>
+                        <th>{{ "expiration"|t('cookie-banner') }}</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for cookie in group.cookies %}
+                    {% for cookie in category.cookies %}
                         <tr>
                             <td>{{ cookie.name }}</td>
                             <td>{{ cookie.purpose }}</td>
@@ -62,19 +62,19 @@
     <table class="ccb-cookies-list">
         <thead>
             <tr>
-                <th>{{ "Name"|t('cookie-banner') }}</th>
-                <th>{{ "Type"|t('cookie-banner') }}</th>
-                <th>{{ "Purpose"|t('cookie-banner') }}</th>
-                <th>{{ "Expiration"|t('cookie-banner') }}</th>
+                <th>{{ "name"|t('cookie-banner') }}</th>
+                <th>{{ "type"|t('cookie-banner') }}</th>
+                <th>{{ "purpose"|t('cookie-banner') }}</th>
+                <th>{{ "expiration"|t('cookie-banner') }}</th>
             </tr>
         </thead>
         <tbody>
-            {% for group in cookieGroups %}
-                {% if group.cookies is not empty %}
-                    {% for cookie in group.cookies %}
+            {% for category in categories %}
+                {% if category.cookies is not empty %}
+                    {% for cookie in category.cookies %}
                         <tr>
                             <td>{{ cookie.name }}</td>
-                            <td>{{ group.label }}</td>
+                            <td>{{ category.label }}</td>
                             <td>{{ cookie.purpose }}</td>
                             <td>{{ cookie.expiration }}</td>
                         </tr>

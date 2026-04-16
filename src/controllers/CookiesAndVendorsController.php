@@ -29,7 +29,7 @@ class CookiesAndVendorsController extends Controller {
         
         $settings = CookieBanner::getInstance()->getSettings();
 
-        return $this->renderTemplate("cookie-banner/_cookiesAndVendors", [
+        return $this->renderTemplate("cookie-banner/pages/_cookiesAndVendors", [
             'settings' => $settings,
         ]);
     }
@@ -74,7 +74,7 @@ class CookiesAndVendorsController extends Controller {
             ->getCookiesAndVendors()
             ->getCreateCookieTableFieldData($autoFillCookieName);
 
-        return $this->renderTemplate("cookie-banner/_createCookie", [
+        return $this->renderTemplate("cookie-banner/pages/_createCookie", [
             'settings' => $settings,
             'cookieForEachSite' => $cookieForEachSite,
         ]);
@@ -144,7 +144,7 @@ class CookiesAndVendorsController extends Controller {
             ->getCookiesAndVendors()
             ->getEditCookieTableFieldData($cookieName);
 
-        return $this->renderTemplate("cookie-banner/_editCookie", [
+        return $this->renderTemplate("cookie-banner/pages/_editCookie", [
             'settings' => $settings,
             'cookieForEachSite' => $cookieForEachSite,
         ]);
@@ -249,7 +249,7 @@ class CookiesAndVendorsController extends Controller {
             ->getCookiesAndVendors()
             ->getCreateVendorTableFieldData($autoFillVendorName);
 
-        return $this->renderTemplate("cookie-banner/_createVendor", [
+        return $this->renderTemplate("cookie-banner/pages/_createVendor", [
             'vendorForEachSite' => $vendorForEachSite,
         ]);
     }
@@ -318,7 +318,7 @@ class CookiesAndVendorsController extends Controller {
             ->getCookiesAndVendors()
             ->getEditVendorTableFieldData($vendorName);
 
-        return $this->renderTemplate("cookie-banner/_editVendor", [
+        return $this->renderTemplate("cookie-banner/pages/_editVendor", [
             'vendorForEachSite' => $vendorForEachSite,
         ]);
     }
@@ -382,7 +382,7 @@ class CookiesAndVendorsController extends Controller {
     }
 
     public function actionGetVendors() {
-        return Content::find()->one()->cookieGroups;
+        return Content::find()->one()->vendors;
     }
 
     public function actionGetVendorsChartData(): Response {

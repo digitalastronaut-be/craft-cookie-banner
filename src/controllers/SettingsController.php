@@ -16,7 +16,7 @@ class SettingsController extends Controller{
         $settings = CookieBanner::getInstance()->getSettings();
         $content = Content::find()->where(['siteId' => 1])->one();
         
-        return $this->renderTemplate('cookie-banner/_settings.twig', [
+        return $this->renderTemplate('cookie-banner/pages/_settings.twig', [
             'settings' => $settings,
             'content' => $content
         ]);

@@ -20,11 +20,13 @@ class DashboardController extends Controller {
     public function actionIndex(): Response {
         $settings = CookieBanner::getInstance()->getSettings();
 
-        return $this->renderTemplate('cookie-banner/_dashboard.twig', [
-            "consentRecordsChart" => [
-                "total" => ConsentRecord::find()->count(),
+        return $this->renderTemplate('cookie-banner/pages/_dashboard.twig', [
+            'consentRecordsChartMetrics' => CookieBanner::getInstance()->getConsentRecords()->getChartData(),
+            'cookiesAndVendorsChartMetrics' => [
+                'vendors' => CookieBanner::getInstance()->getCookiesAndVendors()->getCookieChartData(),
+                'cookies' => CookieBanner::getInstance()->getCookiesAndVendors()->getVendorsChartData(),
             ],
-            "gettingStartedProgress" => $settings->gettingStartedProgress,
+            'gettingStartedProgress' => $settings->gettingStartedProgress,
         ]);
     }
 
@@ -37,6 +39,9 @@ class DashboardController extends Controller {
         $settings->gettingStartedProgress['appearanceStepCompleted'] = true;
         $settings->gettingStartedProgress['finalSettingsStepCompleted'] = true;
 
+        Craft::$app->plugins->savePluginSettings(CookieBanner::getInstance(), $settings->toArray());
+
+        Craft::$app->getSession()->setSuccess("Setup guide skipped");
         return $this->redirectToPostedUrl();
     }
 
@@ -48,28 +53,31 @@ class DashboardController extends Controller {
 
         Craft::$app->plugins->savePluginSettings(CookieBanner::getInstance(), $settings->toArray());
 
+        Craft::$app->getSession()->setSuccess("Legal pages step completed");
         return $this->redirectToPostedUrl();
     }
-
+        
     public function actionCompleteDeferScriptsStep(): Response {
         $this->requirePostRequest();
         
         $settings = CookieBanner::getInstance()->getSettings();
         $settings->gettingStartedProgress['deferScriptsStepCompleted'] = true;
-
+        
         Craft::$app->plugins->savePluginSettings(CookieBanner::getInstance(), $settings->toArray());
-
+            
+        Craft::$app->getSession()->setSuccess("Defer third party scripts step completed");
         return $this->redirectToPostedUrl();
     }
-
+        
     public function actionCompleteContentStep(): Response {
         $this->requirePostRequest();
         
         $settings = CookieBanner::getInstance()->getSettings();
         $settings->gettingStartedProgress['contentStepCompleted'] = true;
-
+        
         Craft::$app->plugins->savePluginSettings(CookieBanner::getInstance(), $settings->toArray());
-
+            
+        Craft::$app->getSession()->setSuccess("Content step completed");
         return $this->redirectToPostedUrl();
     }
 
@@ -81,6 +89,7 @@ class DashboardController extends Controller {
 
         Craft::$app->plugins->savePluginSettings(CookieBanner::getInstance(), $settings->toArray());
 
+        Craft::$app->getSession()->setSuccess("Appearance step completed");
         return $this->redirectToPostedUrl();
     }
 
@@ -92,6 +101,7 @@ class DashboardController extends Controller {
 
         Craft::$app->plugins->savePluginSettings(CookieBanner::getInstance(), $settings->toArray());
 
+        Craft::$app->getSession()->setSuccess("Final settings step completed");
         return $this->redirectToPostedUrl();
     }
 }

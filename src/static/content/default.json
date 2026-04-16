@@ -5,7 +5,7 @@
 	"privacyPolicyLinkURL": "",
 	"cookiePolicyLinkLabel": "",
 	"cookiePolicyLinkURL": "",
-	"cookieGroups": [
+	"vendors": [
 		{
 			"name": "Craft CMS",
 			"description": "",
@@ -19,14 +19,14 @@
 	"necessaryCookies": [
 		{
 			"name": "CRAFT_CSRF_TOKEN",
-			"group": "craft-cms",
+			"vendor": "craft-cms",
 			"purpose": "",
 			"expiration": "",
 			"enabled": true
 		},
 		{
 			"name": "CraftSessionId",
-			"group": "craft-cms",
+			"vendor": "craft-cms",
 			"purpose": "",
 			"expiration": "",
 			"enabled": true
@@ -38,7 +38,7 @@
 	"preferenceCookies": [
 		{
 			"name": "craft-cookie-banner",
-			"group": "craft-cms",
+			"vendor": "craft-cms",
 			"purpose": "",
 			"expiration": "",
 			"enabled": true

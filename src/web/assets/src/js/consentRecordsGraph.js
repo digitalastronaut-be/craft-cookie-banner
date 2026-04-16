@@ -13,11 +13,14 @@ class ConsentRecordsGraph extends HTMLElement {
 			throw new Error("Component must define a valid chart canvas element");
 		}
 
-		const response = await fetch("/admin/cookie-banner/consent-records/get-chart-data");
+		const response = await fetch("/actions/cookie-banner/consent-records/get-chart-data");
 		const json = await response.json();
 
 		const labels = json.data.map((row) => row.date);
 		const values = json.data.map((row) => row.count);
+		const accepted = json.data.map((row) => row.accepted);
+
+		console.log(values);
 
 		new Chart(this.chartElement, {
 			type: "line",
@@ -33,8 +36,20 @@ class ConsentRecordsGraph extends HTMLElement {
 						tension: 0,
 						fill: "start",
 						borderColor: "#4299E1",
-						backgroundColor: "rgba(66,153,225, 0.1)",
+						backgroundColor: "rgba(66, 153, 225, 0.1)",
 						pointBackgroundColor: "#4299E1",
+					},
+					{
+						label: "Accepted",
+						data: accepted,
+						borderWidth: 3,
+						pointRadius: 3,
+						pointHoverRadius: 6,
+						tension: 0,
+						fill: "start",
+						borderColor: "#10b981",
+						backgroundColor: "rgba(16, 185, 129, 0.1)",
+						pointBackgroundColor: "#10b981",
 					},
 				],
 			},
@@ -68,6 +83,7 @@ class ConsentRecordsGraph extends HTMLElement {
 						display: true,
 						suggestedMax: Math.max(...values) + 2,
 						ticks: {
+							stepSize: 1,
 							maxTicksLimit: 8,
 							callback: function (value) {
 								return value >= 0 ? value : "";

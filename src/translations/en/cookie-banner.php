@@ -190,6 +190,10 @@ return [
   'consent records' => 'consent records',
   'denied' => 'denied',
   'granted' => 'granted',
+  'name' => 'Name',
+  'type' => 'Type',
+  'purpose' => 'Purpose',
+  'expiration' => 'Expiration',
   
   // Nog over te nemen voor andere talen
   "Manage your cookies" => "Manage your cookies",

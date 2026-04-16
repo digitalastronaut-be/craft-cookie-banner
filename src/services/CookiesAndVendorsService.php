@@ -22,7 +22,7 @@ class CookiesAndVendorsService extends Component {
 
         $content = Content::find()->where(['siteId' => $siteId])->one();
 
-        $categorizedCookies = $content->getAttributes(CookieBannerHelper::COOKIE_GROUPS);
+        $categorizedCookies = $content->getAttributes(CookieBannerHelper::COOKIE_CATEGORIES);
 
         if (!$content) return [];
 
@@ -77,7 +77,7 @@ class CookiesAndVendorsService extends Component {
 
                     $cookiesForCategory[] = [
                         "name" => $data['languageMatch'] ? $data['cookie']['name'] : $cookieName,
-                        "group" => 'default',
+                        "vendor" => 'default',
                         "purpose" => $data['languageMatch'] ? $data['cookie']['description'] : null,
                         "expiration" => $data['languageMatch'] ? $data['cookie']['retention'] : null,
                         "enabled" => true,
@@ -122,6 +122,10 @@ class CookiesAndVendorsService extends Component {
                 if (!$cookie['name']) {
                     throw new BadRequestHttpException("Cookie name attribute missing for " . $site->name);
                 }
+                    
+                if (array_column($this->getAllCookies(), null, "name")[$cookie['name']]) {
+                    throw new Exception("Cookie name {$cookie['name']} Already exists");
+                };
                 
                 $content = Content::find()->where(['siteId' => $site->id])->one();
 
@@ -133,7 +137,7 @@ class CookiesAndVendorsService extends Component {
 
                 $cookies[] = [
                     'name' => $cookie['name'],
-                    'group' => $cookie['group'],
+                    'vendor' => $cookie['vendor'],
                     'purpose' => $cookie['purpose'],
                     'expiration' => $cookie['expiration'],
                     'enabled' => $cookie['enabled'],
@@ -176,7 +180,7 @@ class CookiesAndVendorsService extends Component {
                 $cookieForEachSite[$site->id] = [
                     'siteName' => $site->name,
                     'name' => $data['cookie']['name'],
-                    'group' => $data['cookie']['category'],
+                    'vendor' => $data['cookie']['vendor'],
                     'purpose' => $data['languageMatch'] ? $data['cookie']['description'] : "",
                     'expiration' => $data['languageMatch'] ? $data['cookie']['retention'] : "",
                     'enabled' => true,
@@ -185,7 +189,7 @@ class CookiesAndVendorsService extends Component {
                 $cookieForEachSite[$site->id] = [
                     'siteName' => $site->name,
                     'name' => "",
-                    'group' => null,
+                    'vendor' => null,
                     'purpose' => "",
                     'expiration' => "",
                     'enabled' => true,
@@ -237,7 +241,7 @@ class CookiesAndVendorsService extends Component {
 
                 $newCategoryCookiesByName[$cookie['name']] = [
                     'name' => $cookie['name'],
-                    'group' => $cookie['group'],
+                    'vendor' => $cookie['vendor'],
                     'purpose' => $cookie['purpose'],
                     'expiration' => $cookie['expiration'],
                     'enabled' => (bool)($cookie['enabled'] ?? false),
@@ -271,10 +275,10 @@ class CookiesAndVendorsService extends Component {
         
         foreach ($contentForEachSite as $content) {
             $site = Craft::$app->getSites()->getSiteById($content->siteId);
-            $cookieGroups = CookieBannerHelper::COOKIE_GROUPS;
+            $categories = CookieBannerHelper::COOKIE_CATEGORIES;
 
-            foreach ($cookieGroups as $groupField) {
-                $cookies = empty($content->$groupField) ? [] : $content->$groupField;
+            foreach ($categories as $category) {
+                $cookies = empty($content->$category) ? [] : $content->$category;
 
                 foreach ($cookies as $cookie) {
                     if ($cookie['name'] !== $cookieName) continue;
@@ -282,11 +286,11 @@ class CookiesAndVendorsService extends Component {
                     $cookieForEachSite[] = [
                         'siteName' => $site->name,
                         'name' => $cookie['name'] ?? null,
-                        'group' => $cookie['group'] ?? null,
+                        'vendor' => $cookie['vendor'] ?? null,
                         'purpose' => $cookie['purpose'] ?? null,
                         'expiration' => $cookie['expiration'] ?? null,
                         'enabled' => $cookie['enabled'] ?? true,
-                        'category' => $groupField ?? null,
+                        'category' => $category ?? null,
                         'hiddenInputs' => [
                             'siteHandle' => $site->handle,
                         ],
@@ -311,10 +315,10 @@ class CookiesAndVendorsService extends Component {
 
         try {
             foreach ($contentForEachSite as $content) {            
-                $cookieGroups = CookieBannerHelper::COOKIE_GROUPS;
+                $categories = CookieBannerHelper::COOKIE_CATEGORIES;
                 
-                foreach ($cookieGroups as $group) {
-                    $cookies = $content->$group ?? [];
+                foreach ($categories as $category) {
+                    $cookies = $content->$category ?? [];
     
                     if (!is_array($cookies)) continue;
                     
@@ -323,7 +327,7 @@ class CookiesAndVendorsService extends Component {
                         fn($cookie) => ($cookie['name'] ?? null) !== $cookieName
                     ));
     
-                    $content->setAttribute($group, $filteredCookies);
+                    $content->setAttribute($category, $filteredCookies);
                 }
     
                 if (!$content->save()) {
@@ -404,30 +408,42 @@ class CookiesAndVendorsService extends Component {
     public function getCookieChartData(): array {
         $cookies = CookieBanner::getInstance()->getCookieDetection()->getCookiesOverview();
 
+        $metrics = [
+            'Defined' => 0,
+            'Defined incomplete' => 0,
+            'Suggested' => 0,
+            'Control panel' => 0,
+        ];
+
         $data = [];
 
         foreach ($cookies as $cookie) {
             if ($cookie['isControlPanelCookie']) {
+                $metrics["Control panel"]++;
                 $data[] = [
                     'label' => $cookie['name'],
                     'data' => 'Control panel',
                     'backgroundColor' => '#d8e2ee',
-                ];
-
-                continue;
-            }
-
+                    ];
+                    
+                    continue;
+                    }
+                    
             if ($cookie['onlyInBrowserCookies']) {
+                $metrics["Suggested"]++;
                 $data[] = [
                     'label' => $cookie['name'],
                     'data' => 'Suggested',
                     'backgroundColor' => '#4299E1',
-                ];
-
+                    ];
+                    
                 continue;
             }
-
+                    
             $result = CookieBanner::getInstance()->getCookiesAndVendors()->checkCookieDefinitionForEachSite($cookie['name']);
+            
+            if (in_array('defined-incomplete', $result, true)) $metrics['Defined incomplete']++;
+            else $metrics['Defined']++;
             
             $data[] = [
                 'label' => $cookie['name'],
@@ -436,7 +452,10 @@ class CookiesAndVendorsService extends Component {
             ];
         }
 
-        return $data;
+        return [
+            'data' => $data,
+            'metrics' => $metrics,
+        ];
     }
 
     /**
@@ -463,7 +482,7 @@ class CookiesAndVendorsService extends Component {
                     throw new Exception("Content record missing for site {$site->id}");
                 }
 
-                $vendors = $content->getAttribute('cookieGroups');
+                $vendors = $content->getAttribute('vendors');
 
                 $vendors[] = [
                     'name' => $data['languageMatch'] ? $data['vendor']['name'] : $vendorName, 
@@ -472,7 +491,7 @@ class CookiesAndVendorsService extends Component {
                     'enabled' => true, 
                 ];
 
-                $content->setAttribute('cookieGroups', $vendors);
+                $content->setAttribute('vendors', $vendors);
                 
                 if (!$content->save()) {
                     throw new Exception(sprintf(
@@ -516,7 +535,7 @@ class CookiesAndVendorsService extends Component {
                     throw new Exception("Content record missing for site {$site->id}");
                 }
 
-                $vendors = $content->getAttribute("cookieGroups") ?? [];
+                $vendors = $content->getAttribute("vendors") ?? [];
 
                 $vendors[] = [
                     'name' => $vendor['name'],
@@ -525,7 +544,7 @@ class CookiesAndVendorsService extends Component {
                     'enabled' => $vendor['enabled'],
                 ];
 
-                $content->setAttribute("cookieGroups", $vendors);
+                $content->setAttribute("vendors", $vendors);
 
                 if (!$content->save()) {
                     throw new Exception(sprintf(
@@ -599,7 +618,7 @@ class CookiesAndVendorsService extends Component {
                     throw new Exception("Content record missing for site {$site->id}");
                 }
     
-                $vendors = $content->getAttribute('cookieGroups');
+                $vendors = $content->getAttribute('vendors');
                 $vendorsByName = array_column($vendors, null, 'name');
     
                 $vendorsByName[$vendor['name']] = [
@@ -609,7 +628,7 @@ class CookiesAndVendorsService extends Component {
                     'enabled' => $vendor['enabled'], 
                 ];
     
-                $content->setAttribute('cookieGroups', array_values($vendorsByName));
+                $content->setAttribute('vendors', array_values($vendorsByName));
     
                 if (!$content->save()) {
                     throw new Exception(sprintf(
@@ -639,7 +658,7 @@ class CookiesAndVendorsService extends Component {
     
         foreach ($contentForEachSite as $content) {
             $site = Craft::$app->getSites()->getSiteById($content->siteId);
-            $vendors = $content->getAttribute("cookieGroups");
+            $vendors = $content->getAttribute("vendors");
 
             foreach ($vendors as $vendor) {
                 if ($vendor['name'] !== $vendorName) continue;
@@ -674,11 +693,11 @@ class CookiesAndVendorsService extends Component {
         try {
             foreach ($contentForEachSite as $content) {
                 $filteredVendors = array_values(array_filter(
-                    $content['cookieGroups'],
+                    $content['vendors'],
                     fn($vendor) => ($vendor['name'] ?? null) !== $vendorName
                 ));
     
-                $content->setAttribute('cookieGroups', $filteredVendors);
+                $content->setAttribute('vendors', $filteredVendors);
     
                 if (!$content->save()) {
                     throw new Exception(sprintf(
@@ -730,7 +749,7 @@ class CookiesAndVendorsService extends Component {
             $site = Craft::$app->getSites()->getSiteById($content->siteId);
             $siteKey = $site->name . ' (' . $site->language . ')';
 
-            $vendors = $content['cookieGroups'];
+            $vendors = $content['vendors'];
 
             $matchedVendor = null;
             foreach ($vendors as $vendor) {
@@ -765,10 +784,17 @@ class CookiesAndVendorsService extends Component {
     public function getVendorsChartData(): array {
         $vendors = CookieBanner::getInstance()->getCookieDetection()->getVendorsOverview();
 
+        $metrics = [
+            'Defined' => 0,
+            'Defined incomplete' => 0,
+            'Suggested' => 0,
+        ];
+
         $data = [];
 
         foreach ($vendors as $vendor) {
             if ($vendor['isSuggestion']) {
+                $metrics['Suggested']++;
                 $data[] = [
                     'label' => $vendor['name'],
                     'data' => 'Suggested',
@@ -779,6 +805,9 @@ class CookiesAndVendorsService extends Component {
             }
 
             $result = CookieBanner::getInstance()->getCookiesAndVendors()->checkVendorDefinitionForEachSite($vendor['name']);
+
+            if (in_array('defined-incomplete', $result, true)) $metrics['Defined incomplete']++;
+            else $metrics['Defined']++;
             
             $data[] = [
                 'label' => $vendor['name'],
@@ -787,6 +816,9 @@ class CookiesAndVendorsService extends Component {
             ];
         }
 
-        return $data;
+        return [
+            'data' => $data,
+            'metrics' => $metrics,
+        ];
     }
 }

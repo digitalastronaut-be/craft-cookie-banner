@@ -113,7 +113,7 @@ class CookieDetectionService extends Component {
         $result = [];
         $existingVendorNames = [];
 
-        $existingVendors = Content::find()->one()->cookieGroups;
+        $existingVendors = Content::find()->one()->vendors;
 
         foreach ($existingVendors as $vendor) {
             $vendorMatch = CookieBanner::getInstance()
@@ -228,7 +228,7 @@ class CookieDetectionService extends Component {
      *
      * @return array|void
      */
-    public function getVendorDataFromDatabase(string $vendorName, string $language): ?array {
+    public function getVendorDataFromDatabase(string|null $vendorName, string $language): ?array {
         $vendorDatabase = $this->getDatabaseFile("vendors", $language);
 
         foreach ($vendorDatabase['data'] as $vendor) {

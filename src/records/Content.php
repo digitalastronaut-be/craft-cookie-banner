@@ -28,7 +28,7 @@ class Content extends ActiveRecord {
             'cookiePolicyLinkLabel',
             'cookiePolicyLinkURL',
 
-            'cookieGroups',
+            'vendors',
 
             'necessaryCookiesTitle',
             'necessaryCookiesLabel',
@@ -75,7 +75,7 @@ class Content extends ActiveRecord {
                     'privacyPolicyLinkURL',
                     'cookiePolicyLinkLabel',
                     'cookiePolicyLinkURL',
-                    'cookieGroups',
+                    'vendors',
                     'necessaryCookiesTitle',
                     'necessaryCookiesLabel',
                     'necessaryCookiesDefinition',

@@ -190,7 +190,7 @@
 
                 <div>
                     <div class="status-chip not-defined">{{ "Not defined"|t("cookie-banner") }}</div>
-                    <div class="status-chip detected">{{ "Detected based on existing cookie"|t("cookie-banner") }}</div>
+                    <div class="status-chip detected">{{ "Suggested based on existing cookie"|t("cookie-banner") }}</div>
                     <div class="status-chip defined-incomplete">{{ "Defined but incomplete"|t("cookie-banner") }}</div>
                     <div class="status-chip defined">{{ "Defined completely"|t("cookie-banner") }}</div>
                     <div class="status-chip disabled">{{ "Disabled"|t("cookie-banner") }}</div>
@@ -232,10 +232,21 @@
                                                     </li>
                                                 {% endif %}
 
+                                                {% if vendor.isSuggestion %}
+                                                    <li class="ccb-actions-menu-option">
+                                                        <a 
+                                                            title="{{ "Manually add this vendor"|t("cookie-banner") }}"
+                                                            href="{{ cpUrl('cookie-banner/cookies-and-vendors/create-vendor?autoFillVendor=' ~ vendor.name) }}"
+                                                        >
+                                                            {{ "Manually add this vendor"|t("cookie-banner") }}
+                                                        </a>
+                                                    </li>
+                                                {% endif %}
+
                                                 {% if not vendor.isSuggestion %}
                                                     <li class="ccb-actions-menu-option">
                                                         <a 
-                                                            title="Manually edit this cookie for all sites"
+                                                            title="{{ "Manually edit this vendor for all sites"|t("cookie-banner") }}"
                                                             href="{{ cpUrl('cookie-banner/cookies-and-vendors/edit-vendor/' ~ vendor.name )}}"
                                                         >
                                                             {{ "Manually edit this vendor for all sites"|t("cookie-banner") }}

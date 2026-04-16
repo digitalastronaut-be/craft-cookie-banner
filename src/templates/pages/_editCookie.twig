@@ -49,7 +49,7 @@
                     id: 'vendor',
                     name: 'vendor',
                     options: getVendorOptions(),
-                    value: cookieForEachSite[0]['group'],
+                    value: cookieForEachSite[0]['vendor'],
                 }) }}
             </div>
 
@@ -69,7 +69,7 @@
                             heading: "Cookie Name", 
                             type: "singleline",
                         },
-                        group: { 
+                        vendor: { 
                             heading: "Vendor", 
                             type: "select",
                             options: getVendorOptions()
@@ -126,8 +126,15 @@
                         '[name^="fields[cookieForEachSite]"][name$="[name]"]'
                     );
 
+                    tableInputs.forEach(input => {
+                        const preview = input.previousElementSibling;
 
-                    tableInputs.forEach(input => input.value = value);
+                        if (preview && preview.classList.contains('editable-table-preview')) {
+                            preview.textContent = value;
+                        }
+
+                        input.value = value;
+                    });
                 });
             }
 
@@ -136,7 +143,7 @@
                     const value = this.value;
 
                     const tableSelects = document.querySelectorAll(
-                        'select[name^="fields[cookieForEachSite]"][name$="[group]"]'
+                        'select[name^="fields[cookieForEachSite]"][name$="[vendor]"]'
                     );
 
                     tableSelects.forEach(select => select.value = value);

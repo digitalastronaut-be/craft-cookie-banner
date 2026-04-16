@@ -190,4 +190,8 @@ return [
   'consent records' => 'consent records',
   'denied' => 'denied',
   'granted' => 'granted',
+  'name' => 'Name',
+  'type' => 'Typ',
+  'purpose' => 'Zweck',
+  'expiration' => 'Ablauf',
 ];

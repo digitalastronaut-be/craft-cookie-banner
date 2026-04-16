@@ -14,8 +14,8 @@ use digitalastronaut\craftcookiebanner\services\ServicesTrait;
 // TODO: Enabled switches row laten disabelen als ze uit staan CSS bestaat al en heeft gewerkt weet niet waarom nu niet meer
 // TODO: Figure out hoe we consent records kunnen deleten zonder elke site/cp request cleanup te triggeren zonder persee een cron job... (BASE)
 // TODO: Styling en templates mooier opsplitsen (BASE) 
-// TODO: rename cookieGroups to vendors
 // TODO: JS translatinos for chip component
+// TODO: improve rules for active records
 
 /**
  * Cookie banner plugin

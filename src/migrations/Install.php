@@ -59,7 +59,7 @@ class Install extends Migration {
             'title' => $this->string(255)->null(),
             'text' => $this->text()->null(),
 
-            'cookieGroups' => $this->json()->null(),
+            'vendors' => $this->json()->null(),
 
             'privacyPolicyLinkLabel' => $this->string(255)->null(),
             'privacyPolicyLinkURL' => $this->string(255)->null(),

@@ -4,7 +4,7 @@
 {% set title = title|default("") %}
 {% set description = description|default("") %}
 {% set cookies = cookies|default([]) %}
-{% set groups = content.cookieGroups|merge([{
+{% set groups = content.vendors|merge([{
     "name": "Default",
     "description": "",
     "url": "",
@@ -14,7 +14,7 @@
     'name': group.name,
     'description': group.description,
     'url': group.url,
-    'cookies': cookies|filter(cookie => cookie.group == (group.name|lower|replace({' ': '-'})))
+    'cookies': cookies|filter(cookie => cookie.vendor == (group.name|lower|replace({' ': '-'})))
 }) %}
 
 {# ======================= #}

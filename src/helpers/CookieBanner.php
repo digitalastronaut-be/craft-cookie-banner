@@ -3,7 +3,7 @@
 namespace digitalastronaut\craftcookiebanner\helpers;
 
 abstract class CookieBanner {
-    public const COOKIE_GROUPS = [
+    public const COOKIE_CATEGORIES = [
         'necessaryCookies',
         'preferenceCookies',
         'analyticalCookies',

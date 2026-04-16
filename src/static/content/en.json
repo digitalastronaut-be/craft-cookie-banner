@@ -5,7 +5,7 @@
 	"privacyPolicyLinkURL": "",
 	"cookiePolicyLinkLabel": "Cookie policy",
 	"cookiePolicyLinkURL": "",
-	"cookieGroups": [
+	"vendors": [
 		{
 			"name": "Craft CMS",
 			"description": "A bespoke content management system build for devs and authors",
@@ -19,14 +19,14 @@
 	"necessaryCookies": [
 		{
 			"name": "CRAFT_CSRF_TOKEN",
-			"group": "craft-cms",
+			"vendor": "craft-cms",
 			"purpose": "Security token used to prevent cross-site request forgery (CSRF) attacks. Ensures that form submissions and requests are coming from trusted sources.",
 			"expiration": "Session",
 			"enabled": true
 		},
 		{
 			"name": "CraftSessionId",
-			"group": "craft-cms",
+			"vendor": "craft-cms",
 			"purpose": "Identifies a unique session between the browser and the server. Required for basic site functionality such as logins and form submissions.",
 			"expiration": "Session",
 			"enabled": true
@@ -38,7 +38,7 @@
 	"preferenceCookies": [
 		{
 			"name": "craft-cookie-banner",
-			"group": "craft-cms",
+			"vendor": "craft-cms",
 			"purpose": "Stores the user's cookie preferences (e.g. accepted or refused categories) so that the banner does not reappear on every visit.",
 			"expiration": "1 year",
 			"enabled": true

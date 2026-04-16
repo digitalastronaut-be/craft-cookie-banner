@@ -41,7 +41,7 @@
                         { 'label': 'Marketing cookies'|t("cookie-banner"), 'value': 'marketingCookies' },
                         { 'label': 'Uncategorized cookies'|t("cookie-banner"), 'value': 'uncategorizedCookies' }
                     ],
-                    value: cookieForEachSite|first['group'] ~ "Cookies",
+                    value: cookieForEachSite|first['vendor'] ~ "Cookies",
                 }) }}
             </div>
             
@@ -51,7 +51,6 @@
                     id: 'vendor',
                     name: 'vendor',
                     options: getVendorOptions(),
-                    value: 'default',
                 }) }}
             </div>
 
@@ -71,7 +70,7 @@
                             heading: "Cookie name"|t("cookie-banner"), 
                             type: "singleline",
                         },
-                        group: { 
+                        vendor: { 
                             heading: "Vendor"|t("cookie-banner"), 
                             type: "select",
                             options: getVendorOptions()
@@ -127,7 +126,7 @@
                     const value = this.value;
 
                     const tableSelects = document.querySelectorAll(
-                        'select[name^="fields[cookieForEachSite]"][name$="[group]"]'
+                        'select[name^="fields[cookieForEachSite]"][name$="[vendor]"]'
                     );
 
                     tableSelects.forEach(select => select.value = value);

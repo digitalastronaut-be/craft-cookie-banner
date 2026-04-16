@@ -25,7 +25,7 @@ class ContentController extends Controller {
         $currentSiteId = Craft::$app->getSites()->getSiteByHandle($this->request->queryParams['site'] ?? Craft::$app->sites->primarySite->handle)->id;
         $content = Content::find()->where(['siteId' => $currentSiteId])->one();
         
-        return $this->renderTemplate('cookie-banner/_content.twig', [
+        return $this->renderTemplate('cookie-banner/pages/_content.twig', [
             'content' => $content
         ]);
     }
@@ -71,6 +71,5 @@ class ContentController extends Controller {
 
             return $this->redirectToPostedUrl();
         }
-
     }
 }

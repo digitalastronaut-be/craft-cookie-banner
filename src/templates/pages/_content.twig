@@ -46,8 +46,8 @@
     ] %}
 {% endif %}
 
-{% set cookieGroups = [{"label": "Default", "value": "default" }]|merge(
-    banner.cookieGroups|default([])|map(item => {
+{% set vendors = [{"label": "Default", "value": "default" }]|merge(
+    content.vendors|default([])|map(item => {
         'label': item.name,
         'value': item.name|kebab
     })
@@ -130,11 +130,11 @@
         <h2>{{ 'Cookies'|t('cookie-banner') }}</h2>
 
         <div class="field width-75">
-            {% if content.cookieGroups|length %}
+            {% if content.vendors|length %}
                 {{ forms.editableTableField({
                     label: 'Vendors'|t('cookie-banner'),
-                    id: 'cookieGroups',
-                    name: 'fields[cookieGroups]',
+                    id: 'vendors',
+                    name: 'fields[vendors]',
                     tip: 'Adding or removing vendors can be done via the [cookies & vendors tab](/cookie-banner/cookies-and-vendors)'|t('cookie-banner'),
                     cols: {
                         name: { heading: "Name"|t('cookie-banner'), type: "singleline" },
@@ -142,7 +142,7 @@
                         url: { heading: "URL"|t('cookie-banner'), type: "url"},
                         enabled: { heading: "Enabled"|t('cookie-banner'), type: "lightswitch"},
                     },
-                    rows: content.cookieGroups ?? [],
+                    rows: content.vendors ?? [],
                     allowReorder: true,
                 }) }}
             {% else %}
@@ -194,7 +194,7 @@
                     tip: 'Adding or removing cookies can be done via the [cookies & vendors tab](/cookie-banner/cookies-and-vendors)'|t('cookie-banner'),
                     cols: {
                         name: { heading: "Name"|t('cookie-banner'), type: "singleline" },
-                        group: { heading: "Vendor"|t('cookie-banner'), type: "select", options: cookieGroups },
+                        group: { heading: "Vendor"|t('cookie-banner'), type: "select", options: vendors },
                         purpose: { heading: "Purpose"|t('cookie-banner'), type: "multiline" },
                         expiration: { heading: "Expiration"|t('cookie-banner'), type: "singleline" },
                         enabled: { heading: "Enabled"|t('cookie-banner'), type: "lightswitch" },
@@ -251,7 +251,7 @@
                     tip: 'Adding or removing cookies can be done via the [cookies & vendors tab](/cookie-banner/cookies-and-vendors)'|t('cookie-banner'),
                     cols: {
                         name: { heading: "Name"|t('cookie-banner'), type: "singleline" },
-                        group: { heading: "Vendor"|t('cookie-banner'), type: "select", options: cookieGroups },
+                        group: { heading: "Vendor"|t('cookie-banner'), type: "select", options: vendors },
                         purpose: { heading: "Purpose"|t('cookie-banner'), type: "multiline" },
                         expiration: { heading: "Expiration"|t('cookie-banner'), type: "singleline" },
                         enabled: { heading: "Enabled"|t('cookie-banner'), type: "lightswitch" },
@@ -308,7 +308,7 @@
                     tip: 'Adding or removing cookies can be done via the [cookies & vendors tab](/cookie-banner/cookies-and-vendors)'|t('cookie-banner'),
                     cols: {
                         name: { heading: "Name"|t('cookie-banner'), type: "singleline" },
-                        group: { heading: "Vendor"|t('cookie-banner'), type: "select", options: cookieGroups },
+                        group: { heading: "Vendor"|t('cookie-banner'), type: "select", options: vendors },
                         purpose: { heading: "Purpose"|t('cookie-banner'), type: "multiline" },
                         expiration: { heading: "Expiration"|t('cookie-banner'), type: "singleline" },
                         enabled: { heading: "Enabled"|t('cookie-banner'), type: "lightswitch" },
@@ -365,7 +365,7 @@
                     tip: 'Adding or removing cookies can be done via the [cookies & vendors tab](/cookie-banner/cookies-and-vendors)'|t('cookie-banner'),
                     cols: {
                         name: { heading: "Name"|t('cookie-banner'), type: "singleline" },
-                        group: { heading: "Vendor"|t('cookie-banner'), type: "select", options: cookieGroups },
+                        group: { heading: "Vendor"|t('cookie-banner'), type: "select", options: vendors },
                         purpose: { heading: "Purpose"|t('cookie-banner'), type: "multiline" },
                         expiration: { heading: "Expiration"|t('cookie-banner'), type: "singleline" },
                         enabled: { heading: "Enabled"|t('cookie-banner'), type: "lightswitch" },
@@ -422,7 +422,7 @@
                     tip: 'Adding or removing cookies can be done via the [cookies & vendors tab](/cookie-banner/cookies-and-vendors)'|t('cookie-banner'),
                     cols: {
                         name: { heading: "Name"|t('cookie-banner'), type: "singleline" },
-                        group: { heading: "Vendor"|t('cookie-banner'), type: "select", options: cookieGroups },
+                        group: { heading: "Vendor"|t('cookie-banner'), type: "select", options: vendors },
                         purpose: { heading: "Purpose"|t('cookie-banner'), type: "multiline" },
                         expiration: { heading: "Expiration"|t('cookie-banner'), type: "singleline" },
                         enabled: { heading: "Enabled"|t('cookie-banner'), type: "lightswitch" },

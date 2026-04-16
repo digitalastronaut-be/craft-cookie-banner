@@ -8,10 +8,7 @@ use craft\web\Response;
 
 use digitalastronaut\craftcookiebanner\CookieBanner;
 use digitalastronaut\craftcookiebanner\elements\ConsentRecord;
-use digitalastronaut\craftcookiebanner\helpers\Table;
 
-use yii\db\Expression;
-use yii\db\Query;
 use yii\web\BadRequestHttpException;
 
 use DateTime;
@@ -27,7 +24,7 @@ class ConsentRecordsController extends Controller {
     public function actionView(): Response {
         $this->requirePermission("cookie-banner:access-consent-records");
         
-        return $this->renderTemplate('cookie-banner/_consentRecords.twig', [
+        return $this->renderTemplate('cookie-banner/pages/_consentRecords.twig', [
             "consentStatistics" => CookieBanner::getInstance()->getConsentRecords()->getCategorizedConsentRecordStats(),
         ]);
     }
@@ -40,7 +37,7 @@ class ConsentRecordsController extends Controller {
 
         if (!$element) throw new BadRequestHttpException('No element was identified by the request.');
         
-        return $this->renderTemplate('cookie-banner/_consentRecord.twig', [
+        return $this->renderTemplate('cookie-banner/pages/_consentRecord.twig', [
             "element" => $element,
             "matchingConsentRecords" => $matchingConsentRecords,
         ]);
@@ -84,40 +81,10 @@ class ConsentRecordsController extends Controller {
     }
 
     public function actionGetChartData(): Response {
-        $rows = (new Query())
-            ->select([
-                'date' => new Expression('DATE(cr.consentTimestamp)'),
-                'count' => new Expression('COUNT(*)'),
-            ])
-            ->from(['cr' => Table::COOKIE_BANNER_CONSENT_RECORDS])
-            ->innerJoin(['elements' => '{{%elements}}'], 'elements.id = cr.id')
-            ->where([
-                '>=',
-                'cr.consentTimestamp',
-                new Expression('DATE_SUB(CURDATE(), INTERVAL 30 DAY)')
-            ])
-            ->groupBy(new Expression('DATE(cr.consentTimestamp)'))
-            ->orderBy(['date' => SORT_ASC])
-            ->all();
+        $this->requirePermission("cookie-banner:access-consent-records");
 
-        $indexed = [];
+        $data = CookieBanner::getInstance()->getConsentRecords()->getChartData();
 
-        foreach ($rows as $row) {
-            $indexed[$row['date']] = (int)$row['count'];
-        }
-
-        $data = [];
-        $today = new DateTime();
-
-        for ($i = 30; $i >= 0; $i--) {
-            $date = (clone $today)->modify("-{$i} days")->format('Y-m-d');
-
-            $data[] = [
-                'date' => $date,
-                'count' => $indexed[$date] ?? 0,
-            ];
-        }
-
-        return $this->asJson(['data' => $data]);
+        return $this->asJson($data);
     }
 }
