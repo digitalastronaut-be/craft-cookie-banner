@@ -30,8 +30,8 @@ class Settings extends Model {
         return [
             [['cookieBannerEnabled'], 'boolean'],
 
-            [['cookieBannerVersion', 'privacyPolicyVersion', 'cookiePolicyVersion'], 'string'],
-            [['cookieBannerVersion', 'privacyPolicyVersion', 'cookiePolicyVersion'], 'match', 'pattern' => '/^v\d+\.\d+\.\d+$/'],
+            [['bannerVersion', 'privacyPolicyVersion', 'cookiePolicyVersion'], 'string'],
+            [['bannerVersion', 'privacyPolicyVersion', 'cookiePolicyVersion'], 'match', 'pattern' => '/^v\d+\.\d+\.\d+$/'],
 
             [['consentRecordRetention'], 'string'],
             [['consentRecordRetention'], 'in', 'range' => [
