@@ -14,6 +14,8 @@ use yii\web\Response;
 use digitalastronaut\craftcookiebanner\CookieBanner;
 use digitalastronaut\craftcookiebanner\records\Content;
 
+use Fuse\Fuse;
+
 use Throwable;
 
 class CookiesAndVendorsController extends Controller {
@@ -31,6 +33,127 @@ class CookiesAndVendorsController extends Controller {
 
         return $this->renderTemplate("cookie-banner/pages/_cookiesAndVendors", [
             'settings' => $settings,
+        ]);
+    }
+
+    public function actionBulkCreate(): Response {
+        $this->requirePermission('cookie-banner:add-cookies');
+
+        if ($this->request->isPost) {
+            $this->requirePostRequest();
+
+            $input = $this->request->getBodyParam("input");
+
+            if (!$input) throw new BadRequestHttpException("Input cannot be empty");
+
+            $parsedInput = str_getcsv($input, ",", '"');
+
+            foreach ($parsedInput as $item) {
+                $matchedCookie = CookieBanner::getInstance()
+                    ->getCookieDetection()
+                    ->getCookieDataFromDatabase($item, "en");
+
+                if ($matchedCookie) {
+                    CookieBanner::getInstance()
+                        ->getCookiesAndVendors()
+                        ->autoCreateCookieForEachSite($matchedCookie['cookie']['name']);
+                        
+                    continue;
+                }
+                        
+                $matchedVendor = CookieBanner::getInstance()
+                    ->getCookieDetection()
+                    ->getVendorDataFromDatabase($item, "en");
+                        
+                if ($matchedVendor) {
+                    CookieBanner::getInstance()
+                        ->getCookiesAndVendors()
+                        ->autoCreateVendorForEachSite($matchedVendor['vendor']['name']);
+                            
+                    continue;
+                }
+            }
+
+            Craft::$app->getSession()->setSuccess("Items successfully added");
+            $this->redirectToPostedUrl();
+        }
+
+        return $this->renderTemplate("cookie-banner/pages/_bulkCreate");
+    }
+
+    public function actionPreviewBulkCreate(): mixed {
+        $this->requirePermission('cookie-banner:add-cookies');
+        
+        try {
+            $this->requirePostRequest();
+            
+            $input = $this->request->getBodyParam("input");
+            
+            if (!$input) throw new BadRequestHttpException("Input cannot be empty");
+            
+            $parsedInput = str_getcsv($input, ",", '"');
+
+            $cookieDatabase = CookieBanner::getInstance()
+                ->getCookieDetection()
+                ->getDatabaseFile("cookies", "en");
+
+            $fuzzySearchIndex = new Fuse($cookieDatabase['data'], [
+                'keys' => ['name'],
+                'threshold' => 0.3,
+            ]);
+
+            foreach ($parsedInput as $item) {
+                $matchedCookie = CookieBanner::getInstance()
+                    ->getCookieDetection()
+                    ->getCookieDataFromDatabase($item, "en");
+
+                if ($matchedCookie) {
+                    $results['cookies'][] = [
+                        'name' => $matchedCookie['name'] ?? $item,
+                        'duplicate' => CookieBanner::getInstance()
+                            ->getCookiesAndVendors()
+                            ->isDuplicate($matchedCookie['name'] ?? $item)
+                    ];
+
+                    continue;
+                }
+
+                $matchedVendor = CookieBanner::getInstance()
+                    ->getCookieDetection()
+                    ->getVendorDataFromDatabase($item, "en");
+
+                if ($matchedVendor) {
+                    $results['vendors'][] = [
+                        'name' => $matchedVendor['name'] ?? $item,
+                        'duplicate' => CookieBanner::getInstance()
+                            ->getCookiesAndVendors()
+                            ->isDuplicate($matchedVendor['name'] ?? $item)
+                    ];
+
+                    continue;
+                }
+
+                $suggestionResults = $fuzzySearchIndex->search($item);
+
+                $results['manual'][] = [
+                    'name' => $item,
+                    'suggestions' => array_slice($suggestionResults, 0, 3),
+                    'duplicate' => CookieBanner::getInstance()
+                        ->getCookiesAndVendors()
+                        ->isDuplicate($item)
+                ];
+            }
+        } catch(Throwable $error) {
+            Craft::error($error->getMessage(), __METHOD__);
+
+            return $this->renderTemplate("cookie-banner/requests/_bulkCreatePreview", [
+                'error' => $error->getMessage(),
+            ]);
+        }
+
+        return $this->renderTemplate("cookie-banner/requests/_bulkCreatePreview", [
+            'data' => $results,
+            'error' => null,
         ]);
     }
 

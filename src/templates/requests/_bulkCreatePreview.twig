@@ -1,0 +1,62 @@
+<hr>
+
+<div class="field width-50">
+    {% if data.cookies is defined and data.cookies|length %}
+        <h3>{{ data.cookies|length }} {{ "Matched Cookies"|t("cookie-banner") }}</h3>
+
+        <ul>
+            {% for item in data.cookies %}
+                <li>
+                    {{ item.name }} 
+                    {% if item.duplicate %} {{ "(duplicate)"|t("cookie-banner") }} {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% if data.vendors is defined and data.vendors|length %}
+        <h3>{{ data.vendors|length }} {{ "Matched Vendors"|t("cookie-banner") }}</h3>
+
+        <ul>
+            {% for item in data.vendors %}
+                <li>
+                    {{ item.name }} 
+                    {% if item.duplicate %} {{ "(duplicate)"|t("cookie-banner") }} {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% if data.manual is defined and data.manual|length %}
+        <h3>{{ data.manual|length }} {{ "Unknown"|t("cookie-banner") }}</h3>
+
+        <ul>
+            {% for item in data.manual %}
+                <li>
+                    {{ item.name }} 
+                    {% if item.suggestions|length %} {{ "(did you mean?)" }} {% endif %}
+                </li>
+
+                <ol>
+                    {% for suggestion in item.suggestions %}
+                        <li>{{ suggestion.item.name }}</li>
+                    {% endfor %}
+                </ol>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% if error %}
+        <p class="error">{{ error }}. {{ "Please check your input and try again"|t("cookie-banner") }}</p>
+    {% endif %}
+</div>
+
+{% if not error %}
+    <hr>
+
+    <div class="field width-100">
+        <button type="submit" class="btn submit">
+            {{ "Finalize process"|t }}
+        </button>
+    </div>
+{% endif %}

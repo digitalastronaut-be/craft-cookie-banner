@@ -15,6 +15,7 @@ use yii\web\BadRequestHttpException;
 class CookiesAndVendorsService extends Component {
     /**
      * @param bool $categorized
+     * @param int $siteId
      * @return array|mixed[]
      */
     public function getAllCookies(bool $categorized = false, ?int $siteId = null) {
@@ -41,6 +42,16 @@ class CookiesAndVendorsService extends Component {
     }
 
     /**
+     * @param int $siteId
+     * @return array|mixed[]
+     */
+    public function getAllVendors(?int $siteId = null) {
+        if (!$siteId) $siteId = Craft::$app->sites->getPrimarySite()->id;
+
+        return Content::find()->where(['siteId' => $siteId])->one()->vendors;
+    }
+
+    /**
      * @param $cookieName
      *
      * @return void
@@ -63,11 +74,9 @@ class CookiesAndVendorsService extends Component {
                     throw new Exception("Content record missing for site {$site->id}");
                 }
 
-                $existingCookies = array_column($this->getAllCookies(), null, "name");
-
-                if (in_array($data['cookie']['name'], $existingCookies)) {
-                    throw new Exception("This cookie is already defined");
-                }
+                // if (CookieBanner::getInstance()
+                //     ->getCookiesAndVendors()
+                //     ->isDuplicate($data['cookie']['name'])) break;
 
                 if ($data['cookie']['category']) {
                     // We need to add a Cookies suffix because the cookies.json doesn't match our db schema
@@ -823,5 +832,12 @@ class CookiesAndVendorsService extends Component {
             'data' => $data,
             'metrics' => $metrics,
         ];
+    }
+
+    public function isDuplicate($item): bool {
+        $existingCookies = array_column($this->getAllCookies(), null, 'name');
+        $existingVendors = array_column($this->getAllVendors(), null, 'name');
+
+        return key_exists($item, [...$existingCookies, ...$existingVendors]);
     }
 }

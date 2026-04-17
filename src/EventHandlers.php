@@ -49,9 +49,7 @@ class EventHandlers {
     private static function registerCpEvents(): void {
         self::registerPermissions();
         self::registerCpRoutes();
-        self::registerSiteModelEvents();
-        
-        CookieBannerPlugin::getInstance()->getConsentRecords()->cleanup();
+        self::registerSiteModelEvents();        
     }
 
     private static function registerSiteEvents(): void {
@@ -196,6 +194,7 @@ class EventHandlers {
                 $event->rules['cookie-banner/cookies-and-vendors/edit-vendor/<vendorName>'] = 'cookie-banner/cookies-and-vendors/edit-vendor';
                 $event->rules['cookie-banner/cookies-and-vendors/get-vendors-chart-data'] = 'cookie-banner/cookies-and-vendors/get-vendors-chart-data';
                 $event->rules['cookie-banner/cookies-and-vendors/search-vendors'] = 'cookie-banner/cookies-and-vendors/search-vendors';
+                $event->rules['cookie-banner/cookies-and-vendors/bulk-create'] = 'cookie-banner/cookies-and-vendors/bulk-create';
 
                 $event->rules['cookie-banner/content'] = 'cookie-banner/content/index';
                 $event->rules['cookie-banner/content/add-cookie'] = 'cookie-banner/content/add-cookie';

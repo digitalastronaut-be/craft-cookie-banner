@@ -31,6 +31,10 @@
     <a href="{{ url('cookie-banner/cookies-and-vendors/create-vendor') }}" class="btn add icon">
         {{ "Add a new vendor"|t('cookie-banner') }}
     </a>
+
+    <a href="{{ url('cookie-banner/cookies-and-vendors/bulk-create') }}" class="btn add icon">
+        {{ "Bulk add vendors & cookies"|t('cookie-banner') }}
+    </a>
 {% endset %}
 
 {% block content %}
@@ -145,7 +149,7 @@
 
                                 <td class="ccb-semi-bold">{{ cookie.name|truncate(30) }}</td>
 
-                                <td>{{ cookie.currentValue|truncate(20) }}</td>
+                                <td>{{ cookie.currentValue|default("---")|truncate(20) }}</td>
 
                                 {% if cookie.isControlPanelCookie %}
                                     <td>

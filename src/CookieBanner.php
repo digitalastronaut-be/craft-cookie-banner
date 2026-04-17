@@ -17,6 +17,8 @@ use digitalastronaut\craftcookiebanner\services\ServicesTrait;
 // TODO: JS translatinos for chip component
 // TODO: improve rules for active records
 // TODO: rename consent record cookie categories
+// TODO: kijken om de category ook autoFillen bij manual create
+// TODO: Fix duplicates for autoCreate and manualCreate
 
 /**
  * Cookie banner plugin

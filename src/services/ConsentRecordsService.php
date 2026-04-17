@@ -41,6 +41,8 @@ class ConsentRecordsService extends Component {
                 $consentRecord->$key = $value;
             }
 
+            $this->cleanup();
+
             if (!Craft::$app->elements->saveElement($consentRecord)) {
                 throw new Exception(sprintf(
                     'Failed the create consent record',

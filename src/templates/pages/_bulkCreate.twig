@@ -1,0 +1,77 @@
+{% extends "_layouts/cp.twig" %}
+
+{% import '_includes/forms.twig' as forms %}
+
+{% set title = "Bulk add cookies & vendors"|t("cookie-banner") %}
+{% set selectedSubnavItem = 'compliancyChecklist' %}
+
+{% set crumbs = [
+    { label: 'Cookie banner'|t("cookie-banner"), url: url('cookie-banner') },
+    { label: 'Cookies and vendors'|t("cookie-banner"), url: url('cookie-banner/cookies-and-vendors') },
+    { label: 'Bulk add'|t("cookie-banner") },
+] %}
+
+{% block content %}
+    <div class="ccb-bulk-add">
+        <form method="post">
+            {{ csrfInput() }}
+            {{ actionInput("cookie-banner/cookies-and-vendors/bulk-create") }}
+
+            <div class="flex-fields">
+                {# <div class="field width-100">
+                    {{ forms.buttonGroupField({
+                        label: "Choose your input method"|t,
+                        id: "inputMethod",
+                        name: "inputMethod",
+                        value: "text",
+                        options: [
+                            { label: 'Text'|t("cookie-banner"), value: 'text', icon: 'field' },
+                            { label: 'upload CSV file'|t("cookie-banner"), value: 'file', icon: 'file' },
+                        ]
+                    }) }}      
+                </div> #}
+
+                <div class="field width-50">
+                    {{ forms.textareaField({
+                        label: "List your cookies and/or vendors"|t("cookie-banner"),
+                        instructions: "Use the preview button find syntax issues or typo's in cookie and vendor names",
+                        tip: "This field only accepts a comma as separator"|t("cookie-banner"),
+                        id: 'input',
+                        name: 'input',
+                        rows: 6,
+                        value: '_ga,_gid,Google,_fbp,Facebook,test-cookie-die-niet-gevonden-mag-worden',
+                        placeholder: 'Comma separated values: _ga, _gid, Google, _fbp, Facebook etc...'|t('cookie-banner'),
+                    }) }}
+                </div>
+
+                <div class="field width-100">
+                    <button data-preview-changes type="button" class="btn">{{ "Preview changes"|t }}</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const previewChangesButton = document.querySelector("[data-preview-changes]");
+
+        previewChangesButton.addEventListener("click", async () => { 
+            const input = document.querySelector("#input").value;
+
+            const response = await fetch("/actions/cookie-banner/cookies-and-vendors/preview-bulk-create", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-Token': '{{ craft.app.request.csrfToken }}',
+                },
+                body: JSON.stringify({ input })
+            });
+
+            const text = await response.text();
+
+            const parser = new DOMParser();
+            const html = parser.parseFromString(text, "text/html");
+
+            previewChangesButton.parentElement.insertAdjacentHTML("afterend", html.body.innerHTML);
+        })
+    </script>
+{% endblock %}
