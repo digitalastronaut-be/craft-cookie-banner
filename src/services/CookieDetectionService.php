@@ -113,7 +113,8 @@ class CookieDetectionService extends Component {
         $result = [];
         $existingVendorNames = [];
 
-        $existingVendors = Content::find()->one()->vendors;
+        $content = Content::find()->one();
+        $existingVendors = $content?->vendors ?? [];
 
         foreach ($existingVendors as $vendor) {
             $vendorMatch = CookieBanner::getInstance()

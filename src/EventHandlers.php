@@ -43,18 +43,19 @@ class EventHandlers {
         self::registerTemplateRoots();
         self::registerElementTypes();
         self::registerAssetBundles();
-        self::registerTwigExtension();
     }
 
     private static function registerCpEvents(): void {
         self::registerPermissions();
         self::registerCpRoutes();
-        self::registerSiteModelEvents();        
+        self::registerSiteModelEvents();      
+        self::registerTwigExtension();
     }
 
     private static function registerSiteEvents(): void {
         self::registerSiteRoutes();
         self::registerCookieBannerHtml();
+        self::registerTwigExtension();
     }
 
     private static function registerConsoleEvents(): void {
@@ -113,6 +114,14 @@ class EventHandlers {
                 $event->permissions[] = [
                     'heading' => 'Cookie banner',
                     'permissions' => [
+                        'cookie-banner:access-dashboard' => [
+                            'label' => Craft::t('cookie-banner', 'Access dashboard'),
+                            'nested' => [
+                                'cookie-banner:update-guide-progress' => [
+                                    'label' => Craft::t('cookie-banner', 'Update guide progress')
+                                ],
+                            ],
+                        ],
                         'cookie-banner:access-cookies-and-vendors' => [
                             'label' => Craft::t('cookie-banner', 'Access cookies and vendors'),
                             'nested' => [

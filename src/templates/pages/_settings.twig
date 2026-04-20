@@ -21,7 +21,7 @@
 {% block content %}
     {{ actionInput('plugins/save-plugin-settings') }}
     {{ hiddenInput('pluginHandle', 'cookie-banner') }}
-    {{ hiddenInput('siteId', ) }}
+    {{ hiddenInput('siteId', currentSite) }}
 
     <div class="flex-fields">
         <h2>{{ 'General'|t("cookie-banner") }}</h2>

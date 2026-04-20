@@ -6,6 +6,7 @@ use Craft;
 use craft\web\Controller;
 
 use yii\web\Response;
+use yii\web\BadRequestHttpException;
 
 use digitalastronaut\craftcookiebanner\CookieBanner;
 use digitalastronaut\craftcookiebanner\elements\ConsentRecord;
@@ -17,7 +18,17 @@ class DashboardController extends Controller {
     public $defaultAction = 'index';
     protected array|int|bool $allowAnonymous = self::ALLOW_ANONYMOUS_NEVER;
 
+    private const VALID_STEPS = [
+        'legalPagesStepCompleted',
+        'deferScriptsStepCompleted',
+        'contentStepCompleted',
+        'appearanceStepCompleted',
+        'finalSettingsStepCompleted',
+    ];
+
     public function actionIndex(): Response {
+        $this->requirePermission("cookie-banner:access-dashboard");
+
         $settings = CookieBanner::getInstance()->getSettings();
 
         return $this->renderTemplate('cookie-banner/pages/_dashboard.twig', [
@@ -31,6 +42,9 @@ class DashboardController extends Controller {
     }
 
     public function actionSkipGuide(): Response {
+        $this->requirePermission("cookie-banner:update-guide-progress");
+        $this->requirePostRequest();
+
         $settings = CookieBanner::getInstance()->getSettings();
 
         $settings->gettingStartedProgress['legalPagesStepCompleted'] = true;
@@ -45,63 +59,22 @@ class DashboardController extends Controller {
         return $this->redirectToPostedUrl();
     }
 
-    public function actionCompleteLegalPagesStep(): Response {
+    public function actionCompleteGuideStep(): Response {
+        $this->requirePermission('cookie-banner:update-guide-progress');
         $this->requirePostRequest();
-        
+
+        $step = Craft::$app->getRequest()->getRequiredBodyParam('step');
+
+        if (!in_array($step, self::VALID_STEPS, true)) {
+            throw new BadRequestHttpException("Invalid guide step: $step");
+        }
+
         $settings = CookieBanner::getInstance()->getSettings();
-        $settings->gettingStartedProgress['legalPagesStepCompleted'] = true;
+        $settings->gettingStartedProgress[$step] = true;
 
         Craft::$app->plugins->savePluginSettings(CookieBanner::getInstance(), $settings->toArray());
 
-        Craft::$app->getSession()->setSuccess("Legal pages step completed");
-        return $this->redirectToPostedUrl();
-    }
-        
-    public function actionCompleteDeferScriptsStep(): Response {
-        $this->requirePostRequest();
-        
-        $settings = CookieBanner::getInstance()->getSettings();
-        $settings->gettingStartedProgress['deferScriptsStepCompleted'] = true;
-        
-        Craft::$app->plugins->savePluginSettings(CookieBanner::getInstance(), $settings->toArray());
-            
-        Craft::$app->getSession()->setSuccess("Defer third party scripts step completed");
-        return $this->redirectToPostedUrl();
-    }
-        
-    public function actionCompleteContentStep(): Response {
-        $this->requirePostRequest();
-        
-        $settings = CookieBanner::getInstance()->getSettings();
-        $settings->gettingStartedProgress['contentStepCompleted'] = true;
-        
-        Craft::$app->plugins->savePluginSettings(CookieBanner::getInstance(), $settings->toArray());
-            
-        Craft::$app->getSession()->setSuccess("Content step completed");
-        return $this->redirectToPostedUrl();
-    }
-
-    public function actionCompleteAppearanceStep(): Response {
-        $this->requirePostRequest();
-        
-        $settings = CookieBanner::getInstance()->getSettings();
-        $settings->gettingStartedProgress['appearanceStepCompleted'] = true;
-
-        Craft::$app->plugins->savePluginSettings(CookieBanner::getInstance(), $settings->toArray());
-
-        Craft::$app->getSession()->setSuccess("Appearance step completed");
-        return $this->redirectToPostedUrl();
-    }
-
-    public function actionCompleteFinalSettingsStep(): Response {
-        $this->requirePostRequest();
-        
-        $settings = CookieBanner::getInstance()->getSettings();
-        $settings->gettingStartedProgress['finalSettingsStepCompleted'] = true;
-
-        Craft::$app->plugins->savePluginSettings(CookieBanner::getInstance(), $settings->toArray());
-
-        Craft::$app->getSession()->setSuccess("Final settings step completed");
+        Craft::$app->getSession()->setSuccess('Step completed successfully');
         return $this->redirectToPostedUrl();
     }
 }

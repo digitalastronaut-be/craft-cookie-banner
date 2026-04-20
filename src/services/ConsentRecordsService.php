@@ -11,9 +11,6 @@ use digitalastronaut\craftcookiebanner\CookieBanner;
 use digitalastronaut\craftcookiebanner\helpers\Table;
 use digitalastronaut\craftcookiebanner\elements\ConsentRecord;
 
-use yii\db\Expression;
-use yii\db\Query;
-
 use DateTime;
 
 use Carbon\Carbon;
@@ -25,7 +22,7 @@ class ConsentRecordsService extends Component {
         $expiredDate = $this->getExpiredDate();
 
         $records = ConsentRecord::find()
-            ->where(['<', 'cookie_banner_consent_records.consentTimestamp', $expiredDate->toDateTimeString()])
+            ->consentTimestampBetween(Carbon::now()->subMillennium(), $expiredDate)
             ->all();
         
         foreach ($records as $record) {
@@ -45,7 +42,7 @@ class ConsentRecordsService extends Component {
 
             if (!Craft::$app->elements->saveElement($consentRecord)) {
                 throw new Exception(sprintf(
-                    'Failed the create consent record',
+                    'Failed the create consent record: %s',
                     json_encode($consentRecord->getErrors())
                 ));
             }
@@ -53,33 +50,6 @@ class ConsentRecordsService extends Component {
         } catch (Exception $error) {
             throw $error;
         }
-    }
-
-    public function getCategorizedConsentRecordStats(): array {
-        $consentRecordsCount = ConsentRecord::find()->count();
-
-        $necessaryCookiesCount = ConsentRecord::find()->where(["necessaryCookies" => true])->count(); 
-        $preferenceCookiesCount = ConsentRecord::find()->where(["preferenceCookies" => true])->count(); 
-        $analyticalCookiesCount = ConsentRecord::find()->where(["analyticalCookies" => true])->count(); 
-        $marketingCookiesCount = ConsentRecord::find()->where(["marketingCookies" => true])->count(); 
-        $uncategorizedCookiesCount = ConsentRecord::find()->where(["uncategorizedCookies" => true])->count(); 
-        
-        return [
-            "acceptedNecessaryCookiesPercentage" => 
-                $consentRecordsCount != 0 ? round((($necessaryCookiesCount / $consentRecordsCount) * 100), 1) : 0,
-
-            "acceptedPreferenceCookiesPercentage" => 
-                $consentRecordsCount != 0 ? round((($preferenceCookiesCount / $consentRecordsCount) * 100), 1) : 0,
-
-            "acceptedAnalyticalCookiesPercentage" => 
-                $consentRecordsCount != 0 ? round((($analyticalCookiesCount / $consentRecordsCount) * 100), 1) : 0,
-
-            "acceptedMarketingCookiesPercentage" => 
-                $consentRecordsCount != 0 ? round((($marketingCookiesCount / $consentRecordsCount) * 100), 1) : 0,
-
-            "acceptedUncategorizedCookiesPercentage" => 
-                $consentRecordsCount != 0 ? round((($uncategorizedCookiesCount / $consentRecordsCount) * 100), 1) : 0,
-        ];
     }
 
     private function getExpiredDate(): Carbon {
@@ -98,31 +68,10 @@ class ConsentRecordsService extends Component {
     }
 
     public function getChartData(): array {
-        $rows = (new Query())
-            ->select([
-                'date' => new Expression('DATE(cr.consentTimestamp)'),
-                'count' => new Expression('COUNT(*)'),
-                'accepted' => new Expression("
-                    SUM(
-                        cr.necessaryCookies = 1 AND
-                        cr.preferenceCookies = 1 AND
-                        cr.analyticalCookies = 1 AND
-                        cr.marketingCookies = 1 AND
-                        cr.uncategorizedCookies = 1
-                    )
-                "),
-            ])
-            ->from(['cr' => Table::COOKIE_BANNER_CONSENT_RECORDS])
-            ->innerJoin(['elements' => '{{%elements}}'], 'elements.id = cr.id')
-            ->where([
-                '>=',
-                'cr.consentTimestamp',
-                new Expression('DATE_SUB(CURDATE(), INTERVAL 60 DAY)')
-            ])
-            ->groupBy(new Expression('DATE(cr.consentTimestamp)'))
-            ->orderBy(['date' => SORT_ASC])
-            ->all();
-
+        $rows = ConsentRecord::find()
+            ->consentTimestampBetween(Carbon::now()->subMonth(), Carbon::now())
+            ->countAndAcceptancePerDay();
+    
         $indexed = [];
 
         foreach ($rows as $row) {

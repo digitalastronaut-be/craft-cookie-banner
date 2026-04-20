@@ -8,6 +8,7 @@ use craft\web\Controller;
 use yii\db\Exception;
 use yii\web\Response;
 use yii\web\BadRequestHttpException;
+use yii\web\NotFoundHttpException;
 
 use digitalastronaut\craftcookiebanner\records\Appearance;
 
@@ -15,14 +16,21 @@ use Throwable;
 
 class AppearanceController extends Controller {
     public $defaultAction = 'index';
-    protected array|int|bool $allowAnonymous = true;
+    protected array|int|bool $allowAnonymous = self::ALLOW_ANONYMOUS_NEVER;
 
     /**
      * @return Response
      */
     public function actionIndex(): Response {
-        $currentSiteId = Craft::$app->getSites()->getSiteByHandle($this->request->queryParams['site'] ?? Craft::$app->sites->primarySite->handle)->id;
-        $appearance = Appearance::find()->where(['siteId' => $currentSiteId])->one();
+        $this->requirePermission("cookie-banner:access-appearance");
+
+        $siteHandle = $this->request->queryParams['site'] ?? Craft::$app->sites->primarySite->handle;
+
+        $site = Craft::$app->getSites()->getSiteByHandle($siteHandle);
+
+        if (!$site) throw new NotFoundHttpException("Invalid site handle: {$siteHandle}");
+
+        $appearance = Appearance::find()->where(['siteId' => $site->id])->one();
 
         return $this->renderTemplate("cookie-banner/pages/_appearance", [
             'appearance' => $appearance,

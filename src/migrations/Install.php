@@ -36,7 +36,7 @@ class Install extends Migration {
             'language' => $this->string(10)->null(),
 
             'consentTimestamp' => $this->dateTime()->null(),
-            'consentAction' => $this->enum('consentAction', ['Accept all', 'Accept selected', 'Refuse all'])->null(),
+            'consentAction' => $this->string(255)->null(),
             'consentMethod' => $this->string(255)->notNull(),
             
             'necessaryCookies' => $this->boolean()->null(),

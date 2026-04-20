@@ -7,10 +7,12 @@ use craft\base\Component;
 
 use digitalastronaut\craftcookiebanner\CookieBanner;
 use digitalastronaut\craftcookiebanner\helpers\CookieBanner as CookieBannerHelper;
+use digitalastronaut\craftcookiebanner\records\Appearance;
 use digitalastronaut\craftcookiebanner\records\Content;
 
 use yii\db\Exception;
 use yii\web\BadRequestHttpException;
+use yii\helpers\Inflector;
 
 class CookiesAndVendorsService extends Component {
     /**
@@ -23,10 +25,9 @@ class CookiesAndVendorsService extends Component {
 
         $content = Content::find()->where(['siteId' => $siteId])->one();
 
-        $categorizedCookies = $content->getAttributes(CookieBannerHelper::COOKIE_CATEGORIES);
-
         if (!$content) return [];
 
+        $categorizedCookies = $content->getAttributes(CookieBannerHelper::COOKIE_CATEGORIES);
         $uncategorizedCookies = [];
 
         foreach ($categorizedCookies as $category => $cookies) {
@@ -49,6 +50,25 @@ class CookiesAndVendorsService extends Component {
         if (!$siteId) $siteId = Craft::$app->sites->getPrimarySite()->id;
 
         return Content::find()->where(['siteId' => $siteId])->one()->vendors;
+    }
+
+    public function getVendorSelectFieldOptions(): array {
+        $content = Content::find()->one();
+        $existingVendors = $content?->vendors ?? [];
+
+        $options[0] = [
+            "label" => Craft::t("cookie-banner", "Default"),
+            "value" => "default"
+        ];
+
+        foreach ($existingVendors as $vendor) {
+            $options[] = [
+                "label" => $vendor['name'],
+                "value" => Inflector::slug($vendor['name']),
+            ];
+        }
+
+        return $options;
     }
 
     /**
@@ -284,6 +304,7 @@ class CookiesAndVendorsService extends Component {
      */
     public function getEditCookieTableFieldData(string|null $cookieName): array {
         $contentForEachSite = Content::find()->all();
+        $cookieForEachSite = [];
         
         foreach ($contentForEachSite as $content) {
             $site = Craft::$app->getSites()->getSiteById($content->siteId);
@@ -365,7 +386,7 @@ class CookiesAndVendorsService extends Component {
     public function blacklistCookieForEachSite(string|null $cookieName): void {
         $settings = CookieBanner::getInstance()->getSettings();
 
-        if (!in_array($cookieName, $settings->blacklistedCookies)) {
+        if (!in_array($cookieName, array_column($settings->blacklistedCookies, 'name'))) {
             $settings->blacklistedCookies[] = ['name' => $cookieName];
         }
 
@@ -665,7 +686,6 @@ class CookiesAndVendorsService extends Component {
      */
     public function getEditVendorTableFieldData(string|null $vendorName): array {
         $contentForEachSite = Content::find()->all();
-
         $vendorForEachSite = [];
     
         foreach ($contentForEachSite as $content) {
@@ -839,5 +859,18 @@ class CookiesAndVendorsService extends Component {
         $existingVendors = array_column($this->getAllVendors(), null, 'name');
 
         return key_exists($item, [...$existingCookies, ...$existingVendors]);
+    }
+
+    public function getCookiesListHtml(): string {
+        $currentSiteId = Craft::$app->getSites()->getCurrentSite()->id;
+        $content = Content::find()->where(['siteId' => $currentSiteId])->one();
+        $appearance = Appearance::find()->where(['siteId' => $currentSiteId])->one();
+
+        $cookiesListHtml = Craft::$app->getView()->renderTemplate('cookie-banner/components/_cookiesList.twig', [
+            'appearance' => $appearance,
+            'content' => $content
+        ]);
+
+        return $cookiesListHtml;
     }
 }

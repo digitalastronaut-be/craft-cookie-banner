@@ -11,6 +11,7 @@ use craft\enums\Color;
 use craft\helpers\Db;
 use craft\helpers\UrlHelper;
 use craft\models\FieldLayout;
+
 use yii\web\Response;
 
 use digitalastronaut\craftcookiebanner\elements\conditions\ConsentRecordCondition;
@@ -19,6 +20,9 @@ use digitalastronaut\craftcookiebanner\helpers\Table;
 
 use DateTime;
 
+/**
+ * @method static ConsentRecordQuery find()
+ */
 class ConsentRecord extends Element {
     private ?FieldLayout $fieldLayout = null;
     public ?string $ipAddressHash = null;
@@ -43,11 +47,17 @@ class ConsentRecord extends Element {
     public static function pluralLowerDisplayName(): string { return Craft::t('cookie-banner', 'consent records'); }
     public static function refHandle(): ?string { return 'consentrecord'; }
 
-    public static function trackChanges(): bool { return true; }
+    public static function trackChanges(): bool { return false; }
     public static function hasTitles(): bool { return true; }
     public static function hasUris(): bool { return false; }
     public static function isLocalized(): bool { return false; }
     public static function hasStatuses(): bool { return true; }
+
+    public function canView(User $user): bool { return true; }
+    public function canSave(User $user): bool { return false; }
+    public function canDuplicate(User $user): bool {return false; }
+    public function canDelete(User $user): bool { return true; }
+    public function canCreateDrafts(User $user): bool { return false; }
 
     public static function statuses(): array {
         return [
@@ -68,19 +78,17 @@ class ConsentRecord extends Element {
     }
 
     protected static function defineSources(string $context): array {
+        $rows = ConsentRecord::find()->groupedByMonth();
+
         $grouped = [];
 
-        foreach (ConsentRecord::find()->all() as $consentRecord) {
-            $date = $consentRecord->consentTimestamp;
+        foreach ($rows as $row) {
+            $year = (int)$row['year'];
+            $month = (int)$row['month'];
 
-            $year = (int)$date->format('Y');
-            $month = (int)$date->format('m');
-            $monthLabel = $date->format('F');
+            if (!isset($grouped[$year])) $grouped[$year] = [];
 
-            if (!isset($grouped[$year])) {
-                $grouped[$year] = [];
-            }
-
+            $monthLabel = Craft::$app->getFormatter()->asDate("{$year}-{$month}-01", 'MMMM');
             $grouped[$year][$month] = $monthLabel;
         }
 
@@ -135,7 +143,7 @@ class ConsentRecord extends Element {
     protected static function defineSortOptions(): array {
         return [
             'title' => Craft::t('app', 'Title'),
-            'consentTimestamp' => Craft::t('app', 'Title')
+            'consentTimestamp' => Craft::t('app', 'Consent timestamp')
         ];
     }
 
@@ -221,10 +229,7 @@ class ConsentRecord extends Element {
     }
 
     protected function route(): array|string|null {
-        return ['templates/render', [
-            'template' => 'site/template/path',
-            'variables' => ['consentRecord' => $this],
-        ]];
+        return null;
     }
 
     public function getFieldLayout(): ?FieldLayout
@@ -237,12 +242,6 @@ class ConsentRecord extends Element {
 
         return $this->fieldLayout;
     }
-
-    public function canView(User $user): bool { return true; }
-    public function canSave(User $user): bool { return false; }
-    public function canDuplicate(User $user): bool {return false; }
-    public function canDelete(User $user): bool { return true; }
-    public function canCreateDrafts(User $user): bool { return false; }
 
     public function prepareEditScreen(Response $response, string $containerId): void {
         $response->crumbs([

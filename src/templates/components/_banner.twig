@@ -286,7 +286,7 @@
             --ccb-cookie-table-border-color: {{ "#" ~ appearance.cookieTableBorderColor }};
             --ccb-cookie-table-border-radius: {{ bannerElementBorderRadiusOptions[appearance.bannerStyle] }};
 
-            {{ appearance.css|raw }}
+            {{ appearance.css|striptags|raw }}
         }
     </style>
 </cookie-banner>

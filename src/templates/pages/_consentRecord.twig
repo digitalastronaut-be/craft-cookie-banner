@@ -6,7 +6,7 @@
 {% set crumbs = [
     { label: 'Cookie banner'|t, url: url('cookie-banner') },
     { label: 'Consent records'|t, url: url('cookie-banner/consent-records') },
-    { label: element.id, url: url('cookie-banner/consent-records/:id') },
+    { label: element.id, url: url('cookie-banner/consent-records/' ~ element.id) },
 ] %}
 
 {% set recentConsentRecords = matchingConsentRecords|slice(-3) %}

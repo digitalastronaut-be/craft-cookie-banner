@@ -280,7 +280,7 @@ class CookiesAndVendorsController extends Controller {
      * @throws MissingComponentException
      */
     public function actionDeleteCookieForAllSites(): Response {
-        $this->requirePermission("cookie-banner:delete-cookies");
+        $this->requirePermission("cookie-banner:remove-cookies");
 
         try {
             $cookieName = $this->request->getBodyParam("cookieName");
@@ -291,7 +291,7 @@ class CookiesAndVendorsController extends Controller {
                 ->getCookiesAndVendors()
                 ->deleteCookieForEachSite($cookieName);
 
-            Craft::$app->getSession()->setSuccess("{$cookieName} cookie deleted for all sites.");
+            Craft::$app->getSession()->setSuccess("{$cookieName} cookie removed for all sites.");
             return $this->redirect('cookie-banner/cookies-and-vendors');
 
         } catch(Throwable $error) {
@@ -504,10 +504,6 @@ class CookiesAndVendorsController extends Controller {
         }
     }
 
-    public function actionGetVendors() {
-        return Content::find()->one()->vendors;
-    }
-
     public function actionGetVendorsChartData(): Response {
         $data = CookieBanner::getInstance()->getCookiesAndVendors()->getVendorsChartData();
 
@@ -515,14 +511,18 @@ class CookiesAndVendorsController extends Controller {
     }
 
     public function actionSearchCookies() {
+        $this->requirePermission("cookie-banner:add-cookies");
+        
         $searchTerm = $this->request->getQueryParam("searchTerm");
-
+        
         return $this->renderTemplate("cookie-banner/requests/_cookieDatabase", [
             'searchTerm' => $searchTerm,
         ]);
     }
-        
+            
     public function actionSearchVendors() {
+        $this->requirePermission("cookie-banner:add-vendors");
+
         $searchTerm = $this->request->getQueryParam("searchTerm");
 
         return $this->renderTemplate("cookie-banner/requests/_vendorDatabase", [

@@ -1,9 +1,9 @@
 export const googleConsentV2Map = {
-	essentialCookies: ["functionality_storage", "security_storage"],
-	functionalCookies: ["functionality_storage"],
+	necessaryCookies: ["security_storage"],
+	preferenceCookies: ["functionality_storage"],
 	analyticalCookies: ["analytics_storage"],
-	advertisementCookies: ["ad_storage", "ad_personalization", "ad_user_data"],
-	personalizationCookies: ["personalization_storage"],
+	marketingCookies: ["ad_storage", "ad_personalization", "ad_user_data"],
+	uncategorizedCookies: ["personalization_storage"],
 };
 
 export const buildGoogleConsentV2Object = (consentCategories) => {
@@ -13,7 +13,7 @@ export const buildGoogleConsentV2Object = (consentCategories) => {
 		const keys = googleConsentV2Map[category] || [];
 
 		for (const key of keys) {
-			if (category === "essentialCookies") {
+			if (category === "necessaryCookies") {
 				result[key] = "granted";
 			} else {
 				result[key] = value ? "granted" : "denied";

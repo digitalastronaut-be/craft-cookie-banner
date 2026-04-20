@@ -2,6 +2,7 @@
 
 namespace digitalastronaut\craftcookiebanner\console\controllers;
 
+use Carbon\Carbon;
 use DateTime;
 
 use Craft;
@@ -17,8 +18,10 @@ use yii\helpers\Console;
 class SeedController extends Controller {
     public $defaultAction = 'index';
 
-    public function actionIndex(): void {
+    public function actionIndex(): int {
         $this->stdout("Use this controller to seed data for cookie banner related tables" . PHP_EOL, Console::FG_CYAN);
+
+        return ExitCode::OK;
     }
 
     public function actionConsentRecords(
@@ -32,8 +35,8 @@ class SeedController extends Controller {
         $actions = ['Accept all', 'Accept selected', 'Refuse all'];
         $userAgents = CookieBannerHelper::EXAMPLE_USER_AGENTS;
 
-        $now = new DateTime();
-        $startDate = (new DateTime())->modify("-{$period}");
+        $now = Carbon::now();
+        $startDate = Carbon::now()->modify("-{$period}");
         $secret = Craft::$app->getConfig()->getGeneral()->securityKey;
 
         for ($i = 0; $i < $count; $i++) {

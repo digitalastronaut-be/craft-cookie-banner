@@ -27,7 +27,7 @@ class CookieBanner extends HTMLElement {
 	}
 
 	connectedCallback() {
-		if (!window.dataLayer) {
+		if (!window.dataLayer && typeof gtag !== "undefined") {
 			console.warn(
 				"%cCraft CMS plugin warning - Cookie banner\n%cThe dataLayer is not initialized.\nPlease load Google tag manager script first.",
 				"font-weight: bold;",
@@ -121,11 +121,21 @@ class CookieBanner extends HTMLElement {
 	}
 
 	async logConsent(consentAction) {
-		const response = await fetch(`/cookie-banner/consent-records/create`, {
+		let session = await fetch("/actions/users/session-info", {
+			headers: {
+				Accept: "application/json",
+			},
+		});
+
+		if (!session.ok) throw new Error("Failed to fetch session info");
+
+		session = await session.json();
+
+		const response = await fetch(`actions/cookie-banner/consent-records/create`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
-				"X-CSRF-Token": window.craftCookieBanner.csrfTokenValue,
+				"X-CSRF-Token": session.csrfTokenValue,
 			},
 			body: JSON.stringify({
 				language: navigator.language,
@@ -134,8 +144,7 @@ class CookieBanner extends HTMLElement {
 			}),
 		});
 
-		const data = await response.json();
-		console.log(data);
+		if (!response.ok) throw new Error("Failed to log consent");
 	}
 
 	dispatchConsentUpdate() {

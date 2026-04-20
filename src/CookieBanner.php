@@ -7,7 +7,6 @@ use craft\base\Model;
 use craft\base\Plugin;
 
 use craft\helpers\UrlHelper;
-
 use digitalastronaut\craftcookiebanner\models\Settings;
 use digitalastronaut\craftcookiebanner\services\ServicesTrait;
 
@@ -16,9 +15,10 @@ use digitalastronaut\craftcookiebanner\services\ServicesTrait;
 // TODO: Styling en templates mooier opsplitsen (BASE) 
 // TODO: JS translatinos for chip component
 // TODO: improve rules for active records
-// TODO: rename consent record cookie categories
 // TODO: kijken om de category ook autoFillen bij manual create
 // TODO: Fix duplicates for autoCreate and manualCreate
+// TODO: PHP Docs overlopen
+// TODO: improve log consent if error happens
 
 /**
  * Cookie banner plugin
@@ -94,7 +94,7 @@ class CookieBanner extends Plugin {
             ];
         }
         
-        if ($currentUser->checkPermission("cookie-banner:access-appearance")) {
+        if ($currentUser->checkPermission("cookie-banner:access-settings")) {
             $nav['subnav']['settings'] = [
                 'label' => Craft::t('cookie-banner', 'Settings'), 
                 'url' => 'cookie-banner/settings'

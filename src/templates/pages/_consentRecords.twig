@@ -11,11 +11,7 @@
 
 {% set elementType = 'digitalastronaut\\craftcookiebanner\\elements\\ConsentRecord' %}
 
-{% set canHaveDrafts = true %}
-
 {% block content %}
-    {% set result = craft.app.i18n.translate('cookie-banner', 'Introduction', {}, craft.app.language) %}
-
     <div class="ccb-consent-overview">
         <h2>{{ "Consent statistics"|t("cookie-banner") }}</h2>
 

@@ -12,7 +12,7 @@ class CookiesAndVendorsGraph extends HTMLElement {
 		this.cookiesChartElement = this.querySelector(":scope #cookies-graph");
 		this.vendorsChartElement = this.querySelector(":scope #vendors-graph");
 
-		if (!this.cookiesChartElement && this.vendorsChartElement) {
+		if (!this.cookiesChartElement || !this.vendorsChartElement) {
 			throw new Error("Component must define a valid chart canvas elements");
 		}
 
@@ -36,8 +36,6 @@ class CookiesAndVendorsGraph extends HTMLElement {
 
 		const vendorsResponse = await fetch("/actions/cookie-banner/cookies-and-vendors/get-vendors-chart-data");
 		const { data: vendorsRawData } = await vendorsResponse.json();
-
-		console.log(vendorsRawData);
 
 		const vendorsChartData = {
 			labels: vendorsRawData.map((item) => item.label),

@@ -20,8 +20,6 @@ class ConsentRecordsGraph extends HTMLElement {
 		const values = json.data.map((row) => row.count);
 		const accepted = json.data.map((row) => row.accepted);
 
-		console.log(values);
-
 		new Chart(this.chartElement, {
 			type: "line",
 			data: {

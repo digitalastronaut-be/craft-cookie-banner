@@ -58,8 +58,8 @@ class Content extends ActiveRecord {
             'acceptAllButtonLabel',
             'acceptSelectedButtonLabel',
             'refuseAllButtonLabel',
-            'DeterminePreferencesButtonLabel',
-            'DetailedPreferencesButtonLabel',
+            'determinePreferencesButtonLabel',
+            'detailedPreferencesButtonLabel',
         ];
 
         return array_merge($fields, parent::fields());
@@ -80,10 +80,10 @@ class Content extends ActiveRecord {
                     'necessaryCookiesLabel',
                     'necessaryCookiesDefinition',
                     'necessaryCookies',
-                    'preferencelCookiesTitle',
-                    'preferencelCookiesLabel',
-                    'preferencelCookiesDefinition',
-                    'preferencelCookies',
+                    'preferenceCookiesTitle',
+                    'preferenceCookiesLabel',
+                    'preferenceCookiesDefinition',
+                    'preferenceCookies',
                     'analyticalCookiesTitle',
                     'analyticalCookiesLabel',
                     'analyticalCookiesDefinition',
@@ -99,8 +99,8 @@ class Content extends ActiveRecord {
                     'acceptAllButtonLabel',
                     'acceptSelectedButtonLabel',
                     'refuseAllButtonLabel',
-                    'DeterminePreferencesButtonLabel',
-                    'DetailedPreferencesButtonLabel',
+                    'determinePreferencesButtonLabel',
+                    'detailedPreferencesButtonLabel',
                 ], 
                 'safe'
             ],

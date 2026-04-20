@@ -16,7 +16,7 @@ use Throwable;
 
 class ConsentRecordsController extends Controller {
     public $defaultAction = 'index';
-    protected array|int|bool $allowAnonymous = true;
+    protected array|int|bool $allowAnonymous = ['create'];
 
     public function actionIndex(): Response {
         return $this->redirect("cookie-banner/consent-records");
@@ -26,7 +26,7 @@ class ConsentRecordsController extends Controller {
         $this->requirePermission("cookie-banner:access-consent-records");
         
         return $this->renderTemplate('cookie-banner/pages/_consentRecords.twig', [
-            "consentStatistics" => CookieBanner::getInstance()->getConsentRecords()->getCategorizedConsentRecordStats(),
+            "consentStatistics" => ConsentRecord::find()->categoryAcceptancePercentages(),
         ]);
     }
             
@@ -34,9 +34,10 @@ class ConsentRecordsController extends Controller {
         $this->requirePermission("cookie-banner:access-consent-records");
 
         $element = ConsentRecord::find()->id($id)->one();
-        $matchingConsentRecords = ConsentRecord::find()->ipAddressHash($element->ipAddressHash)->all();
-
+        
         if (!$element) throw new BadRequestHttpException('No element was identified by the request.');
+
+        $matchingConsentRecords = ConsentRecord::find()->ipAddressHash($element->ipAddressHash)->all();
         
         return $this->renderTemplate('cookie-banner/pages/_consentRecord.twig', [
             "element" => $element,
@@ -93,8 +94,8 @@ class ConsentRecordsController extends Controller {
 
             $this->response->statusCode = 500;
             return $this->asJson([
-                "succes" => false,
-                "error" => $error->getMessage(),
+                "success" => false,
+                "error" => "Something went wrong",
             ]);
         }
     }
