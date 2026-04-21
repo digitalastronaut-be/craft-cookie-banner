@@ -227,7 +227,7 @@ class CookieBanner extends HTMLElement {
 		this.acceptSelectedButton = this.querySelector("[data-accept-selected-button]");
 		this.acceptAllButton = this.querySelector("[data-accept-all-button]");
 
-		this.manageConsentElements = [...document.querySelectorAll("[data-manage-consent]")];
+		this.manageConsentElements = [...document.querySelectorAll('a[href*="#manage-consent"]')];
 	}
 
 	registerEventListeners() {

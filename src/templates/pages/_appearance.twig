@@ -501,30 +501,30 @@
                     suffix: "px",
                 }) }}
             </div>
-
-            <hr>
-
-            <div class="field width-100">
-                {{ codeEditor.textareaField(
-                    {
-                        label: "Custom styles"|t("cookie-banner"),
-                        instructions: "Define CSS styles that should be registered for the cookie banner for this site"|t("cookie-banner"),
-                        id: "custom-styles",
-                        name: "fields[css]",
-                        value: appearance.css,
-                    }, 
-                    "Code Editor", 
-                    {
-                        tabSize: 2,
-                        showUnused: false,
-                        language: 'css',
-                    }, 
-                    {
-                        wrapperClass: "monaco-editor-background-frame",
-                        placeholderText: "Custom cookie banner styling for"|t("cookie-banner") ~ " " ~ currentSite.name,
-                    })
-                }}
-            </div>
         {% endif %}
+
+        <hr>
+
+        <div class="field width-100">
+            {{ codeEditor.textareaField(
+                {
+                    label: "Custom styles"|t("cookie-banner"),
+                    instructions: "Define CSS styles that should be registered for the cookie banner for this site"|t("cookie-banner"),
+                    id: "custom-styles",
+                    name: "fields[css]",
+                    value: appearance.css,
+                }, 
+                "Code Editor", 
+                {
+                    tabSize: 2,
+                    showUnused: false,
+                    language: 'css',
+                }, 
+                {
+                    wrapperClass: "monaco-editor-background-frame",
+                    placeholderText: "Custom cookie banner styling for"|t("cookie-banner") ~ " " ~ currentSite.name,
+                })
+            }}
+        </div>
     </div>
 {% endblock %}

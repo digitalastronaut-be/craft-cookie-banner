@@ -913,7 +913,7 @@ var CookieBanner = /*#__PURE__*/function (_HTMLElement) {
       this.determinePreferencesLink = this.querySelector("[data-determine-preferences-link]");
       this.acceptSelectedButton = this.querySelector("[data-accept-selected-button]");
       this.acceptAllButton = this.querySelector("[data-accept-all-button]");
-      this.manageConsentElements = _toConsumableArray(document.querySelectorAll("[data-manage-consent]"));
+      this.manageConsentElements = _toConsumableArray(document.querySelectorAll('a[href*="#manage-consent"]'));
     }
   }, {
     key: "registerEventListeners",
