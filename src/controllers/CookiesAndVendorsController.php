@@ -62,42 +62,48 @@ class CookiesAndVendorsController extends Controller {
         $this->requirePermission('cookie-banner:add-cookies');
 
         if ($this->request->isPost) {
-            $this->requirePostRequest();
-
-            $input = $this->request->getBodyParam("input");
-
-            if (!$input) throw new BadRequestHttpException("Input cannot be empty");
-
-            $parsedInput = str_getcsv($input, ",", '"');
-
-            foreach ($parsedInput as $item) {
-                $matchedCookie = CookieBanner::getInstance()
-                    ->getCookieDetection()
-                    ->getCookieDataFromDatabase($item, "en");
-
-                if ($matchedCookie) {
-                    CookieBanner::getInstance()
-                        ->getCookiesAndVendors()
-                        ->autoCreateCookieForEachSite($matchedCookie['cookie']['name']);
-                        
-                    continue;
-                }
-                        
-                $matchedVendor = CookieBanner::getInstance()
-                    ->getCookieDetection()
-                    ->getVendorDataFromDatabase($item, "en");
-                        
-                if ($matchedVendor) {
-                    CookieBanner::getInstance()
-                        ->getCookiesAndVendors()
-                        ->autoCreateVendorForEachSite($matchedVendor['vendor']['name']);
+            try {
+                $input = $this->request->getBodyParam("input");
+    
+                if (!$input) throw new BadRequestHttpException("Input cannot be empty");
+    
+                $parsedInput = str_getcsv(trim($input), ",", '"');
+    
+                foreach ($parsedInput as $item) {
+                    $matchedCookie = CookieBanner::getInstance()
+                        ->getCookieDetection()
+                        ->getCookieDataFromDatabase($item, "en");
+    
+                    if ($matchedCookie) {
+                        CookieBanner::getInstance()
+                            ->getCookiesAndVendors()
+                            ->autoCreateCookieForEachSite($matchedCookie['cookie']['name']);
                             
-                    continue;
+                        continue;
+                    }
+                            
+                    $matchedVendor = CookieBanner::getInstance()
+                        ->getCookieDetection()
+                        ->getVendorDataFromDatabase($item, "en");
+                            
+                    if ($matchedVendor) {
+                        CookieBanner::getInstance()
+                            ->getCookiesAndVendors()
+                            ->autoCreateVendorForEachSite($matchedVendor['vendor']['name']);
+                                
+                        continue;
+                    }
                 }
-            }
 
-            Craft::$app->getSession()->setSuccess("Items successfully added");
-            $this->redirectToPostedUrl();
+                Craft::$app->getSession()->setSuccess("Items successfully added");
+                $this->redirectToPostedUrl();
+
+            } catch(Throwable $error) {
+                Craft::error($error->getMessage(), __METHOD__);
+                Craft::$app->getSession()->setError('Error: ' . $error->getMessage());
+
+                return $this->redirectToPostedUrl();
+            }
         }
 
         return $this->renderTemplate("cookie-banner/pages/_bulkCreate");
@@ -118,7 +124,7 @@ class CookiesAndVendorsController extends Controller {
             
             if (!$input) throw new BadRequestHttpException("Input cannot be empty");
             
-            $parsedInput = str_getcsv($input, ",", '"');
+            $parsedInput = str_getcsv(trim($input), ",", '"');
 
             $cookieDatabase = CookieBanner::getInstance()
                 ->getCookieDetection()

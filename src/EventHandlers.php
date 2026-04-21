@@ -348,7 +348,7 @@ class EventHandlers {
                     'content' => $content
                 ]);
 
-                Craft::$app->getView()->registerHtml($bannerHtml, View::POS_BEGIN);
+                Craft::$app->getView()->registerHtml($bannerHtml, View::POS_END);
                 Craft::$app->getView()->registerHtml($dataLayerScript, View::POS_HEAD);
             }
         );

@@ -137,19 +137,14 @@ class Content extends ActiveRecord {
                     'cookiePolicyLinkURL',
                     'necessaryCookiesTitle',
                     'necessaryCookiesLabel',
-                    'necessaryCookiesDefinition',
                     'preferenceCookiesTitle',
                     'preferenceCookiesLabel',
-                    'preferenceCookiesDefinition',
                     'analyticalCookiesTitle',
                     'analyticalCookiesLabel',
-                    'analyticalCookiesDefinition',
                     'marketingCookiesTitle',
                     'marketingCookiesLabel',
-                    'marketingCookiesDefinition',
                     'uncategorizedCookiesTitle',
                     'uncategorizedCookiesLabel',
-                    'uncategorizedCookiesDefinition',
                     'acceptAllButtonLabel',
                     'acceptSelectedButtonLabel',
                     'refuseAllButtonLabel',
@@ -162,7 +157,17 @@ class Content extends ActiveRecord {
                 'max' => 255,
             ],
 
-            [['text'], 'string', 'max' => 65535],
+            [
+                [
+                    'text',
+                    'necessaryCookiesDefinition',
+                    'preferenceCookiesDefinition',
+                    'analyticalCookiesDefinition',
+                    'marketingCookiesDefinition',
+                    'uncategorizedCookiesDefinition',
+                ], 
+                'string', 'max' => 65535
+            ],
 
             [
                 [

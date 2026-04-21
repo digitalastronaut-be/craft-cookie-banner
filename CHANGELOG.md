@@ -1,5 +1,10 @@
 # Release Notes for Cookie banner
 
+## 1.0.9-beta
+
+- Bulk import error handling
+- Bulk import input sanitizing
+
 ## 1.0.8-beta
 
 - Added copy appearance from option to make repeated appearance configurations easy
