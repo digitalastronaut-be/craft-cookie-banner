@@ -3,6 +3,7 @@
 ## 1.0.8-beta
 
 - Added copy appearance from option to make repeated appearance configurations easy
+- Fixed appearance default value
 
 ## 1.0.7-beta
 

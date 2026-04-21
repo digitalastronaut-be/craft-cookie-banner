@@ -121,7 +121,7 @@ class Install extends Migration {
 
             'cookieBannerPosition' => $this->string(50)->defaultValue('bottom-left'),
             'preferencesAction' => $this->string(50)->defaultValue('button'),
-            'showCookieCategoriesPreview' => $this->boolean()->defaultValue(false),
+            'showCookieCategoriesPreview' => $this->boolean()->defaultValue(null),
             'showCookieTables' => $this->boolean()->defaultValue(true),
 
             'buttonSize' => $this->string(20)->defaultValue('small'),
