@@ -101,4 +101,56 @@ class AppearanceController extends Controller {
             return $this->redirectToPostedUrl();
         }
     }
+
+    /**
+     * @throws ForbiddenHttpException
+     * @throws BadRequestHttpException
+     * @throws NotFoundHttpException
+     * @return Response
+     * 
+     * @since v1.0.8-beta
+     */
+    public function actionCopyAppearanceFromSite(): Response {
+        $this->requirePostRequest();
+        $this->requirePermission('cookie-banner:edit-appearance');
+
+        try {
+            $sourceSiteId = $this->request->getRequiredBodyParam("sourceSiteId");
+            $destinationSiteId = $this->request->getRequiredBodyParam("destinationSiteId");
+
+            $sourceSite = Craft::$app->getSites()->getSiteById($sourceSiteId);
+            $destinationSite = Craft::$app->getSites()->getSiteById($destinationSiteId);
+
+            $sourceSiteAppearance = Appearance::find()->where(['siteId' => $sourceSiteId])->one();
+            $destinationSiteAppearance = Appearance::find()->where(['siteId' => $destinationSiteId])->one();
+
+            if (!$sourceSiteAppearance) 
+                throw new NotFoundHttpException("Appearance settings not found for source siteId: {$sourceSiteId}");
+            
+            if (!$destinationSiteAppearance)
+                throw new NotFoundHttpException("Appearance settings not found for destination siteId: {$destinationSiteId}");
+
+            $destinationSiteAppearance->setAttributes($sourceSiteAppearance->getAttributes(null, ['id', 'siteId', 'uid']));
+
+            if (!$destinationSiteAppearance->save()) {
+                throw new Exception(\sprintf(
+                    'Failed copying appearance to "%s": %s',
+                    $destinationSite->name,
+                    json_encode($destinationSiteAppearance->getErrors())
+                ));
+            }
+
+            Craft::$app->getSession()->setSuccess(Craft::t(
+                'cookie-banner',
+                "Appearance copied from {$sourceSite->name} to {$destinationSite->name} successfully"
+            ));
+
+            return $this->redirectToPostedUrl();
+        } catch(Throwable $error) {
+            Craft::error($error->getMessage(), __METHOD__);
+            Craft::$app->getSession()->setError('Error copying appearance ' . $error->getMessage());
+
+            return $this->redirectToPostedUrl();
+        }
+    }
 }
