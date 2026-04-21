@@ -1,4 +1,15 @@
 <?php
+/**
+ * Cookie banner plugin for Craft CMS
+ *
+ * Provides a fully configurable GDPR-compliant cookie banner for
+ * Craft CMS. Supports cookie detection/suggestion, consent records, vendor
+ * management, and customizable appearance & content — all from within the
+ * Craft control panel.
+ *
+ * @link      https://digitalastronaut.be
+ * @copyright Copyright (c) 2026 Digitalastronaut
+ */
 
 namespace digitalastronaut\craftcookiebanner\services;
 
@@ -7,6 +18,7 @@ use craft\base\Component;
 
 use digitalastronaut\craftcookiebanner\CookieBanner;
 use digitalastronaut\craftcookiebanner\helpers\CookieBanner as CookieBannerHelper;
+use digitalastronaut\craftcookiebanner\models\Settings;
 use digitalastronaut\craftcookiebanner\records\Appearance;
 use digitalastronaut\craftcookiebanner\records\Content;
 
@@ -14,6 +26,13 @@ use yii\db\Exception;
 use yii\web\BadRequestHttpException;
 use yii\helpers\Inflector;
 
+/**
+ * Class EventHandlers
+ *
+ * @author      Digitalastronaut
+ * @package     CookieBanner
+ * @since       v1.0.0-beta
+ */
 class CookiesAndVendorsService extends Component {
     /**
      * @param bool $categorized
@@ -31,7 +50,7 @@ class CookiesAndVendorsService extends Component {
         $uncategorizedCookies = [];
 
         foreach ($categorizedCookies as $category => $cookies) {
-            if (!is_array($cookies)) continue;
+            if (!\is_array($cookies)) continue;
 
             foreach ($cookies as $cookie) {
                 $cookie['category'] = $category;
@@ -46,13 +65,17 @@ class CookiesAndVendorsService extends Component {
      * @param int $siteId
      * @return array|mixed[]
      */
-    public function getAllVendors(?int $siteId = null) {
-        if (!$siteId) $siteId = Craft::$app->sites->getPrimarySite()->id;
+    public function getAllVendors(?int $siteId = null): array {
+        $siteId ??= Craft::$app->sites->getPrimarySite()->id;
 
-        return Content::find()->where(['siteId' => $siteId])->one()->vendors;
+        /** @var Content $content */
+        $content = Content::find()->where(['siteId' => $siteId])->one();
+
+        return $content->vendors ?? [];
     }
 
     public function getVendorSelectFieldOptions(): array {
+        /** @var Content $content */
         $content = Content::find()->one();
         $existingVendors = $content?->vendors ?? [];
 
@@ -102,7 +125,7 @@ class CookiesAndVendorsService extends Component {
                     // We need to add a Cookies suffix because the cookies.json doesn't match our db schema
                     $cookiesForCategory = $content->getAttribute($data['cookie']['category'] . 'Cookies');
 
-                    if (!is_array($cookiesForCategory)) $cookiesForCategory = [];
+                    if (!\is_array($cookiesForCategory)) $cookiesForCategory = [];
 
                     $cookiesForCategory[] = [
                         "name" => $data['languageMatch'] ? $data['cookie']['name'] : $cookieName,
@@ -115,7 +138,7 @@ class CookiesAndVendorsService extends Component {
                     $content->setAttribute($data['cookie']['category'] . 'Cookies', $cookiesForCategory);
 
                     if (!$content->save()) {
-                        throw new Exception(sprintf(
+                        throw new Exception(\sprintf(
                             'Failed saving content for site "%s": %s',
                             $site->name,
                             json_encode($content->getErrors())
@@ -178,7 +201,7 @@ class CookiesAndVendorsService extends Component {
                 $content->setAttribute($category, $cookies);
 
                 if (!$content->save()) {
-                    throw new Exception(sprintf(
+                    throw new Exception(\sprintf(
                         'Failed saving content for site "%s": %s',
                         $site->name,
                         json_encode($content->getErrors())
@@ -282,7 +305,7 @@ class CookiesAndVendorsService extends Component {
                 $content->setAttribute($newCategory, array_values($newCategoryCookiesByName));
 
                 if (!$content->save()) {
-                    throw new Exception(sprintf(
+                    throw new Exception(\sprintf(
                         'Failed saving content for site "%s": %s',
                         $site->name,
                         json_encode($content->getErrors())
@@ -353,7 +376,7 @@ class CookiesAndVendorsService extends Component {
                 foreach ($categories as $category) {
                     $cookies = $content->$category ?? [];
     
-                    if (!is_array($cookies)) continue;
+                    if (!\is_array($cookies)) continue;
                     
                     $filteredCookies = array_values(array_filter(
                         $cookies,
@@ -364,7 +387,7 @@ class CookiesAndVendorsService extends Component {
                 }
     
                 if (!$content->save()) {
-                    throw new Exception(sprintf(
+                    throw new Exception(\sprintf(
                         'Failed to save content: %s',
                         json_encode($content->getErrors())
                     ));
@@ -384,9 +407,10 @@ class CookiesAndVendorsService extends Component {
      * @return void
      */
     public function blacklistCookieForEachSite(string|null $cookieName): void {
+        /** @var Settings $settings */
         $settings = CookieBanner::getInstance()->getSettings();
 
-        if (!in_array($cookieName, array_column($settings->blacklistedCookies, 'name'))) {
+        if (!\in_array($cookieName, array_column($settings->blacklistedCookies, 'name'))) {
             $settings->blacklistedCookies[] = ['name' => $cookieName];
         }
 
@@ -396,11 +420,16 @@ class CookiesAndVendorsService extends Component {
         );
     }
 
+    /**
+     * @param string|null $cookieName
+     * 
+     * @return array|
+     */
     public function checkCookieDefinitionForEachSite(string|null $cookieName): array {
         $sites = Craft::$app->getSites()->getAllSites();
 
         foreach ($sites as $site) {
-            $siteKey = $site->name . ' (' . $site->language . ')';
+            $siteKey = "{$site->name} ({$site->language})";
 
             $content = Content::find()->where(['siteId' => $site->id])->one();
 
@@ -457,10 +486,10 @@ class CookiesAndVendorsService extends Component {
                     'label' => $cookie['name'],
                     'data' => 'Control panel',
                     'backgroundColor' => '#d8e2ee',
-                    ];
+                ];
                     
-                    continue;
-                    }
+                continue;
+            }
                     
             if ($cookie['onlyInBrowserCookies']) {
                 $metrics["Suggested"]++;
@@ -468,20 +497,22 @@ class CookiesAndVendorsService extends Component {
                     'label' => $cookie['name'],
                     'data' => 'Suggested',
                     'backgroundColor' => '#4299E1',
-                    ];
+                ];
                     
                 continue;
             }
                     
-            $result = CookieBanner::getInstance()->getCookiesAndVendors()->checkCookieDefinitionForEachSite($cookie['name']);
+            $result = CookieBanner::getInstance()
+                ->getCookiesAndVendors()
+                ->checkCookieDefinitionForEachSite($cookie['name']);
             
-            if (in_array('defined-incomplete', $result, true)) $metrics['Defined incomplete']++;
+            if (\in_array('defined-incomplete', $result, true)) $metrics['Defined incomplete']++;
             else $metrics['Defined']++;
             
             $data[] = [
                 'label' => $cookie['name'],
-                'data' => in_array('defined-incomplete', $result, true) ? "Defined incomplete" : "Defined",
-                'backgroundColor' => in_array('defined-incomplete', $result, true) ? "#facc15" : "#10b981",
+                'data' => \in_array('defined-incomplete', $result, true) ? "Defined incomplete" : "Defined",
+                'backgroundColor' => \in_array('defined-incomplete', $result, true) ? "#facc15" : "#10b981",
             ];
         }
 
@@ -580,7 +611,7 @@ class CookiesAndVendorsService extends Component {
                 $content->setAttribute("vendors", $vendors);
 
                 if (!$content->save()) {
-                    throw new Exception(sprintf(
+                    throw new Exception(\sprintf(
                         'Failed saving content for site "%s": %s',
                         $site->name,
                         json_encode($content->getErrors())
@@ -664,7 +695,7 @@ class CookiesAndVendorsService extends Component {
                 $content->setAttribute('vendors', array_values($vendorsByName));
     
                 if (!$content->save()) {
-                    throw new Exception(sprintf(
+                    throw new Exception(\sprintf(
                         'Failed saving content for site "%s": %s',
                         $site->name,
                         json_encode($content->getErrors())
@@ -732,7 +763,7 @@ class CookiesAndVendorsService extends Component {
                 $content->setAttribute('vendors', $filteredVendors);
     
                 if (!$content->save()) {
-                    throw new Exception(sprintf(
+                    throw new Exception(\sprintf(
                         'Failed to save content: %s',
                         json_encode($content->getErrors())
                     ));
@@ -753,9 +784,10 @@ class CookiesAndVendorsService extends Component {
      * @throws Exception
      */
     public function blacklistVendorForEachSite(string|null $vendorName): void {
+        /** @var Settings $settings */
         $settings = CookieBanner::getInstance()->getSettings();
 
-        if (in_array($vendorName, array_column($settings->blacklistedVendors, null, 'name'))) {
+        if (\in_array($vendorName, array_column($settings->blacklistedVendors, null, 'name'))) {
             throw new Exception("Vendor is already blacklisted");
         };
 
@@ -773,13 +805,14 @@ class CookiesAndVendorsService extends Component {
      * @return array
      */
     public function checkVendorDefinitionForEachSite(string|null $vendorName): array {
+        /** @var Content $cookieBannerContentAllLanguages */
         $cookieBannerContentAllLanguages = Content::find()->all();
 
         $result = [];
 
         foreach ($cookieBannerContentAllLanguages as $content) {
             $site = Craft::$app->getSites()->getSiteById($content->siteId);
-            $siteKey = $site->name . ' (' . $site->language . ')';
+            $siteKey = "{$site->name} ({$site->language})";
 
             $vendors = $content['vendors'];
 
@@ -838,13 +871,13 @@ class CookiesAndVendorsService extends Component {
 
             $result = CookieBanner::getInstance()->getCookiesAndVendors()->checkVendorDefinitionForEachSite($vendor['name']);
 
-            if (in_array('defined-incomplete', $result, true)) $metrics['Defined incomplete']++;
+            if (\in_array('defined-incomplete', $result, true)) $metrics['Defined incomplete']++;
             else $metrics['Defined']++;
             
             $data[] = [
                 'label' => $vendor['name'],
-                'data' => in_array('defined-incomplete', $result, true) ? "Defined incomplete" : "Defined",
-                'backgroundColor' => in_array('defined-incomplete', $result, true) ? "#facc15" : "#10b981",
+                'data' => \in_array('defined-incomplete', $result, true) ? "Defined incomplete" : "Defined",
+                'backgroundColor' => \in_array('defined-incomplete', $result, true) ? "#facc15" : "#10b981",
             ];
         }
 
@@ -854,6 +887,10 @@ class CookiesAndVendorsService extends Component {
         ];
     }
 
+    /**
+     * @param mixed $item
+     * @return bool
+     */
     public function isDuplicate($item): bool {
         $existingCookies = array_column($this->getAllCookies(), null, 'name');
         $existingVendors = array_column($this->getAllVendors(), null, 'name');
@@ -861,6 +898,9 @@ class CookiesAndVendorsService extends Component {
         return key_exists($item, [...$existingCookies, ...$existingVendors]);
     }
 
+    /**
+     * @return string
+     */
     public function getCookiesListHtml(): string {
         $currentSiteId = Craft::$app->getSites()->getCurrentSite()->id;
         $content = Content::find()->where(['siteId' => $currentSiteId])->one();

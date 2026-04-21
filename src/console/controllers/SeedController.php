@@ -1,11 +1,21 @@
 <?php
+/**
+ * Cookie banner plugin for Craft CMS
+ *
+ * Provides a fully configurable GDPR-compliant cookie banner for
+ * Craft CMS. Supports cookie detection/suggestion, consent records, vendor
+ * management, and customizable appearance & content — all from within the
+ * Craft control panel.
+ *
+ * @link      https://digitalastronaut.be
+ * @copyright Copyright (c) 2026 Digitalastronaut
+ */
 
 namespace digitalastronaut\craftcookiebanner\console\controllers;
 
-use Carbon\Carbon;
-use DateTime;
-
 use Craft;
+
+use Carbon\Carbon;
 
 use craft\console\Controller;
 
@@ -15,15 +25,31 @@ use digitalastronaut\craftcookiebanner\helpers\CookieBanner as CookieBannerHelpe
 use yii\console\ExitCode;
 use yii\helpers\Console;
 
+/**
+ * Class SeedController
+ *
+ * @author      Digitalastronaut
+ * @package     CookieBanner
+ * @since       v1.0.0-beta
+ */
 class SeedController extends Controller {
     public $defaultAction = 'index';
 
+    /**
+     * @return int
+     */
     public function actionIndex(): int {
         $this->stdout("Use this controller to seed data for cookie banner related tables" . PHP_EOL, Console::FG_CYAN);
 
         return ExitCode::OK;
     }
 
+    /**
+     * @param int $count
+     * @param bool $fixedIpAddress
+     * @param string $period
+     * @return int
+     */
     public function actionConsentRecords(
         int $count = 5,
         bool $fixedIpAddress = false,
@@ -47,7 +73,7 @@ class SeedController extends Controller {
             $shortHash = substr($ipAddressHash, 0, 10);
 
             $randomTimestamp = mt_rand($startDate->getTimestamp(), $now->getTimestamp());
-            $consentTimestamp = (new DateTime())->setTimestamp($randomTimestamp);
+            $consentTimestamp = Carbon::now()->setTimestamp($randomTimestamp);
 
             CookieBanner::getInstance()
                 ->getConsentRecords()

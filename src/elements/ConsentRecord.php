@@ -1,4 +1,15 @@
 <?php
+/**
+ * Cookie banner plugin for Craft CMS
+ *
+ * Provides a fully configurable GDPR-compliant cookie banner for
+ * Craft CMS. Supports cookie detection/suggestion, consent records, vendor
+ * management, and customizable appearance & content — all from within the
+ * Craft control panel.
+ *
+ * @link      https://digitalastronaut.be
+ * @copyright Copyright (c) 2026 Digitalastronaut
+ */
 
 namespace digitalastronaut\craftcookiebanner\elements;
 
@@ -21,6 +32,12 @@ use digitalastronaut\craftcookiebanner\helpers\Table;
 use DateTime;
 
 /**
+ * Class ConsentRecord
+ *
+ * @author      Digitalastronaut
+ * @package     CookieBanner
+ * @since       v1.0.0-beta
+ * 
  * @method static ConsentRecordQuery find()
  */
 class ConsentRecord extends Element {
@@ -61,22 +78,35 @@ class ConsentRecord extends Element {
 
     public static function statuses(): array {
         return [
-            'valid' => ['label' => 'Valid', 'color' => Color::Teal],
+            'valid' => ['label' => Craft::t('cookie-banner', 'Valid'), 'color' => Color::Teal],
         ];
     }
 
+    /**
+     * @return ConsentRecordQuery
+     */
     public static function find(): ElementQueryInterface {
         return Craft::createObject(ConsentRecordQuery::class, [static::class]);
     }
 
+    /**
+     * @return ConsentRecordCondition
+     */
     public static function createCondition(): ElementConditionInterface {
         return Craft::createObject(ConsentRecordCondition::class, [static::class]);
     }
 
+    /**
+     * @return string[]
+     */
     protected static function defineSearchableAttributes(): array {
         return ['ipAddressHash', 'userAgent'];
     }
 
+    /**
+     * @param string $context
+     * @return array[]
+     */
     protected static function defineSources(string $context): array {
         $rows = ConsentRecord::find()->groupedByMonth();
 
@@ -134,12 +164,19 @@ class ConsentRecord extends Element {
         return $sources;
     }
 
+    /**
+     * @param string $source
+     * @return array
+     */
     protected static function defineActions(string $source): array {
         $actions = parent::defineActions($source);
 
         return $actions;
     }
 
+    /**
+     * @return array
+     */
     protected static function defineSortOptions(): array {
         return [
             'title' => Craft::t('app', 'Title'),
@@ -147,27 +184,34 @@ class ConsentRecord extends Element {
         ];
     }
 
+    /**
+     * @return array
+     */
     protected static function defineTableAttributes(): array {
         return [
-            'status' => ['label' => 'Status'],
-            'ipAddressHash' => ['label' => 'IP address Hash'],
-            'sessionId' => ['label' => 'Session ID'],
-            'userAgent' => ['label' => 'User Agent'],
-            'language' => ['label' => 'Language'],
-            'consentTimestamp' => ['label' => 'Timestamp'],
-            'consentAction' => ['label' => 'Action'],
-            'consentMethod' => ['label' => 'Method'],
-            'necessaryCookies' => ['label' => 'Necessary'],
-            'preferenceCookies' => ['label' => 'Preference'],
-            'analyticalCookies' => ['label' => 'Analytical'],
-            'marketingCookies' => ['label' => 'Marketing'],
-            'uncategorizedCookies' => ['label' => 'Uncategorized'],
-            'bannerVersion' => ['label' => 'Banner Version'],
-            'privacyPolicyVersion' => ['label' => 'Privacy Policy Version'],
-            'cookiePolicyVersion' => ['label' => 'Cookie Policy Version'],
+            'status' => ['label' => Craft::t('cookie-banner', 'Status')],
+            'ipAddressHash' => ['label' => Craft::t('cookie-banner', 'IP address Hash')],
+            'sessionId' => ['label' => Craft::t('cookie-banner', 'Session ID')],
+            'userAgent' => ['label' => Craft::t('cookie-banner', 'User Agent')],
+            'language' => ['label' => Craft::t('cookie-banner', 'Language')],
+            'consentTimestamp' => ['label' => Craft::t('cookie-banner', 'Timestamp')],
+            'consentAction' => ['label' => Craft::t('cookie-banner', 'Action')],
+            'consentMethod' => ['label' => Craft::t('cookie-banner', 'Method')],
+            'necessaryCookies' => ['label' => Craft::t('cookie-banner', 'Necessary')],
+            'preferenceCookies' => ['label' => Craft::t('cookie-banner', 'Preference')],
+            'analyticalCookies' => ['label' => Craft::t('cookie-banner', 'Analytical')],
+            'marketingCookies' => ['label' => Craft::t('cookie-banner', 'Marketing')],
+            'uncategorizedCookies' => ['label' => Craft::t('cookie-banner', 'Uncategorized')],
+            'bannerVersion' => ['label' => Craft::t('cookie-banner', 'Banner Version')],
+            'privacyPolicyVersion' => ['label' => Craft::t('cookie-banner', 'Privacy Policy Version')],
+            'cookiePolicyVersion' => ['label' => Craft::t('cookie-banner', 'Cookie Policy Version')],
         ];
     }
 
+    /**
+     * @param string $source
+     * @return string[]
+     */
     protected static function defineDefaultTableAttributes(string $source): array {
         return [
             'consentTimestamp', 
@@ -179,6 +223,9 @@ class ConsentRecord extends Element {
         ];
     }
 
+    /**
+     * @return array
+     */
     protected function defineRules(): array {
         return array_merge(parent::defineRules(), [
             [
@@ -224,16 +271,24 @@ class ConsentRecord extends Element {
         ]);
     }
 
+    /**
+     * @return string
+     */
     public function cpEditUrl(): string {
-        return "cookie-banner/consent-records/{$this->id}";
+        return UrlHelper::cpUrl("cookie-banner/consent-records/{$this->id}");
     }
 
+    /**
+     * @return array|string|null
+     */
     protected function route(): array|string|null {
         return null;
     }
 
-    public function getFieldLayout(): ?FieldLayout
-    {
+    /**
+     * @return FieldLayout|null
+     */
+    public function getFieldLayout(): ?FieldLayout {
         if ($this->fieldLayout !== null) {
             return $this->fieldLayout;
         }
@@ -243,6 +298,11 @@ class ConsentRecord extends Element {
         return $this->fieldLayout;
     }
 
+    /**
+     * @param Response $response
+     * @param string $containerId
+     * @return void
+     */
     public function prepareEditScreen(Response $response, string $containerId): void {
         $response->crumbs([
             [
@@ -252,6 +312,10 @@ class ConsentRecord extends Element {
         ]);
     }
 
+    /**
+     * @param bool $isNew
+     * @return void
+     */
     public function afterSave(bool $isNew): void {
         if (!$this->propagating) {
             Db::upsert(Table::COOKIE_BANNER_CONSENT_RECORDS, [

@@ -1,4 +1,15 @@
 <?php
+/**
+ * Cookie banner plugin for Craft CMS
+ *
+ * Provides a fully configurable GDPR-compliant cookie banner for
+ * Craft CMS. Supports cookie detection/suggestion, consent records, vendor
+ * management, and customizable appearance & content — all from within the
+ * Craft control panel.
+ *
+ * @link      https://digitalastronaut.be
+ * @copyright Copyright (c) 2026 Digitalastronaut
+ */
 
 namespace digitalastronaut\craftcookiebanner\controllers;
 
@@ -12,12 +23,18 @@ use yii\web\BadRequestHttpException;
 use yii\web\Response;
 
 use digitalastronaut\craftcookiebanner\CookieBanner;
-use digitalastronaut\craftcookiebanner\records\Content;
 
 use Fuse\Fuse;
 
 use Throwable;
 
+/**
+ * Class CookiesAndVendorsController
+ *
+ * @author      Digitalastronaut
+ * @package     CookieBanner
+ * @since       v1.0.0-beta
+ */
 class CookiesAndVendorsController extends Controller {
     public $defaultAction = 'index';
     protected array|int|bool $allowAnonymous = self::ALLOW_ANONYMOUS_NEVER;
@@ -36,6 +53,11 @@ class CookiesAndVendorsController extends Controller {
         ]);
     }
 
+    /**
+     * @throws BadRequestHttpException
+     * @throws ForbiddenHttpException
+     * @return Response
+     */
     public function actionBulkCreate(): Response {
         $this->requirePermission('cookie-banner:add-cookies');
 
@@ -81,6 +103,11 @@ class CookiesAndVendorsController extends Controller {
         return $this->renderTemplate("cookie-banner/pages/_bulkCreate");
     }
 
+    /**
+     * @throws ForbiddenHttpException
+     * @throws BadRequestHttpException
+     * @return Response
+     */
     public function actionPreviewBulkCreate(): mixed {
         $this->requirePermission('cookie-banner:add-cookies');
         
@@ -203,6 +230,10 @@ class CookiesAndVendorsController extends Controller {
         ]);
     }
 
+    /**
+     * @throws BadRequestHttpException
+     * @return Response
+     */
     public function actionAutoAddCookie(): Response {
         $this->requirePermission("cookie-banner:add-cookies");
         $this->requirePostRequest();

@@ -1,4 +1,15 @@
 <?php
+/**
+ * Cookie banner plugin for Craft CMS
+ *
+ * Provides a fully configurable GDPR-compliant cookie banner for
+ * Craft CMS. Supports cookie detection/suggestion, consent records, vendor
+ * management, and customizable appearance & content — all from within the
+ * Craft control panel.
+ *
+ * @link      https://digitalastronaut.be
+ * @copyright Copyright (c) 2026 Digitalastronaut
+ */
 
 namespace digitalastronaut\craftcookiebanner;
 
@@ -10,32 +21,38 @@ use craft\helpers\UrlHelper;
 use digitalastronaut\craftcookiebanner\models\Settings;
 use digitalastronaut\craftcookiebanner\services\ServicesTrait;
 
-// TODO: Enabled switches row laten disabelen als ze uit staan CSS bestaat al en heeft gewerkt weet niet waarom nu niet meer
-// TODO: Figure out hoe we consent records kunnen deleten zonder elke site/cp request cleanup te triggeren zonder persee een cron job... (BASE)
-// TODO: Styling en templates mooier opsplitsen (BASE) 
-// TODO: JS translatinos for chip component
-// TODO: improve rules for active records
-// TODO: kijken om de category ook autoFillen bij manual create
-// TODO: Fix duplicates for autoCreate and manualCreate
-// TODO: PHP Docs overlopen
-// TODO: improve log consent if error happens
+use yii\web\Response;
 
 /**
- * Cookie banner plugin
+ * Class CookieBanner
  *
- * @method static CookieBanner getInstance()
- * @method Settings getSettings()
- * @author digitalastronaut <bram@digitalastronaut.be>
- * @copyright digitalastronaut
- * @license https://craftcms.github.io/license/ Craft License
+ * @author      Digitalastronaut
+ * @package     CookieBanner
+ * @since       v1.0.0-beta
+ *
+ * @method SettingsModel getSettings()
  */
 class CookieBanner extends Plugin {
     use ServicesTrait;
 
+    /**
+     * @var string
+     */
     public string $schemaVersion = '1.0.0';
+    
+    /**
+     * @var bool
+     */
     public bool $hasCpSettings = true;
+
+    /**
+     * @var bool
+     */
     public bool $hasCpSection = true;
 
+    /**
+     * @return void
+     */
     public function init(): void {
         parent::init();
 
@@ -44,14 +61,26 @@ class CookieBanner extends Plugin {
         Craft::info(Craft::t('cookie-banner', '{name} plugin loaded', ['name' => $this->name]));
     }
 
+    /**
+     * @inheritDoc
+     * @return Model|null
+     */
     protected function createSettingsModel(): ?Model {
         return Craft::createObject(Settings::class);
     }
 
+    /**
+     * @inheritDoc
+     * @return Response
+     */
     public function getSettingsResponse(): mixed {
 		return Craft::$app->controller->redirect(UrlHelper::cpUrl('cookie-banner/settings'));
 	}
 
+    /**
+     * @inheritDoc
+     * @return array|null
+     */
     public function getCpNavItem(): ?array {
         $currentUser = Craft::$app->getUser();
 

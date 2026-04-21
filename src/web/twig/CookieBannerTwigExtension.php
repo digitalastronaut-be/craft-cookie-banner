@@ -1,4 +1,15 @@
 <?php
+/**
+ * Cookie banner plugin for Craft CMS
+ *
+ * Provides a fully configurable GDPR-compliant cookie banner for
+ * Craft CMS. Supports cookie detection/suggestion, consent records, vendor
+ * management, and customizable appearance & content — all from within the
+ * Craft control panel.
+ *
+ * @link      https://digitalastronaut.be
+ * @copyright Copyright (c) 2026 Digitalastronaut
+ */
 
 namespace digitalastronaut\craftcookiebanner\web\twig;
 
@@ -7,7 +18,17 @@ use Twig\TwigFunction;
 
 use digitalastronaut\craftcookiebanner\CookieBanner;
 
+/**
+ * Class CookieBannerTwigExtension
+ *
+ * @author      Digitalastronaut
+ * @package     CookieBanner
+ * @since       v1.0.0-beta
+ */
 class CookieBannerTwigExtension extends AbstractExtension {
+    /**
+     * @return TwigFunction[]
+     */
     public function getFunctions() {
         return [
             new TwigFunction('renderCookiesListHtml', [$this, 'renderCookiesListHtml'], ['is_safe' => ['html']]),
@@ -21,34 +42,62 @@ class CookieBannerTwigExtension extends AbstractExtension {
         ];
     }
 
-    public function getCookieDetectionOverviewData() {
+    /**
+     * @return array
+     */
+    public function getCookieDetectionOverviewData(): array {
         return CookieBanner::getInstance()->getCookieDetection()->getCookiesOverview();
     }
 
-    public function getVendorOverview() {
+    /**
+     * @return array
+     */
+    public function getVendorOverview(): array {
         return CookieBanner::getInstance()->getCookieDetection()->getVendorsOverview();
     }
 
-    public function searchCookieDatabase($searchTerm) {
+    /**
+     * @param string $searchTerm
+     * @return array
+     */
+    public function searchCookieDatabase(string $searchTerm): array {
         return CookieBanner::getInstance()->getCookieDetection()->searchCookieDatabase($searchTerm);
     }
 
-    public function searchVendorDatabase($searchTerm) {
+    /**
+     * @param string $searchTerm
+     * @return array
+     */
+    public function searchVendorDatabase(string $searchTerm): array {
         return CookieBanner::getInstance()->getCookieDetection()->searchVendorDatabase($searchTerm);
     }
 
-    public function checkCookieDefinitionForEachSite($cookieName) {
+    /**
+     * @param string $cookieName
+     * @return array
+     */
+    public function checkCookieDefinitionForEachSite(string $cookieName): array {
         return CookieBanner::getInstance()->getCookiesAndVendors()->checkCookieDefinitionForEachSite($cookieName);
     }
 
-    public function checkVendorDefinitionForEachSite($vendorName) {
+    /**
+     * @param string $vendorName
+     * @return array
+     */
+    public function checkVendorDefinitionForEachSite(string $vendorName): array {
         return CookieBanner::getInstance()->getCookiesAndVendors()->checkVendorDefinitionForEachSite($vendorName);
     }
 
-    public function renderCookiesListHtml() {
+    /**
+     * @return string
+     */
+    public function renderCookiesListHtml(): string {
         return CookieBanner::getInstance()->getCookiesAndVendors()->getCookiesListHtml();
     }
 
+    /**
+     * @return array
+     */
     public function getVendorSelectFieldOptions(): array {
         return CookieBanner::getInstance()->getCookiesAndVendors()->getVendorSelectFieldOptions();
     }

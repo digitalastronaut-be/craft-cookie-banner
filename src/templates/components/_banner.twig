@@ -239,51 +239,51 @@
 
     <style>
         :root {
-            --ccb-banner-title-font: {{ appearance.titleFont|raw }};
-            --ccb-banner-text-font: {{ appearance.textFont|raw }};
+            --ccb-banner-title-font: {{ appearance.titleFont|striptags|raw }};
+            --ccb-banner-text-font: {{ appearance.textFont|striptags|raw }};
             --ccb-banner-border-radius: {{ bannerBorderRadiusOptions[appearance.bannerStyle] }};
-            --ccb-banner-background: {{ "#" ~ appearance.bannerBackground }};
-            --ccb-banner-border-thickness: {{ appearance.bannerBorderThickness ~ "px" }};
-            --ccb-banner-border-color: {{ "#" ~ appearance.bannerBorderColor }};
+            --ccb-banner-background: {{ "#" ~ appearance.bannerBackground|striptags }};
+            --ccb-banner-border-thickness: {{ appearance.bannerBorderThickness|striptags ~ "px" }};
+            --ccb-banner-border-color: {{ "#" ~ appearance.bannerBorderColor|striptags }};
 
-            --ccb-title-color: {{ "#" ~ appearance.titleColor }};
-            --ccb-text-color: {{ "#" ~ appearance.textColor }};
+            --ccb-title-color: {{ "#" ~ appearance.titleColor|striptags }};
+            --ccb-text-color: {{ "#" ~ appearance.textColor|striptags }};
 
-            --ccb-link-color: {{ "#" ~ appearance.linkColor }};
-            --ccb-link-hover-color: {{ "#" ~ appearance.linkHoverColor }};
+            --ccb-link-color: {{ "#" ~ appearance.linkColor|striptags }};
+            --ccb-link-hover-color: {{ "#" ~ appearance.linkHoverColor|striptags }};
 
-            --ccb-button-background: {{ "#" ~ appearance.buttonBackground }};
-            --ccb-button-color: {{ "#" ~ appearance.buttonColor }};
+            --ccb-button-background: {{ "#" ~ appearance.buttonBackground|striptags }};
+            --ccb-button-color: {{ "#" ~ appearance.buttonColor|striptags }};
             --ccb-button-border-radius: {{ controlRadiusOptions[appearance.bannerStyle] }};
-            --ccb-button-border-thickness: {{ appearance.buttonBorderThickness ~ "px" }};
+            --ccb-button-border-thickness: {{ appearance.buttonBorderThickness|striptags ~ "px" }};
             --ccb-button-padding: {{ buttonSizeOptions[appearance.buttonSize] }};
-            --ccb-button-border-color: {{ "#" ~ appearance.buttonBorderColor }};
-            --ccb-button-hover-background: {{ "#" ~ appearance.buttonHoverBackground }};
-            --ccb-button-hover-color: {{ "#" ~ appearance.buttonHoverColor }};
-            --ccb-button-hover-border-color: {{ "#" ~ appearance.buttonHoverBorderColor }};
+            --ccb-button-border-color: {{ "#" ~ appearance.buttonBorderColor|striptags }};
+            --ccb-button-hover-background: {{ "#" ~ appearance.buttonHoverBackground|striptags }};
+            --ccb-button-hover-color: {{ "#" ~ appearance.buttonHoverColor|striptags }};
+            --ccb-button-hover-border-color: {{ "#" ~ appearance.buttonHoverBorderColor|striptags }};
 
             --ccb-toggle-border-radius: {{ controlRadiusOptions[appearance.bannerStyle] }};
-            --ccb-toggle-background-color-off: {{ "#" ~ appearance.toggleBackgroundOff }};
-            --ccb-toggle-background-color-on: {{ "#" ~ appearance.toggleBackgroundOn }};
-            --ccb-toggle-color: {{ "#" ~ appearance.toggleColor }};
+            --ccb-toggle-background-color-off: {{ "#" ~ appearance.toggleBackgroundOff|striptags }};
+            --ccb-toggle-background-color-on: {{ "#" ~ appearance.toggleBackgroundOn|striptags }};
+            --ccb-toggle-color: {{ "#" ~ appearance.toggleColor|striptags }};
 
-            --ccb-cookie-group-title-color: {{ "#" ~ appearance.cookieGroupTitleColor }};
-            --ccb-cookie-group-text-color: {{ "#" ~ appearance.cookieGroupTextColor }};
+            --ccb-cookie-group-title-color: {{ "#" ~ appearance.cookieGroupTitleColor|striptags }};
+            --ccb-cookie-group-text-color: {{ "#" ~ appearance.cookieGroupTextColor|striptags }};
 
-            --ccb-cookie-group-link-color: {{ "#" ~ appearance.cookieGroupLinkColor }};
-            --ccb-cookie-group-link-hover-color: {{ "#" ~ appearance.cookieGroupLinkHoverColor }};
-            --ccb-cookie-group-background: {{ "#" ~ appearance.cookieGroupBackground }};
-            --ccb-cookie-group-border-thickness: {{ appearance.cookieGroupBorderThickness ~ "px" }};
-            --ccb-cookie-group-border-color: {{ "#" ~ appearance.cookieGroupBorderColor }};
+            --ccb-cookie-group-link-color: {{ "#" ~ appearance.cookieGroupLinkColor|striptags }};
+            --ccb-cookie-group-link-hover-color: {{ "#" ~ appearance.cookieGroupLinkHoverColor|striptags }};
+            --ccb-cookie-group-background: {{ "#" ~ appearance.cookieGroupBackground|striptags }};
+            --ccb-cookie-group-border-thickness: {{ appearance.cookieGroupBorderThickness|striptags ~ "px" }};
+            --ccb-cookie-group-border-color: {{ "#" ~ appearance.cookieGroupBorderColor|striptags }};
             --ccb-cookie-group-border-radius: {{ bannerElementBorderRadiusOptions[appearance.bannerStyle] }};
-            --ccb-cookie-group-hover-background: {{ "#" ~ appearance.cookieGroupHoverBackground }};
-            --ccb-cookie-group-hover-border-color: {{ "#" ~ appearance.cookieGroupHoverBorderColor }};
+            --ccb-cookie-group-hover-background: {{ "#" ~ appearance.cookieGroupHoverBackground|striptags }};
+            --ccb-cookie-group-hover-border-color: {{ "#" ~ appearance.cookieGroupHoverBorderColor|striptags }};
 
-            --ccb-cookie-table-title-color: {{ "#" ~ appearance.cookieTableTitleColor }};
-            --ccb-cookie-table-text-color: {{ "#" ~ appearance.cookieTableTextColor }};
-            --ccb-cookie-table-background: {{ "#" ~ appearance.cookieTableBackground }};
-            --ccb-cookie-table-border-thickness: {{ appearance.cookieTableBorderThickness ~ "px" }};
-            --ccb-cookie-table-border-color: {{ "#" ~ appearance.cookieTableBorderColor }};
+            --ccb-cookie-table-title-color: {{ "#" ~ appearance.cookieTableTitleColor|striptags }};
+            --ccb-cookie-table-text-color: {{ "#" ~ appearance.cookieTableTextColor|striptags }};
+            --ccb-cookie-table-background: {{ "#" ~ appearance.cookieTableBackground|striptags }};
+            --ccb-cookie-table-border-thickness: {{ appearance.cookieTableBorderThickness|striptags ~ "px" }};
+            --ccb-cookie-table-border-color: {{ "#" ~ appearance.cookieTableBorderColor|striptags }};
             --ccb-cookie-table-border-radius: {{ bannerElementBorderRadiusOptions[appearance.bannerStyle] }};
 
             {{ appearance.css|striptags|raw }}

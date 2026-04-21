@@ -1,4 +1,15 @@
 <?php
+/**
+ * Cookie banner plugin for Craft CMS
+ *
+ * Provides a fully configurable GDPR-compliant cookie banner for
+ * Craft CMS. Supports cookie detection/suggestion, consent records, vendor
+ * management, and customizable appearance & content — all from within the
+ * Craft control panel.
+ *
+ * @link      https://digitalastronaut.be
+ * @copyright Copyright (c) 2026 Digitalastronaut
+ */
 
 namespace digitalastronaut\craftcookiebanner\controllers;
 
@@ -9,10 +20,14 @@ use yii\web\Response;
 use yii\web\BadRequestHttpException;
 
 use digitalastronaut\craftcookiebanner\CookieBanner;
-use digitalastronaut\craftcookiebanner\elements\ConsentRecord;
+use digitalastronaut\craftcookiebanner\models\Settings;
 
 /**
- * Getting Started controller
+ * Class DashboardController
+ *
+ * @author      Digitalastronaut
+ * @package     CookieBanner
+ * @since       v1.0.0-beta
  */
 class DashboardController extends Controller {
     public $defaultAction = 'index';
@@ -41,10 +56,14 @@ class DashboardController extends Controller {
         ]);
     }
 
+    /**
+     * @return Response
+     */
     public function actionSkipGuide(): Response {
         $this->requirePermission("cookie-banner:update-guide-progress");
         $this->requirePostRequest();
 
+        /** @var Settings $settings */
         $settings = CookieBanner::getInstance()->getSettings();
 
         $settings->gettingStartedProgress['legalPagesStepCompleted'] = true;
@@ -59,13 +78,17 @@ class DashboardController extends Controller {
         return $this->redirectToPostedUrl();
     }
 
+    /**
+     * @throws BadRequestHttpException
+     * @return Response
+     */
     public function actionCompleteGuideStep(): Response {
         $this->requirePermission('cookie-banner:update-guide-progress');
         $this->requirePostRequest();
 
         $step = Craft::$app->getRequest()->getRequiredBodyParam('step');
 
-        if (!in_array($step, self::VALID_STEPS, true)) {
+        if (!\in_array($step, self::VALID_STEPS, true)) {
             throw new BadRequestHttpException("Invalid guide step: $step");
         }
 

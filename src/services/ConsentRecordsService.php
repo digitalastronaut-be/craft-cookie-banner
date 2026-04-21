@@ -8,17 +8,12 @@ use craft\base\Component;
 use yii\base\Exception;
 
 use digitalastronaut\craftcookiebanner\CookieBanner;
-use digitalastronaut\craftcookiebanner\helpers\Table;
 use digitalastronaut\craftcookiebanner\elements\ConsentRecord;
-
-use DateTime;
 
 use Carbon\Carbon;
 
 class ConsentRecordsService extends Component {
     public function cleanup() {
-        if (!Craft::$app->db->tableExists(Table::COOKIE_BANNER_CONSENT_RECORDS)) return;
-
         $expiredDate = $this->getExpiredDate();
 
         $records = ConsentRecord::find()
@@ -34,9 +29,24 @@ class ConsentRecordsService extends Component {
         try {
             $consentRecord = new ConsentRecord();
 
-            foreach ($data as $key => $value) {
-                $consentRecord->$key = $value;
-            }
+            $consentRecord->title = $data['title'];
+            $consentRecord->ipAddressHash = $data['ipAddressHash'];
+            $consentRecord->sessionId = $data['sessionId'];
+            $consentRecord->userAgent = $data['userAgent'];
+            $consentRecord->language = $data['language'];
+            $consentRecord->consentAction = $data['consentAction'];
+
+            $consentRecord->necessaryCookies = $data['necessaryCookies'];
+            $consentRecord->preferenceCookies = $data['preferenceCookies'];
+            $consentRecord->analyticalCookies = $data['analyticalCookies'];
+            $consentRecord->marketingCookies = $data['marketingCookies'];
+            $consentRecord->uncategorizedCookies = $data['uncategorizedCookies'];
+
+            $consentRecord->consentTimestamp = $data['consentTimestamp'];
+            $consentRecord->consentMethod = $data['consentMethod'];
+            $consentRecord->bannerVersion = $data['bannerVersion'];
+            $consentRecord->privacyPolicyVersion = $data['privacyPolicyVersion'];
+            $consentRecord->cookiePolicyVersion = $data['cookiePolicyVersion'];
 
             $this->cleanup();
 
@@ -52,7 +62,7 @@ class ConsentRecordsService extends Component {
         }
     }
 
-    private function getExpiredDate(): Carbon {
+    public function getExpiredDate(): Carbon {
         $retentionKey = CookieBanner::getInstance()->getSettings()->consentRecordRetention;
 
         $now = Carbon::now();
@@ -82,7 +92,7 @@ class ConsentRecordsService extends Component {
         }
 
         $data = [];
-        $today = new DateTime();
+        $today = new Carbon();
 
         for ($i = 30; $i >= 0; $i--) {
             $date = (clone $today)->modify("-{$i} days")->format('Y-m-d');

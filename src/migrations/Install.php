@@ -1,4 +1,15 @@
 <?php
+/**
+ * Cookie banner plugin for Craft CMS
+ *
+ * Provides a fully configurable GDPR-compliant cookie banner for
+ * Craft CMS. Supports cookie detection/suggestion, consent records, vendor
+ * management, and customizable appearance & content — all from within the
+ * Craft control panel.
+ *
+ * @link      https://digitalastronaut.be
+ * @copyright Copyright (c) 2026 Digitalastronaut
+ */
 
 namespace digitalastronaut\craftcookiebanner\migrations;
 
@@ -7,6 +18,13 @@ use craft\records\Site;
 use digitalastronaut\craftcookiebanner\CookieBanner;
 use digitalastronaut\craftcookiebanner\helpers\Table;
 
+/**
+ * Class Install
+ *
+ * @author      Digitalastronaut
+ * @package     CookieBanner
+ * @since       v1.0.0-beta
+ */
 class Install extends Migration {
     public function safeUp(): bool {
         $this->createTables();
@@ -37,7 +55,7 @@ class Install extends Migration {
 
             'consentTimestamp' => $this->dateTime()->null(),
             'consentAction' => $this->string(255)->null(),
-            'consentMethod' => $this->string(255)->notNull(),
+            'consentMethod' => $this->string(255)->null(),
             
             'necessaryCookies' => $this->boolean()->null(),
             'preferenceCookies' => $this->boolean()->null(),
@@ -157,29 +175,46 @@ class Install extends Migration {
         ]);
     }
 
+    /**
+     * @return void
+     */
     public function createForeignKeys(): void {
         $this->addForeignKey(null, Table::COOKIE_BANNER_CONSENT_RECORDS, 'id', Table::ELEMENTS, 'id', 'CASCADE', null);
         $this->addForeignKey(null, Table::COOKIE_BANNER_CONTENT, 'siteId', Table::SITES, 'id', 'CASCADE', null);
         $this->addForeignKey(null, Table::COOKIE_BANNER_APPEARANCE, 'siteId', Table::SITES, 'id', 'CASCADE', null);
     }
 
+    /**
+     * @return void
+     */
     public function createIndexes(): void {
         $this->createIndex(null, Table::COOKIE_BANNER_CONTENT, 'siteId', true);
         $this->createIndex(null, Table::COOKIE_BANNER_APPEARANCE, 'siteId', true);
+        $this->createIndex(null, Table::COOKIE_BANNER_CONSENT_RECORDS, 'consentTimestamp', false);
+        $this->createIndex(null, Table::COOKIE_BANNER_CONSENT_RECORDS, 'ipAddressHash', false);
     }
 
+    /**
+     * @return void
+     */
     public function dropTables(): void {
         $this->dropTableIfExists(Table::COOKIE_BANNER_CONSENT_RECORDS);
         $this->dropTableIfExists(Table::COOKIE_BANNER_CONTENT);
         $this->dropTableIfExists(Table::COOKIE_BANNER_APPEARANCE);
     }
 
+    /**
+     * @return void
+     */
     public function dropForeignKeys(): void {
         $this->dropAllForeignKeysToTable(Table::COOKIE_BANNER_CONSENT_RECORDS);
         $this->dropAllForeignKeysToTable(Table::COOKIE_BANNER_CONTENT);
         $this->dropAllForeignKeysToTable(Table::COOKIE_BANNER_APPEARANCE);
     }
 
+    /**
+     * @return void
+     */
     public function seedContentTable() {
         $sites = Site::find()->all();
         $basePath = CookieBanner::getInstance()->getBasePath() . '/static/content';
@@ -197,6 +232,9 @@ class Install extends Migration {
         }
     }
 
+    /**
+     * @return void
+     */
     public function seedAppearanceTable() {
         $sites = Site::find()->all();
 

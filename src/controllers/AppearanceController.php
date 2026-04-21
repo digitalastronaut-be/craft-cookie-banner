@@ -1,25 +1,47 @@
 <?php
+/**
+ * Cookie banner plugin for Craft CMS
+ *
+ * Provides a fully configurable GDPR-compliant cookie banner for
+ * Craft CMS. Supports cookie detection/suggestion, consent records, vendor
+ * management, and customizable appearance & content — all from within the
+ * Craft control panel.
+ *
+ * @link      https://digitalastronaut.be
+ * @copyright Copyright (c) 2026 Digitalastronaut
+ */
 
 namespace digitalastronaut\craftcookiebanner\controllers;
 
 use Craft;
 use craft\web\Controller;
+use craft\errors\MissingComponentException;
 
 use yii\db\Exception;
 use yii\web\Response;
 use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
+use yii\web\ForbiddenHttpException;
 
 use digitalastronaut\craftcookiebanner\records\Appearance;
 
 use Throwable;
 
+/**
+ * Class AppearanceController
+ *
+ * @author      Digitalastronaut
+ * @package     CookieBanner
+ * @since       v1.0.0-beta
+ */
 class AppearanceController extends Controller {
     public $defaultAction = 'index';
     protected array|int|bool $allowAnonymous = self::ALLOW_ANONYMOUS_NEVER;
 
     /**
      * @return Response
+     * @throws ForbiddenHttpException
+     * @throws NotFoundHttpException
      */
     public function actionIndex(): Response {
         $this->requirePermission("cookie-banner:access-appearance");

@@ -6,12 +6,15 @@ use Craft;
 use craft\web\Controller;
 use craft\web\Response;
 
+use Carbon\Carbon;
+
 use digitalastronaut\craftcookiebanner\CookieBanner;
 use digitalastronaut\craftcookiebanner\elements\ConsentRecord;
 
 use yii\web\BadRequestHttpException;
 
-use DateTime;
+use digitalastronaut\craftcookiebanner\jobs\PurgeExpiredConsentRecords;
+
 use Throwable;
 
 class ConsentRecordsController extends Controller {
@@ -80,7 +83,7 @@ class ConsentRecordsController extends Controller {
                     'analyticalCookies' => $body['consentCategories']['analyticalCookies'],
                     'marketingCookies' => $body['consentCategories']['marketingCookies'],
                     'uncategorizedCookies' => $body['consentCategories']['uncategorizedCookies'],
-                    'consentTimestamp' => new DateTime(),
+                    'consentTimestamp' => new Carbon(),
                     'consentMethod' => 'Cookie banner',
                     'bannerVersion' => $settings->bannerVersion,
                     'privacyPolicyVersion' => $settings->privacyPolicyVersion,

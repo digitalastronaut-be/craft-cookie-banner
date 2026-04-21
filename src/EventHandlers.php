@@ -1,4 +1,15 @@
 <?php
+/**
+ * Cookie banner plugin for Craft CMS
+ *
+ * Provides a fully configurable GDPR-compliant cookie banner for
+ * Craft CMS. Supports cookie detection/suggestion, consent records, vendor
+ * management, and customizable appearance & content — all from within the
+ * Craft control panel.
+ *
+ * @link      https://digitalastronaut.be
+ * @copyright Copyright (c) 2026 Digitalastronaut
+ */
 
 namespace digitalastronaut\craftcookiebanner;
 
@@ -29,7 +40,17 @@ use digitalastronaut\craftcookiebanner\variables\CookieBannerVariable;
 use digitalastronaut\craftcookiebanner\web\assets\CookieBannerAssets;
 use digitalastronaut\craftcookiebanner\web\twig\CookieBannerTwigExtension;
 
+/**
+ * Class EventHandlers
+ *
+ * @author      Digitalastronaut
+ * @package     CookieBanner
+ * @since       v1.0.0-beta
+ */
 class EventHandlers {
+    /**
+     * @return void
+     */
     public static function register(): void {
         self::registerSharedEvents();
 
@@ -38,6 +59,9 @@ class EventHandlers {
         if (Craft::$app->request->isCpRequest) self::registerCpEvents();
     }
 
+    /**
+     * @return void
+     */
     private static function registerSharedEvents(): void {
         self::registerVariables();
         self::registerTemplateRoots();
@@ -45,6 +69,9 @@ class EventHandlers {
         self::registerAssetBundles();
     }
 
+    /**
+     * @return void
+     */
     private static function registerCpEvents(): void {
         self::registerPermissions();
         self::registerCpRoutes();
@@ -52,16 +79,25 @@ class EventHandlers {
         self::registerTwigExtension();
     }
 
+    /**
+     * @return void
+     */
     private static function registerSiteEvents(): void {
         self::registerSiteRoutes();
         self::registerCookieBannerHtml();
         self::registerTwigExtension();
     }
 
+    /**
+     * @return void
+     */
     private static function registerConsoleEvents(): void {
         // Register any console events
     }
 
+    /**
+     * @return void
+     */
     private static function registerVariables(): void {
         Event::on(
             CraftVariable::class,
@@ -72,6 +108,9 @@ class EventHandlers {
         );
     }
 
+    /**
+     * @return void
+     */
     private static function registerTemplateRoots(): void {
         Event::on(
             View::class,
@@ -82,6 +121,9 @@ class EventHandlers {
         );
     }
 
+    /**
+     * @return void
+     */
     private static function registerElementTypes(): void {
         Event::on(
             Elements::class, 
@@ -92,6 +134,9 @@ class EventHandlers {
         );
     }
 
+    /**
+     * @return void
+     */
     private static function registerAssetBundles(): void {
         Event::on(
             View::class,
@@ -102,10 +147,16 @@ class EventHandlers {
         );
     }
 
+    /**
+     * @return void
+     */
     private static function registerTwigExtension(): void {
         Craft::$app->view->registerTwigExtension(new CookieBannerTwigExtension());
     }
 
+    /**
+     * @return void
+     */
     private static function registerPermissions(): void {
         Event::on(
             UserPermissions::class, 
@@ -184,6 +235,9 @@ class EventHandlers {
         );
     }
 
+    /**
+     * @return void
+     */
     private static function registerCpRoutes(): void {
         Event::on(
             UrlManager::class,
@@ -220,6 +274,9 @@ class EventHandlers {
         );
     }
 
+    /**
+     * @return void
+     */
     private static function registerSiteModelEvents(): void {
         Event::on(
             Sites::class,
@@ -256,6 +313,9 @@ class EventHandlers {
         );
     }
 
+    /**
+     * @return void
+     */
     private static function registerSiteRoutes(): void {
         Event::on(
             UrlManager::class,
@@ -266,6 +326,9 @@ class EventHandlers {
         );
     }
 
+    /**
+     * @return void
+     */
     private static function registerCookieBannerHtml(): void {
         Event::on(
             View::class,

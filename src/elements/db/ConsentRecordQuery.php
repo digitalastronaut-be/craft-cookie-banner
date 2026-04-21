@@ -1,4 +1,15 @@
 <?php
+/**
+ * Cookie banner plugin for Craft CMS
+ *
+ * Provides a fully configurable GDPR-compliant cookie banner for
+ * Craft CMS. Supports cookie detection/suggestion, consent records, vendor
+ * management, and customizable appearance & content — all from within the
+ * Craft control panel.
+ *
+ * @link      https://digitalastronaut.be
+ * @copyright Copyright (c) 2026 Digitalastronaut
+ */
 
 namespace digitalastronaut\craftcookiebanner\elements\db;
 
@@ -9,6 +20,12 @@ use craft\helpers\Db;
 use yii\db\Expression;
 
 /**
+ * Class ConsentRecordQuery
+ *
+ * @author      Digitalastronaut
+ * @package     CookieBanner
+ * @since       v1.0.0-beta
+ * 
  * @method self getCategorizedStats()
  * @method self ipAddressHash(string $value)
  */
@@ -34,17 +51,30 @@ class ConsentRecordQuery extends ElementQuery {
     public ?string $consentTimestampFrom = null;
     public ?string $consentTimestampTo = null;
 
+    /**
+     * @param string $value
+     * @return ConsentRecordQuery
+     */
     public function ipAddressHash(string $value): static {
         $this->ipAddressHash = $value;
         return $this;
     }
 
+    /**
+     * @param string $from
+     * @param string $to
+     * @return ConsentRecordQuery
+     */
     public function consentTimestampBetween(string $from, string $to): static {
         $this->consentTimestampFrom = $from;
         $this->consentTimestampTo = $to;
         return $this;
     }
 
+    /**
+     * @param string $status
+     * @return mixed
+     */
     protected function statusCondition(string $status): mixed {
         return match ($status) {
             'valid' => true,
@@ -52,6 +82,9 @@ class ConsentRecordQuery extends ElementQuery {
         };
     }
 
+    /**
+     * @return array[]
+     */
     public function groupedByMonth(): array {
         $db = Craft::$app->getDb();
 
@@ -79,6 +112,9 @@ class ConsentRecordQuery extends ElementQuery {
         return $rows;
     }
 
+    /**
+     * @return array[]
+     */
     public function countAndAcceptancePerDay(): array {
         $db = Craft::$app->getDb();
 
@@ -113,6 +149,9 @@ class ConsentRecordQuery extends ElementQuery {
         return $rows;
     }
 
+    /**
+     * @return array
+     */
     public function categoryAcceptancePercentages(): array {
         $db = Craft::$app->getDb();
 
@@ -156,6 +195,9 @@ class ConsentRecordQuery extends ElementQuery {
         return $percentages;
     }
 
+    /**
+     * @return bool
+     */
     protected function beforePrepare(): bool {
         $this->joinElementTable('cookie_banner_consent_records');
 
