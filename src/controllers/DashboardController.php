@@ -44,11 +44,12 @@ class DashboardController extends Controller {
     public function actionIndex(): Response {
         $this->requirePermission("cookie-banner:access-dashboard");
 
+        /** @var Settings $settings */
         $settings = CookieBanner::getInstance()->getSettings();
 
         return $this->renderTemplate('cookie-banner/pages/_dashboard.twig', [
-            'consentRecordsChartMetrics' => CookieBanner::getInstance()->getConsentRecords()->getChartData(),
-            'cookiesAndVendorsChartMetrics' => [
+            'consentRecordsChart' => CookieBanner::getInstance()->getConsentRecords()->getChartData(),
+            'cookiesAndVendorsChart' => [
                 'vendors' => CookieBanner::getInstance()->getCookiesAndVendors()->getCookieChartData(),
                 'cookies' => CookieBanner::getInstance()->getCookiesAndVendors()->getVendorsChartData(),
             ],
@@ -92,6 +93,7 @@ class DashboardController extends Controller {
             throw new BadRequestHttpException("Invalid guide step: $step");
         }
 
+        /** @var Settings $settings */
         $settings = CookieBanner::getInstance()->getSettings();
         $settings->gettingStartedProgress[$step] = true;
 

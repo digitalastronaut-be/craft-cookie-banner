@@ -16,11 +16,9 @@ class CookiesAndVendorsGraph extends HTMLElement {
 			throw new Error("Component must define a valid chart canvas elements");
 		}
 
-		const cookiesResponse = await fetch("/actions/cookie-banner/cookies-and-vendors/get-cookies-chart-data");
-		const { data: cookiesRawData } = await cookiesResponse.json();
-
+		const cookiesRawData = JSON.parse(this.dataset.cookies);
 		const cookiesChartData = {
-			labels: cookiesRawData.map((item) => item.label),
+			labels: cookiesRawData.map((item) => item.vendors),
 			datasets: [
 				{
 					label: "Cookies",
@@ -34,9 +32,7 @@ class CookiesAndVendorsGraph extends HTMLElement {
 			],
 		};
 
-		const vendorsResponse = await fetch("/actions/cookie-banner/cookies-and-vendors/get-vendors-chart-data");
-		const { data: vendorsRawData } = await vendorsResponse.json();
-
+		const vendorsRawData = JSON.parse(this.dataset.vendors);
 		const vendorsChartData = {
 			labels: vendorsRawData.map((item) => item.label),
 			datasets: [

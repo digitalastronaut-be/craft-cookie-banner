@@ -13,12 +13,11 @@ class ConsentRecordsGraph extends HTMLElement {
 			throw new Error("Component must define a valid chart canvas element");
 		}
 
-		const response = await fetch("/actions/cookie-banner/consent-records/get-chart-data");
-		const json = await response.json();
+		const json = JSON.parse(this.dataset.chart);
 
-		const labels = json.data.map((row) => row.date);
-		const values = json.data.map((row) => row.count);
-		const accepted = json.data.map((row) => row.accepted);
+		const labels = json.map((row) => row.date);
+		const values = json.map((row) => row.count);
+		const accepted = json.map((row) => row.accepted);
 
 		new Chart(this.chartElement, {
 			type: "line",

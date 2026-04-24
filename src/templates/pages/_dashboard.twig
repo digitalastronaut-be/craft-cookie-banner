@@ -20,7 +20,7 @@
                     <h3 class="ccb-typo-body-md ccb-semi-bold">{{ "Total"|t("cookie-banner") }}</h3>
 
                     <div class="ccb-graph-number-value">
-                        <p class="ccb-semi-bold">{{ consentRecordsChartMetrics.metrics.total|default(0) }}</p>
+                        <p class="ccb-semi-bold">{{ consentRecordsChart.metrics.total|default(0) }}</p>
                     </div>
                 </div>
 
@@ -28,7 +28,7 @@
                     <h3 class="ccb-typo-body-md ccb-semi-bold">{{ "Average/day"|t("cookie-banner") }}</h3>
 
                     <div class="ccb-graph-number-value">
-                        <p class="ccb-semi-bold">{{ consentRecordsChartMetrics.metrics.dailyAverage|default(0) }}</p>
+                        <p class="ccb-semi-bold">{{ consentRecordsChart.metrics.dailyAverage|default(0) }}</p>
                     </div>
                 </div>
 
@@ -36,12 +36,15 @@
                     <h3 class="ccb-typo-body-md ccb-semi-bold">{{ "Acceptance rate"|t("cookie-banner") }}</h3>
 
                     <div class="ccb-graph-number-value">
-                        <p class="ccb-semi-bold">{{ consentRecordsChartMetrics.metrics.acceptanceRate|default("0") }}%</p>
+                        <p class="ccb-semi-bold">{{ consentRecordsChart.metrics.acceptanceRate|default("0") }}%</p>
                     </div>
                 </div>
             </div>
 
-            <consent-records-graph class="consent-records-graph">
+            <consent-records-graph 
+                data-chart="{{ consentRecordsChart.data|json_encode }}" 
+                class="consent-records-graph"
+            >
                 <canvas id="consent-records-graph"></canvas>
             </consent-records-graph>
         </div>
@@ -49,7 +52,11 @@
         <div class="ccb-graph">
             <h2>{{ "Cookies and vendors status"|t("cookie-banner") }}</h2>
         
-            <cookies-and-vendors-graph class="cookies-and-vendors-graph">
+            <cookies-and-vendors-graph 
+                data-cookies="{{ cookiesAndVendorsChart.cookies.data|json_encode }}" 
+                data-vendors="{{ cookiesAndVendorsChart.vendors.data|json_encode }}" 
+                class="cookies-and-vendors-graph"
+            >
                 <div class="cookies-and-vendors-graph-container">
                     <canvas id="cookies-graph"></canvas>
                 </div>
@@ -67,7 +74,7 @@
             } %}
 
             <div class="ccb-graph-legend">
-                {% for chartKey, chart in cookiesAndVendorsChartMetrics %}
+                {% for chartKey, chart in cookiesAndVendorsChart %}
                     <div class="ccb-graph-sub-legend">
                         <h3>{{ chartKey|capitalize }}</h3>
                     
