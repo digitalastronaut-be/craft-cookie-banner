@@ -147,6 +147,7 @@ class ConsentRecord extends Element {
                         'consentTimestampFrom' => $from,
                         'consentTimestampTo' => $to,
                     ],
+                    'defaultSort' => ['consentTimestamp' => SORT_DESC],
                 ];
             }
 
@@ -157,6 +158,7 @@ class ConsentRecord extends Element {
                     'consentTimestampFrom' => "{$year}-01-01",
                     'consentTimestampTo' => ($year + 1) . "-01-01",
                 ],
+                'defaultSort' => ['consentTimestamp' => SORT_DESC],
                 'nested' => $monthSources,
             ];
         }
@@ -179,8 +181,8 @@ class ConsentRecord extends Element {
      */
     protected static function defineSortOptions(): array {
         return [
-            'title' => Craft::t('app', 'Title'),
-            'consentTimestamp' => Craft::t('app', 'Consent timestamp')
+            'title' => Craft::t('cookie-banner', 'Title'),
+            'consentTimestamp' => Craft::t('cookie-banner', 'Consent timestamp')
         ];
     }
 

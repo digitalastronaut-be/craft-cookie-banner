@@ -2,6 +2,7 @@
 
 namespace digitalastronaut\craftcookiebanner\services;
 
+use Craft;
 use craft\base\Component;
 
 use digitalastronaut\craftcookiebanner\CookieBanner;
@@ -11,45 +12,79 @@ use digitalastronaut\craftcookiebanner\records\Content;
 use Fuse\Fuse;
 
 class CookieDetectionService extends Component {
+
     /**
      * @return int
      */
     public function getIssues(): int {
         $issues = 0;
+        $contentBySiteId = [];
+
+        foreach (Content::find()->all() as $content) {
+            $contentBySiteId[$content->siteId] = $content;
+        }
+
+        $sites = Craft::$app->getSites()->getAllSites();
 
         $cookiesOverview = $this->getCookiesOverview();
-
         foreach ($cookiesOverview as $cookie) {
             if ($this->isControlPanelCookie($cookie['name'])) continue;
-
-            $definitions = CookieBanner::getInstance()
-                ->getCookiesAndVendors()
-                ->checkCookieDefinitionForEachSite($cookie['name']);
-
-            $definitionCounts = array_count_values($definitions);
-
-            if (
-                ($definitionCounts['not-defined'] ?? 0) > 0 ||
-                ($definitionCounts['defined-incomplete'] ?? 0) > 0
-            ) $issues++;
+            if ($this->hasDefinitionIssue($cookie['name'], $sites, $contentBySiteId, 'cookie')) {
+                $issues++;
+            } 
         }
 
         $vendorsOverview = $this->getVendorsOverview();
-
         foreach ($vendorsOverview as $vendor) {
-            $definitions = CookieBanner::getInstance()
-                ->getCookiesAndVendors()
-                ->checkVendorDefinitionForEachSite($vendor['name']);
-
-            $definitionCounts = array_count_values($definitions);
-
-            if (
-                ($definitionCounts['not-defined'] ?? 0) > 0 ||
-                ($definitionCounts['defined-incomplete'] ?? 0) > 0
-            ) $issues++;
+            if ($this->hasDefinitionIssue($vendor['name'], $sites, $contentBySiteId, 'vendor')) $issues++;
         }
 
         return $issues;
+    }
+
+    private function hasDefinitionIssue(
+        string $name,
+        array $sites,
+        array $contentBySiteId,
+        string $type
+    ): bool {
+        foreach ($sites as $site) {
+            $content = $contentBySiteId[$site->id] ?? null;
+
+            if (!$content) return true;
+
+            if ($type === 'cookie') {
+                $items = [];
+
+                foreach (CookieBannerHelper::COOKIE_CATEGORIES as $category) {
+                    foreach ($content->$category ?? [] as $cookie) {
+                        $items[$cookie['name'] ?? ''] = $cookie;
+                    }
+                }
+
+                $match = $items[$name] ?? null;
+
+                if (!$match) return true;
+                if (!($match['enabled'] ?? false)) continue;
+                if (empty($match['purpose']) || empty($match['expiration'])) return true;
+            } else {
+                $vendors = $content->vendors ?? [];
+                $match = null;
+
+                foreach ($vendors as $vendor) {
+                    if (($vendor['name'] ?? '') === $name) {
+                        $match = $vendor;
+                        break;
+                    }
+                }
+
+                if (!$match) return true;
+                if (!($match['enabled'] ?? false)) continue;
+                if (empty($match['url']) || empty($match['privacyPolicyUrl'])) return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -121,7 +156,7 @@ class CookieDetectionService extends Component {
                 ->getCookieDetection()
                 ->getVendorDataFromDatabase($vendor['name'], "en");
             
-            if (!in_array($vendor['name'], $existingVendorNames)) {
+            if (!\in_array($vendor['name'], $existingVendorNames)) {
                 $result[] = [
                     'name' => $vendor['name'],
                     'url' => $vendor['url'],
@@ -151,8 +186,8 @@ class CookieDetectionService extends Component {
 
             if (
                 $vendorMatch &&
-                !in_array($vendorMatch['vendor']['name'], $existingVendorNames) &&
-                !in_array($vendorMatch['vendor']['name'], array_column($blacklistedVendors, 'name'))
+                !\in_array($vendorMatch['vendor']['name'], $existingVendorNames) &&
+                !\in_array($vendorMatch['vendor']['name'], array_column($blacklistedVendors, 'name'))
             ) {
                 $result[] = [
                     'name' => $vendorMatch['vendor']['name'],
@@ -182,7 +217,7 @@ class CookieDetectionService extends Component {
 
         $results = $fuzzySearchIndex->search($searchTerm);
 
-        return array_slice($results, 0, 100);
+        return \array_slice($results, 0, 100);
     }
 
     /**
@@ -199,7 +234,7 @@ class CookieDetectionService extends Component {
 
         $results = $fuzzySearchIndex->search($searchTerm);
 
-        return array_slice($results, 0, 100);
+        return \array_slice($results, 0, 100);
     }
 
     /**
@@ -263,7 +298,7 @@ class CookieDetectionService extends Component {
         if (!$fileContents) return null;
 
         $data = json_decode($fileContents, true);
-        if (!is_array($data)) return null;
+        if (!\is_array($data)) return null;
 
         return [
             'data' => $data,
@@ -304,7 +339,7 @@ class CookieDetectionService extends Component {
     public function isCookieBlacklisted(string|null $cookieName): bool {
         $blacklistCookies = array_column(CookieBanner::getInstance()->getSettings()->blacklistedCookies, 'name');
 
-        return in_array($cookieName, $blacklistCookies);
+        return \in_array($cookieName, $blacklistCookies);
     }
 
     /**
@@ -315,6 +350,6 @@ class CookieDetectionService extends Component {
     public function isVendorBlacklisted(string|null $vendorName): bool {
         $blacklistVendors = array_column(CookieBanner::getInstance()->getSettings()->blacklistedVendors, 'name');
 
-        return in_array($vendorName, $blacklistVendors);
+        return \in_array($vendorName, $blacklistVendors);
     }
 }

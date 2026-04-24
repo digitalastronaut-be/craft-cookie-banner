@@ -1,5 +1,16 @@
 # Release Notes for Cookie banner
 
+## 1.0.10-beta
+
+- Cleanup method moved to a queue job
+- Dashboard chart queries optimized
+- Added Frontend and CP asset bundles for small download sizes on the frontend
+- Chart styling improved
+- Fixed a date issue where the consent records of today didn't show on the graph
+- Fixed some MySQL specific queries with ANSI SQL
+- Optimised the issues queries and added caching
+- Fixed permissions
+
 ## 1.0.9-beta
 
 - Bulk import error handling

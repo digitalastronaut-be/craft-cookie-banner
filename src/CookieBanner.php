@@ -34,20 +34,10 @@ use yii\web\Response;
  */
 class CookieBanner extends Plugin {
     use ServicesTrait;
+    use PluginTrait;
 
-    /**
-     * @var string
-     */
     public string $schemaVersion = '1.0.0';
-    
-    /**
-     * @var bool
-     */
     public bool $hasCpSettings = true;
-
-    /**
-     * @var bool
-     */
     public bool $hasCpSection = true;
 
     /**
@@ -56,7 +46,7 @@ class CookieBanner extends Plugin {
     public function init(): void {
         parent::init();
 
-        EventHandlers::register();
+        $this->registerEvents();
 
         Craft::info(Craft::t('cookie-banner', '{name} plugin loaded', ['name' => $this->name]));
     }
@@ -88,7 +78,11 @@ class CookieBanner extends Plugin {
 
         $nav['icon'] = "@digitalastronaut/craftcookiebanner/web/icons/shield.svg";
         $nav['url'] = 'cookie-banner';
-        $nav['badgeCount'] = CookieBanner::getInstance()->getCookieDetection()->getIssues();
+        $nav['badgeCount'] = Craft::$app->getCache()->getOrSet(
+            'cookie-banner:issues-count',
+            fn() => CookieBanner::getInstance()->getCookieDetection()->getIssues(),
+            duration: 300,
+        );
 
         if ($currentUser->checkPermission("cookie-banner:access-cookies-and-vendors")) {
             $nav['subnav']['dashboard'] = [

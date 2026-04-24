@@ -147,6 +147,8 @@ class CookiesAndVendorsService extends Component {
                 }
             }
 
+            Craft::$app->getCache()->delete('cookie-banner:issues-count'); 
+
             $transaction->commit();
         } catch (Exception $error) {
             $transaction->rollBack();
@@ -208,6 +210,8 @@ class CookiesAndVendorsService extends Component {
                     ));
                 }
             }
+
+            Craft::$app->getCache()->delete('cookie-banner:issues-count'); 
 
             $transaction->commit();
         } catch (Exception $error) {
@@ -313,6 +317,8 @@ class CookiesAndVendorsService extends Component {
                 }
             }
 
+            Craft::$app->getCache()->delete('cookie-banner:issues-count'); 
+
             $transaction->commit();
         } catch (Exception $error) {
             $transaction->rollBack();
@@ -394,6 +400,8 @@ class CookiesAndVendorsService extends Component {
                 }
             }
 
+            Craft::$app->getCache()->delete('cookie-banner:issues-count'); 
+
             $transaction->commit();
         } catch (Exception $error) {
             $transaction->rollBack();
@@ -418,6 +426,8 @@ class CookiesAndVendorsService extends Component {
             CookieBanner::getInstance(),
             $settings->toArray()
         );
+
+        Craft::$app->getCache()->delete('cookie-banner:issues-count'); 
     }
 
     /**
@@ -566,6 +576,8 @@ class CookiesAndVendorsService extends Component {
                 }
             }
 
+            Craft::$app->getCache()->delete('cookie-banner:issues-count'); 
+
             $transaction->commit();
         } catch (Exception $error) {
             $transaction->rollBack();
@@ -618,6 +630,8 @@ class CookiesAndVendorsService extends Component {
                     ));
                 }
             }
+
+            Craft::$app->getCache()->delete('cookie-banner:issues-count'); 
 
             $transaction->commit();
         } catch (Exception $error) {
@@ -703,6 +717,8 @@ class CookiesAndVendorsService extends Component {
                 }
             }
 
+            Craft::$app->getCache()->delete('cookie-banner:issues-count'); 
+
             $transaction->commit();
         } catch (Exception $error) {
             $transaction->rollBack();
@@ -770,6 +786,8 @@ class CookiesAndVendorsService extends Component {
                 }
             }
 
+            Craft::$app->getCache()->delete('cookie-banner:issues-count'); 
+
             $transaction->commit();
         } catch (Exception $error) {
             $transaction->rollBack();
@@ -797,6 +815,8 @@ class CookiesAndVendorsService extends Component {
             CookieBanner::getInstance(),
             $settings->toArray()
         );
+
+        Craft::$app->getCache()->delete('cookie-banner:issues-count'); 
     }
 
     /**

@@ -16,7 +16,6 @@ namespace digitalastronaut\craftcookiebanner\console\controllers;
 use Craft;
 use craft\console\Controller;
 
-use digitalastronaut\craftcookiebanner\CookieBanner;
 use digitalastronaut\craftcookiebanner\jobs\PurgeExpiredConsentRecords;
 
 use yii\console\ExitCode;

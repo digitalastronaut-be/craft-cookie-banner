@@ -369,6 +369,8 @@ class CookiesAndVendorsController extends Controller {
     }
 
     public function actionGetCookiesChartData(): Response {
+        $this->requirePermission('cookie-banner:access-cookies-and-vendors');
+
         $data = CookieBanner::getInstance()->getCookiesAndVendors()->getCookieChartData();
 
         return $this->asJson($data);
@@ -381,7 +383,7 @@ class CookiesAndVendorsController extends Controller {
      * @throws MissingComponentException
      */
     public function actionCreateVendor(): Response {
-        $this->requirePermission("cookie-banner:create-vendors");
+        $this->requirePermission("cookie-banner:add-vendors");
 
         if ($this->request->isPost) {
             $this->requirePostRequest();
@@ -490,7 +492,7 @@ class CookiesAndVendorsController extends Controller {
      * @throws MissingComponentException
      */
     public function actionDeleteVendorForAllSites(): Response {
-        $this->requirePermission("cookie-banner:delete-vendors");
+        $this->requirePermission("cookie-banner:remove-vendors");
         
         try {
             $vendorName = $this->request->getParam("vendorName");
@@ -542,6 +544,8 @@ class CookiesAndVendorsController extends Controller {
     }
 
     public function actionGetVendorsChartData(): Response {
+        $this->requirePermission('cookie-banner:access-cookies-and-vendors');
+
         $data = CookieBanner::getInstance()->getCookiesAndVendors()->getVendorsChartData();
 
         return $this->asJson($data);

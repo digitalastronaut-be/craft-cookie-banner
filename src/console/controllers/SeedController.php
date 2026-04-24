@@ -75,6 +75,8 @@ class SeedController extends Controller {
             $randomTimestamp = mt_rand($startDate->getTimestamp(), $now->getTimestamp());
             $consentTimestamp = Carbon::now()->setTimestamp($randomTimestamp);
 
+            $acceptAll = (bool) rand(0, 1);
+
             CookieBanner::getInstance()
                 ->getConsentRecords()
                 ->createConsentRecord([
@@ -86,10 +88,10 @@ class SeedController extends Controller {
                     'consentTimestamp' => $consentTimestamp,
                     'consentAction' => $actions[array_rand($actions)],
                     'necessaryCookies' => true,
-                    'preferenceCookies' => (bool)rand(0, 1),
-                    'analyticalCookies' => (bool)rand(0, 1),
-                    'marketingCookies' => (bool)rand(0, 1),
-                    'uncategorizedCookies' => (bool)rand(0, 1),
+                    'preferenceCookies' => $acceptAll ?: (bool)rand(0, 1),
+                    'analyticalCookies' => $acceptAll ?: (bool)rand(0, 1),
+                    'marketingCookies' => $acceptAll ?: (bool)rand(0, 1),
+                    'uncategorizedCookies' => $acceptAll ?: (bool)rand(0, 1),
                     'consentMethod' => 'Seeder script',
                     'bannerVersion' => 'v1.0.0',
                     'privacyPolicyVersion' => 'v1.0.0',

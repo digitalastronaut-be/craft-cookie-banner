@@ -9,6 +9,7 @@ use yii\base\Exception;
 
 use digitalastronaut\craftcookiebanner\CookieBanner;
 use digitalastronaut\craftcookiebanner\elements\ConsentRecord;
+use digitalastronaut\craftcookiebanner\jobs\PurgeExpiredConsentRecords;
 
 use Carbon\Carbon;
 
@@ -48,7 +49,7 @@ class ConsentRecordsService extends Component {
             $consentRecord->privacyPolicyVersion = $data['privacyPolicyVersion'];
             $consentRecord->cookiePolicyVersion = $data['cookiePolicyVersion'];
 
-            $this->cleanup();
+            Craft::$app->queue->push(new PurgeExpiredConsentRecords());
 
             if (!Craft::$app->elements->saveElement($consentRecord)) {
                 throw new Exception(sprintf(
@@ -79,7 +80,7 @@ class ConsentRecordsService extends Component {
 
     public function getChartData(): array {
         $rows = ConsentRecord::find()
-            ->consentTimestampBetween(Carbon::now()->subMonth(), Carbon::now())
+            ->consentTimestampBetween(Carbon::now()->subMonth(), Carbon::now()->addDay())
             ->countAndAcceptancePerDay();
     
         $indexed = [];

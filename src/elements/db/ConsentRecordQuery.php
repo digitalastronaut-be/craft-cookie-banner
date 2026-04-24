@@ -93,8 +93,8 @@ class ConsentRecordQuery extends ElementQuery {
 
         $table = 'cookie_banner_consent_records';
 
-        $yearExpression = new Expression("YEAR([[{$table}.consentTimestamp]])");
-        $monthExpression = new Expression("MONTH([[{$table}.consentTimestamp]])");
+        $yearExpression = new Expression("EXTRACT(YEAR FROM [[{$table}.consentTimestamp]])");
+        $monthExpression = new Expression("EXTRACT(MONTH FROM [[{$table}.consentTimestamp]])");
 
         $rows = (clone $query->subQuery)
             ->select([
@@ -145,7 +145,7 @@ class ConsentRecordQuery extends ElementQuery {
             ->groupBy($dateExpression)
             ->orderBy(['date' => SORT_ASC])
             ->all();
-
+        
         return $rows;
     }
 

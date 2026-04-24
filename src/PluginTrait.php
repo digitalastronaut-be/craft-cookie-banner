@@ -37,7 +37,8 @@ use digitalastronaut\craftcookiebanner\elements\ConsentRecord;
 use digitalastronaut\craftcookiebanner\records\Appearance;
 use digitalastronaut\craftcookiebanner\records\Content;
 use digitalastronaut\craftcookiebanner\variables\CookieBannerVariable;
-use digitalastronaut\craftcookiebanner\web\assets\CookieBannerAssets;
+use digitalastronaut\craftcookiebanner\web\assets\cp\ControlPanelAssets;
+use digitalastronaut\craftcookiebanner\web\assets\frontend\CookieBannerAssets;
 use digitalastronaut\craftcookiebanner\web\twig\CookieBannerTwigExtension;
 
 /**
@@ -47,58 +48,59 @@ use digitalastronaut\craftcookiebanner\web\twig\CookieBannerTwigExtension;
  * @package     CookieBanner
  * @since       v1.0.0-beta
  */
-class EventHandlers {
+trait PluginTrait {
     /**
      * @return void
      */
-    public static function register(): void {
-        self::registerSharedEvents();
+    protected function registerEvents(): void {
+        $this->registerSharedEvents();
 
-        if (Craft::$app->request->isConsoleRequest) self::registerConsoleEvents();
-        if (Craft::$app->request->isSiteRequest) self::registerSiteEvents();
-        if (Craft::$app->request->isCpRequest) self::registerCpEvents();
+        if (Craft::$app->request->isConsoleRequest) $this->registerConsoleEvents();
+        if (Craft::$app->request->isSiteRequest) $this->registerSiteEvents();
+        if (Craft::$app->request->isCpRequest) $this->registerCpEvents();
     }
 
     /**
      * @return void
      */
-    private static function registerSharedEvents(): void {
-        self::registerVariables();
-        self::registerTemplateRoots();
-        self::registerElementTypes();
-        self::registerAssetBundles();
+    protected function registerSharedEvents(): void {
+        $this->registerVariables();
+        $this->registerTemplateRoots();
+        $this->registerElementTypes();
     }
 
     /**
      * @return void
      */
-    private static function registerCpEvents(): void {
-        self::registerPermissions();
-        self::registerCpRoutes();
-        self::registerSiteModelEvents();      
-        self::registerTwigExtension();
+    protected function registerCpEvents(): void {
+        $this->registerPermissions();
+        $this->registerCpRoutes();
+        $this->registerSiteModelEvents();      
+        $this->registerTwigExtension();
+        $this->registerCpAssetBundles();
     }
 
     /**
      * @return void
      */
-    private static function registerSiteEvents(): void {
-        self::registerSiteRoutes();
-        self::registerCookieBannerHtml();
-        self::registerTwigExtension();
+    protected function registerSiteEvents(): void {
+        $this->registerSiteRoutes();
+        $this->registerCookieBannerHtml();
+        $this->registerTwigExtension();
+        $this->registerFrontendAssetBundles();
     }
 
     /**
      * @return void
      */
-    private static function registerConsoleEvents(): void {
+    protected function registerConsoleEvents(): void {
         // Register any console events
     }
 
     /**
      * @return void
      */
-    private static function registerVariables(): void {
+    protected function registerVariables(): void {
         Event::on(
             CraftVariable::class,
             CraftVariable::EVENT_DEFINE_BEHAVIORS,
@@ -111,7 +113,7 @@ class EventHandlers {
     /**
      * @return void
      */
-    private static function registerTemplateRoots(): void {
+    protected function registerTemplateRoots(): void {
         Event::on(
             View::class,
             View::EVENT_REGISTER_SITE_TEMPLATE_ROOTS,
@@ -124,7 +126,7 @@ class EventHandlers {
     /**
      * @return void
      */
-    private static function registerElementTypes(): void {
+    protected function registerElementTypes(): void {
         Event::on(
             Elements::class, 
             Elements::EVENT_REGISTER_ELEMENT_TYPES, 
@@ -137,7 +139,7 @@ class EventHandlers {
     /**
      * @return void
      */
-    private static function registerAssetBundles(): void {
+    protected function registerFrontendAssetBundles(): void {
         Event::on(
             View::class,
             View::EVENT_BEFORE_RENDER_TEMPLATE,
@@ -146,18 +148,31 @@ class EventHandlers {
             }
         );
     }
+    
+    /**
+     * @return void
+     */
+    protected function registerCpAssetBundles(): void {
+        Event::on(
+            View::class,
+            View::EVENT_BEFORE_RENDER_TEMPLATE,
+            function() {
+                Craft::$app->getView()->registerAssetBundle(ControlPanelAssets::class);
+            }
+        );
+    }
 
     /**
      * @return void
      */
-    private static function registerTwigExtension(): void {
+    protected function registerTwigExtension(): void {
         Craft::$app->view->registerTwigExtension(new CookieBannerTwigExtension());
     }
 
     /**
      * @return void
      */
-    private static function registerPermissions(): void {
+    protected function registerPermissions(): void {
         Event::on(
             UserPermissions::class, 
             UserPermissions::EVENT_REGISTER_PERMISSIONS, 
@@ -238,7 +253,7 @@ class EventHandlers {
     /**
      * @return void
      */
-    private static function registerCpRoutes(): void {
+    protected function registerCpRoutes(): void {
         Event::on(
             UrlManager::class,
             UrlManager::EVENT_REGISTER_CP_URL_RULES,
@@ -277,7 +292,7 @@ class EventHandlers {
     /**
      * @return void
      */
-    private static function registerSiteModelEvents(): void {
+    protected function registerSiteModelEvents(): void {
         Event::on(
             Sites::class,
             Sites::EVENT_AFTER_SAVE_SITE,
@@ -316,7 +331,7 @@ class EventHandlers {
     /**
      * @return void
      */
-    private static function registerSiteRoutes(): void {
+    protected function registerSiteRoutes(): void {
         Event::on(
             UrlManager::class,
             UrlManager::EVENT_REGISTER_SITE_URL_RULES,
@@ -329,7 +344,7 @@ class EventHandlers {
     /**
      * @return void
      */
-    private static function registerCookieBannerHtml(): void {
+    protected function registerCookieBannerHtml(): void {
         Event::on(
             View::class,
             View::EVENT_BEFORE_RENDER_PAGE_TEMPLATE,

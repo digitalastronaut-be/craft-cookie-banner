@@ -11,7 +11,7 @@
  * @copyright Copyright (c) 2026 Digitalastronaut
  */
 
-namespace digitalastronaut\craftcookiebanner\web\assets;
+namespace digitalastronaut\craftcookiebanner\web\assets\frontend;
 
 use craft\web\AssetBundle;
 
@@ -27,7 +27,7 @@ class CookieBannerAssets extends AssetBundle {
      * @return void
      */
     public function init(): void {
-        $this->sourcePath = "@digitalastronaut/craftcookiebanner/web/assets/dist";
+        $this->sourcePath = "@digitalastronaut/craftcookiebanner/web/assets/frontend/dist";
         
         $this->css = ['index.css'];
         $this->js = ['index.js'];

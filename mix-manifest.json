@@ -1,4 +1,6 @@
 {
-    "/src/web/assets/dist/index.js": "/src/web/assets/dist/index.js",
-    "/src/web/assets/dist/index.css": "/src/web/assets/dist/index.css"
+    "/src/web/assets/frontend/dist/index.js": "/src/web/assets/frontend/dist/index.js",
+    "/src/web/assets/cp/dist/index.js": "/src/web/assets/cp/dist/index.js",
+    "/src/web/assets/cp/dist/index.css": "/src/web/assets/cp/dist/index.css",
+    "/src/web/assets/frontend/dist/index.css": "/src/web/assets/frontend/dist/index.css"
 }
