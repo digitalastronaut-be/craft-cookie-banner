@@ -51,8 +51,8 @@ class DashboardController extends Controller {
         return $this->renderTemplate('cookie-banner/pages/_dashboard.twig', [
             'consentRecordsChart' => CookieBanner::getInstance()->getConsentRecords()->getChartData(),
             'cookiesAndVendorsChart' => [
-                'vendors' => $cookiesAndVendors->getVendorsChartData(),
                 'cookies' => $cookiesAndVendors->getCookieChartData(),
+                'vendors' => $cookiesAndVendors->getVendorsChartData(),
             ],
             'gettingStartedProgress' => $settings->gettingStartedProgress,
         ]);

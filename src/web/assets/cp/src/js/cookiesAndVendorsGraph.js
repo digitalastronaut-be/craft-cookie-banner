@@ -18,7 +18,7 @@ class CookiesAndVendorsGraph extends HTMLElement {
 
 		const cookiesRawData = JSON.parse(this.dataset.cookies);
 		const cookiesChartData = {
-			labels: cookiesRawData.map((item) => item.vendors),
+			labels: cookiesRawData.map((item) => item.label),
 			datasets: [
 				{
 					label: "Cookies",

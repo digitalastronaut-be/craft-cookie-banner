@@ -42,7 +42,8 @@ This plugin provides a fully featured toolset for managing cookies and displayin
 7. 0 Dependencies 18.7 KiB (~6.5 KiB gzip) JS bundle
 8. Dashboard with consent statistics
 9. Twig helper for generating cookie tables
-10. Cookie blacklists
+10. Google V2 Consent + Custom JS events
+11. Cookie blacklists
 
 ### With this plugin
 
