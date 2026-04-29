@@ -5,10 +5,10 @@
 	"license": "proprietary",
 	"support": {
 		"email": "bram@digitalastronaut.be",
-		"issues": "https://github.com/tim-digitalastronaut/craft-cookie-banner/issues?state=open",
-		"source": "https://github.com/tim-digitalastronaut/craft-cookie-banner",
-		"docs": "https://github.com/tim-digitalastronaut/craft-cookie-banner",
-		"rss": "https://github.com/tim-digitalastronaut/craft-cookie-banner/releases.atom"
+		"issues": "https://github.com/digitalastronaut-be/craft-cookie-banner/issues?state=open",
+		"source": "https://github.com/digitalastronaut-be/craft-cookie-banner",
+		"docs": "https://github.com/digitalastronaut-be/craft-cookie-banner",
+		"rss": "https://github.com/digitalastronaut-be/craft-cookie-banner/releases.atom"
 	},
 	"require": {
 		"php": ">=8.2",
@@ -30,7 +30,7 @@
 		"handle": "cookie-banner",
 		"name": "Cookie banner",
 		"developer": "digitalastronaut",
-		"documentationUrl": "https://github.com/tim-digitalastronaut/craft-cookie-banner",
+		"documentationUrl": "https://github.com/digitalastronaut-be/craft-cookie-banner",
 		"class": "digitalastronaut\\craftcookiebanner\\CookieBanner"
 	},
 	"scripts": {
