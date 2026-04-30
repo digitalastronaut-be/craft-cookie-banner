@@ -36,7 +36,9 @@ class CookieDetectionService extends Component {
 
         $vendorsOverview = $this->getVendorsOverview();
         foreach ($vendorsOverview as $vendor) {
-            if ($this->hasDefinitionIssue($vendor['name'], $sites, $contentBySiteId, 'vendor')) $issues++;
+            if ($this->hasDefinitionIssue($vendor['name'], $sites, $contentBySiteId, 'vendor')) {
+                $issues++;
+            }
         }
 
         return $issues;
@@ -77,10 +79,10 @@ class CookieDetectionService extends Component {
                         break;
                     }
                 }
-
+                
                 if (!$match) return true;
-                if (!($match['enabled'] ?? false)) continue;
-                if (empty($match['url']) || empty($match['privacyPolicyUrl'])) return true;
+                if (!$match['enabled']) continue;
+                if (empty($match['url']) || empty($match['url'])) return true;
             }
         }
 

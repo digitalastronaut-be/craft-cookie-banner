@@ -21,6 +21,12 @@
 		"craftcms/ecs": "dev-main",
 		"craftcms/phpstan": "dev-main"
 	},
+	"authors": [
+		{
+			"name": "Digital Astronaut",
+			"homepage": "https://digitalastronaut.be"
+		}
+	],
 	"autoload": {
 		"psr-4": {
 			"digitalastronaut\\craftcookiebanner\\": "src/"

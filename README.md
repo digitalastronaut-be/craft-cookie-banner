@@ -29,30 +29,26 @@ composer require digitalastronaut/craft-cookie-banner
 php craft plugin/install cookie-banner
 ```
 
-This plugin provides a fully featured toolset for managing cookies and displaying a GDPR compliant banner on your website. It brings the same powerfull features as many paid third party services whilst being seamlessly integrated into the control panel.
+This plugin provides a fully featured toolset for managing cookie consent and displaying a GDPR compliant banner on your website. It brings the same powerfull features as many premium CMP's whilst being seamlessly integrated into the Craft CMS control panel.
 
 ## Features
 
-1. Native Craft translations and multi-site behaviour
-2. 4000+ Cookies and vendors database translated in 7 languages (NL, EN, ES, IT, FR, DE, PL)
-3. Bulk insert and automated categorization
-4. Automated scans and suggestions
-5. Fully customisable from the control panel per site
-6. Consent records keeping with auto cleanup
-7. 0 Dependencies 18.7 KiB (~6.5 KiB gzip) JS bundle
-8. Dashboard with consent statistics
-9. Twig helper for generating cookie tables
-10. Google V2 Consent + Custom JS events
-11. Cookie blacklists
+1. Native multi-site support and translations
+2. No config files or coding required. Fully configurable from the control panel
+3. Contains a database of 4000+ cookies and vendors translated in 7 languages (NL, EN, ES, IT, FR, DE, PL)
+4. Bulk insert and automated categorization of cookies and vendors
+5. Automated scans and suggestions
+6. Customize the UI from the control panel for each site
+7. Consent records with automatic cleanup
+8. 0 Dependencies 18.7 KiB (~6.5 KiB gzip) JS bundle
+9. Dashboard with consent statistics
+10. Twig helper for generating cookie tables
+11. Google V2 Consent & Custom JS events support
+12. Cookie/vendor blacklist
 
-### With this plugin
-
-1. Centralized with your craft installation
-2. $59 / $29 renewal unlimited traffic & pages
-3. Fully branded banner with no contributions required
-
-### Cookiebot
-
-1. Another tool to manage on a per site basis
-2. $90 - $360 depending on traffic & pages
-3. Custom CSS required to remove logo/branding
+| Feature          | Our Plugin                                             | CMP                                                |
+| ---------------- | ------------------------------------------------------ | -------------------------------------------------- |
+| **Access**       | Directly integrated within the Craft CMS control panel | External, outside the CMS                          |
+| **Site support** | Multi-site support                                     | Single site only                                   |
+| **Branding**     | Fully customizable, no third-party branding            | Third-party branding/contributions included        |
+| **Pricing**      | Simple flat annual fee                                 | Variable cost based on traffic and number of pages |
