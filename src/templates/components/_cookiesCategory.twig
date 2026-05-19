@@ -20,68 +20,70 @@
 {# ======================= #}
 {# TEMPLATE                #}
 {# ======================= #}
-<collapsible-content class="ccb-cookies-category ccb-collapse">
-    <div data-collapse-toggle class="ccb-cookies-category-toggle">
-        <div class="ccb-cookies-category-toggle-label">
-            {{ svg("@digitalastronaut/craftcookiebanner/web/icons/chevron-down.svg") }}
+{% if cookies|length %}
+    <collapsible-content class="ccb-cookies-category ccb-collapse">
+        <div data-collapse-toggle class="ccb-cookies-category-toggle">
+            <div class="ccb-cookies-category-toggle-label">
+                {{ svg("@digitalastronaut/craftcookiebanner/web/icons/chevron-down.svg") }}
 
-            <h3 class="ccb-typo-h3">{{ title }} ({{ cookies|length }})</h3>
+                <h3 class="ccb-typo-h3">{{ title }} ({{ cookies|length }})</h3>
+            </div>
+
+            {% block lightswitch %}{% endblock %}
         </div>
 
-        {% block lightswitch %}{% endblock %}
-    </div>
+        <div data-collapse-content class="ccb-cookies-category-content">
+            <div class="ccb-cookies-category-content-inner">
+                <p class="ccb-typo-body-sm">{{ description }}</p>
 
-    <div data-collapse-content class="ccb-cookies-category-content">
-        <div class="ccb-cookies-category-content-inner">
-            <p class="ccb-typo-body-sm">{{ description }}</p>
+                {% if appearance.showCookieTables %}
+                    <ul class="ccb-cookies-category-groups-list">
+                        {% for group in groupedCookies %}
+                            {% set name = group.name|default("") %}
+                            {% set description = group.description|default("") %}
+                            {% set url = group.url|default("") %}
+                            {% set cookies = group.cookies|default([]) %}
 
-            {% if cookies|length and appearance.showCookieTables %}
-                <ul class="ccb-cookies-category-groups-list">
-                    {% for group in groupedCookies %}
-                        {% set name = group.name|default("") %}
-                        {% set description = group.description|default("") %}
-                        {% set url = group.url|default("") %}
-                        {% set cookies = group.cookies|default([]) %}
+                            {% if name != "Default" and cookies|length %}
+                                <li class="ccb-cookies-category-groups-list-item">
+                                    <collapsible-content class="ccb-cookies-category-groups-list-item-collapse ccb-collapse">
+                                        <div data-collapse-toggle class="ccb-cookies-category-groups-list-item-toggle">
+                                            <div>
+                                                <h4 class="ccb-typo-h3">{{ name }} ({{ cookies|length }})</h4>
+                                            
+                                                {{ svg("@digitalastronaut/craftcookiebanner/web/icons/chevron-down.svg") }}
+                                            </div>
 
-                        {% if name != "Default" and cookies|length %}
-                            <li class="ccb-cookies-category-groups-list-item">
-                                <collapsible-content class="ccb-cookies-category-groups-list-item-collapse ccb-collapse">
-                                    <div data-collapse-toggle class="ccb-cookies-category-groups-list-item-toggle">
-                                        <div>
-                                            <h4 class="ccb-typo-h3">{{ name }} ({{ cookies|length }})</h4>
-                                        
-                                            {{ svg("@digitalastronaut/craftcookiebanner/web/icons/chevron-down.svg") }}
+                                            <p class="ccb-typo-body-sm">{{ description }}</p>
+
+                                            {% if url %}
+                                                <a 
+                                                    href="{{ url }}" 
+                                                    target="_blank"
+                                                    ccb-on:click.stop 
+                                                    class="ccb-typo-body-sm"
+                                                >
+                                                    {{ "Learn more about this provider"|t }}
+                                                </a>
+                                            {% endif %}
                                         </div>
 
-                                        <p class="ccb-typo-body-sm">{{ description }}</p>
-
-                                        {% if url %}
-                                            <a 
-                                                href="{{ url }}" 
-                                                target="_blank"
-                                                ccb-on:click.stop 
-                                                class="ccb-typo-body-sm"
-                                            >
-                                                {{ "Learn more about this provider"|t }}
-                                            </a>
-                                        {% endif %}
-                                    </div>
-
-                                    <div data-collapse-content class="ccb-cookies-category-groups-list-item-content">
-                                        <div class="ccb-cookies-category-groups-list-item-content-inner">
-                                            {% include "cookie-banner/components/_cookiesTable" with { cookies } only %}
+                                        <div data-collapse-content class="ccb-cookies-category-groups-list-item-content">
+                                            <div class="ccb-cookies-category-groups-list-item-content-inner">
+                                                {% include "cookie-banner/components/_cookiesTable" with { cookies } only %}
+                                            </div>
                                         </div>
-                                    </div>
-                                </collapsible-content>
-                            </li>
-                        {% elseif cookies|length %}
-                            <li class="ccb-cookies-category-groups-list-item">
-                                {% include "cookie-banner/components/_cookiesTable" with { cookies } only %}
-                            </li>
-                        {% endif %}
-                    {% endfor %}
-                </ul>
-            {% endif %}
+                                    </collapsible-content>
+                                </li>
+                            {% elseif cookies|length %}
+                                <li class="ccb-cookies-category-groups-list-item">
+                                    {% include "cookie-banner/components/_cookiesTable" with { cookies } only %}
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
         </div>
-    </div>
-</collapsible-content>
+    </collapsible-content>
+{% endif %}
