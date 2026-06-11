@@ -33,4 +33,11 @@ class CookieBannerVariable extends Behavior {
     public function consentRecords(array $criteria = []): ConsentRecordQuery {
         return Craft::configure(ConsentRecord::find(), $criteria);
     }
+
+    /**
+     * @return array
+     */
+    public function consent(): array {
+        return json_decode($_COOKIE['craft-cookie-banner']);
+    }
 }

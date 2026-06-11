@@ -82,9 +82,7 @@ class ConsentRecordsGraph extends HTMLElement {
 						ticks: {
 							stepSize: 1,
 							maxTicksLimit: 8,
-							callback: function (value) {
-								return value >= 0 ? value : "";
-							},
+							callback: (value) => (value >= 0 ? value : ""),
 						},
 						grid: {
 							borderDash: [5, 5],

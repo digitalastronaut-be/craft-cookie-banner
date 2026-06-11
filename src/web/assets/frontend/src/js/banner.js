@@ -1,5 +1,4 @@
-import { buildGoogleConsentV2Object } from "./utils.js";
-import { getCookie } from "./utils.js";
+import { buildGoogleConsentV2Object, getCookie } from "./utils.js";
 
 class CookieBanner extends HTMLElement {
 	constructor() {
@@ -53,14 +52,6 @@ class CookieBanner extends HTMLElement {
 			gtag("consent", "update", googleConsentV2Object);
 			gtag("event", "cookie-banner", this.consent);
 		}
-
-		document.dispatchEvent(
-			new CustomEvent("cookie-banner:consent-onload", {
-				bubbles: true,
-				composed: true,
-				detail: { consent: this.consent },
-			}),
-		);
 	}
 
 	acceptAll() {
@@ -245,6 +236,16 @@ class CookieBanner extends HTMLElement {
 				this.showDetailedSettings();
 				this.showBanner();
 			});
+		});
+
+		document.addEventListener("DOMContentLoaded", () => {
+			document.dispatchEvent(
+				new CustomEvent("cookie-banner:consent-onload", {
+					bubbles: true,
+					composed: true,
+					detail: { consent: this.consent },
+				}),
+			);
 		});
 	}
 }

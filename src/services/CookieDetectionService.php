@@ -12,7 +12,6 @@ use digitalastronaut\craftcookiebanner\records\Content;
 use Fuse\Fuse;
 
 class CookieDetectionService extends Component {
-
     /**
      * @return int
      */

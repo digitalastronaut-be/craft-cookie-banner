@@ -42,7 +42,7 @@ use digitalastronaut\craftcookiebanner\web\assets\frontend\CookieBannerAssets;
 use digitalastronaut\craftcookiebanner\web\twig\CookieBannerTwigExtension;
 
 /**
- * Class EventHandlers
+ * Class PluginTrait
  *
  * @author      Digitalastronaut
  * @package     CookieBanner
@@ -105,7 +105,7 @@ trait PluginTrait {
             CraftVariable::class,
             CraftVariable::EVENT_DEFINE_BEHAVIORS,
             function(DefineBehaviorsEvent $event) {
-                $event->sender->attachBehaviors([CookieBannerVariable::class]);
+                $event->sender->set('cookieBanner', CookieBannerVariable::class);
             }
         );
     }

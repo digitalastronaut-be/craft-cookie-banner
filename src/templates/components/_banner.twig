@@ -21,23 +21,27 @@
             <p class="ccb-typo-body-md">{{ content.text }}</p>
 
             <ul class="ccb-cookie-banner-legal-links-list">
-                <li class="ccb-cookie-banner-legal-links-list-item">
-                    <a 
-                        href="{{ content.privacyPolicyLinkURL }}" 
-                        class="ccb-typo-body-md"
-                    >
-                        {{ content.privacyPolicyLinkLabel|default("Privacy policy"|t("cookie-banner")) }}
-                    </a>
-                </li>
-
-                <li class="ccb-cookie-banner-legal-links-list-item">
-                    <a 
-                        href="{{ content.cookiePolicyLinkURL }}" 
-                        class="ccb-typo-body-md"
-                    >
-                        {{ content.cookiePolicyLinkLabel|default("Cookie policy"|t("cookie-banner")) }}
-                    </a>
-                </li>
+                {% if content.privacyPolicyLinkURL %}
+                    <li class="ccb-cookie-banner-legal-links-list-item">
+                        <a 
+                            href="{{ content.privacyPolicyLinkURL }}" 
+                            class="ccb-typo-body-md"
+                        >
+                            {{ content.privacyPolicyLinkLabel|default("Privacy policy"|t("cookie-banner")) }}
+                        </a>
+                    </li>
+                {% endif %}
+                
+                {% if content.cookiePolicyLinkURL %}
+                    <li class="ccb-cookie-banner-legal-links-list-item">
+                        <a 
+                            href="{{ content.cookiePolicyLinkURL }}" 
+                            class="ccb-typo-body-md"
+                        >
+                            {{ content.cookiePolicyLinkLabel|default("Cookie policy"|t("cookie-banner")) }}
+                        </a>
+                    </li>
+                {% endif %}
 
                 <li class="ccb-cookie-banner-legal-links-list-item">
                     <a data-determine-preferences-link class="ccb-typo-body-md">

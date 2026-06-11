@@ -1,5 +1,10 @@
 # Release Notes for Cookie banner
 
+## 1.0.15-beta - 2026-11-06
+
+- The `cookie-banner:consent-onload` event now gets called when the `DOMContentLoaded` event is triggered to prevent other event listeners missing it.
+- A craft varialbe was added so you can easily check consnent in your twig templates `{% if craft.cookieBanner.consent.necessaryCookies %}{% endif %}`
+
 ## 1.0.14-beta - 2026-19-05
 
 - Cookie categories with no cookies are now excluded from the cookie banner

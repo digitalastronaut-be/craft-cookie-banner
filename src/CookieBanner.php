@@ -29,8 +29,6 @@ use yii\web\Response;
  * @author      Digitalastronaut
  * @package     CookieBanner
  * @since       v1.0.0-beta
- *
- * @method SettingsModel getSettings()
  */
 class CookieBanner extends Plugin {
     use ServicesTrait;
