@@ -38,6 +38,16 @@ class CookieBannerVariable extends Behavior {
      * @return array
      */
     public function consent(): array {
-        return json_decode($_COOKIE['craft-cookie-banner']);
+        if (!isset($_COOKIE['craft-cookie-banner'])) {
+            return [
+                'necessaryCookies' => true,
+                'preferenceCookies' => false,
+                'analyticalCookies' => false,
+                'marketingCookies' => false,
+                'uncategorizedCookies' => false,
+            ];
+        }
+
+        return (array) json_decode($_COOKIE['craft-cookie-banner'], true);
     }
 }

@@ -2,6 +2,10 @@
 
 ## 1.0.15-beta - 2026-11-06
 
+- Fix return default object when cookie is not set from twig variable
+
+## 1.0.15-beta - 2026-11-06
+
 - The `cookie-banner:consent-onload` event now gets called when the `DOMContentLoaded` event is triggered to prevent other event listeners missing it.
 - A craft varialbe was added so you can easily check consnent in your twig templates `{% if craft.cookieBanner.consent.necessaryCookies %}{% endif %}`
 
