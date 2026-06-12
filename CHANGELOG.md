@@ -1,6 +1,6 @@
 # Release Notes for Cookie banner
 
-## 1.0.15-beta - 2026-11-06
+## 1.0.16-beta - 2026-11-06
 
 - Fix return default object when cookie is not set from twig variable
 
