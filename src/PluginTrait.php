@@ -367,14 +367,14 @@ trait PluginTrait {
 
                 if (!$settings->cookieBannerEnabled) return;
 
-                $dataLayerScript = Craft::$app->getView()->renderTemplate('cookie-banner/components/_dataLayerScript');
+                // $dataLayerScript = Craft::$app->getView()->renderTemplate('cookie-banner/components/_dataLayerScript');
                 $bannerHtml = Craft::$app->getView()->renderTemplate('cookie-banner/components/_banner.twig', [
                     'appearance' => $appearance,
                     'content' => $content
                 ]);
 
                 Craft::$app->getView()->registerHtml($bannerHtml, View::POS_END);
-                Craft::$app->getView()->registerHtml($dataLayerScript, View::POS_HEAD);
+                // Craft::$app->getView()->registerHtml($dataLayerScript, View::POS_HEAD);
             }
         );
     }

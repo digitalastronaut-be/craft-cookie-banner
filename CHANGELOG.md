@@ -2,6 +2,13 @@
 
 ## 1.0.17-beta - 2026-11-06
 
+- Removed base consent script from the head.
+
+> [!NOTE]  
+> Users should manually add `gtag('consent', 'default'` event to set the inital consent for google consent mode V2 to work correctly
+
+## 1.0.17-beta - 2026-11-06
+
 ### Features
 
 - Detected from browser storage always took the $\_COOKIE variable as input. Now it uses the cookies set on the frontend as reference via a cached value.
