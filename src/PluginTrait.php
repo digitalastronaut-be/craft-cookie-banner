@@ -20,7 +20,6 @@ use craft\events\RegisterTemplateRootsEvent;
 use craft\events\RegisterUrlRulesEvent;
 use craft\events\RegisterUserPermissionsEvent;
 use craft\events\SiteEvent;
-use craft\events\TemplateEvent;
 
 use craft\services\Elements;
 use craft\services\Sites;
@@ -88,6 +87,7 @@ trait PluginTrait {
         $this->registerCookieBannerHtml();
         $this->registerTwigExtension();
         $this->registerFrontendAssetBundles();
+        $this->registerCookieDetection();
     }
 
     /**
@@ -95,6 +95,16 @@ trait PluginTrait {
      */
     protected function registerConsoleEvents(): void {
         // Register any console events
+    }
+
+    protected function registerCookieDetection(): void {
+        Event::on(
+            View::class,
+            View::EVENT_AFTER_RENDER_PAGE_TEMPLATE,
+            function () {
+                CookieBanner::getInstance()->getCookieDetection()->detectBrowserCookies();
+            }
+        );
     }
 
     /**
@@ -348,7 +358,7 @@ trait PluginTrait {
         Event::on(
             View::class,
             View::EVENT_BEFORE_RENDER_PAGE_TEMPLATE,
-            function (TemplateEvent $event) {
+            function () {
                 $currentSiteId = Craft::$app->getSites()->getCurrentSite()->id;
 
                 $settings = CookieBannerPlugin::getInstance()->getSettings();

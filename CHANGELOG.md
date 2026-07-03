@@ -1,5 +1,18 @@
 # Release Notes for Cookie banner
 
+## 1.0.17-beta - 2026-11-06
+
+### Features
+
+- Detected from browser storage always took the $\_COOKIE variable as input. Now it uses the cookies set on the frontend as reference via a cached value.
+
+### Bugfixes
+
+- Fix detected from browser wildcard cookies not always showing as not defined [#3](https://github.com/digitalastronaut-be/craft-cookie-banner/issues/9)
+- Fix a css scope issue [#10](https://github.com/digitalastronaut-be/craft-cookie-banner/issues/9)
+- Fix an action url [#9](https://github.com/digitalastronaut-be/craft-cookie-banner/issues/9)
+- Added commonJS webpack.mix.cjs [#4](https://github.com/digitalastronaut-be/craft-cookie-banner/issues/9)
+
 ## 1.0.16-beta - 2026-11-06
 
 - Fix return default object when cookie is not set from twig variable

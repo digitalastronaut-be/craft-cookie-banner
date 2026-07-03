@@ -12,6 +12,27 @@ use digitalastronaut\craftcookiebanner\records\Content;
 use Fuse\Fuse;
 
 class CookieDetectionService extends Component {
+    public const DETECTED_BROWSER_COOKIES_CACHE_KEY = 'detectedBrowserCookies';
+
+    /**
+     * @return void
+     */
+    public function detectBrowserCookies(): void {
+        $known = Craft::$app->cache->get(self::DETECTED_BROWSER_COOKIES_CACHE_KEY);
+        if ($known === false) $known = [];
+
+        $updated = false;
+
+        foreach ($_COOKIE as $cookieName => $cookieValue) {
+            if (!array_key_exists($cookieName, $known)) {
+                $updated = true;
+            }
+            $known[$cookieName] = $cookieValue;
+        }
+
+        if ($updated) Craft::$app->cache->set(self::DETECTED_BROWSER_COOKIES_CACHE_KEY, $known, 0);
+    }
+
     /**
      * @return int
      */
@@ -109,7 +130,8 @@ class CookieDetectionService extends Component {
             ];
         }
 
-        $browserCookies = $_COOKIE;
+        $browserCookies = Craft::$app->cache->get(self::DETECTED_BROWSER_COOKIES_CACHE_KEY);
+        if ($browserCookies === false) $browserCookies = [];
 
         foreach ($browserCookies as $cookieName => $cookieValue) {
             $isControlPanelCookie = $this->isControlPanelCookie($cookieName);
