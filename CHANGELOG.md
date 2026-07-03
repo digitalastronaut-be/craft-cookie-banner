@@ -1,6 +1,6 @@
 # Release Notes for Cookie banner
 
-## 1.0.17-beta - 2026-11-06
+## 1.0.18-beta - 2026-11-06
 
 - Removed base consent script from the head.
 
