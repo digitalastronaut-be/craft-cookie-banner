@@ -112,13 +112,13 @@ class CookieDetectionService extends Component {
         $browserCookies = $_COOKIE;
 
         foreach ($browserCookies as $cookieName => $cookieValue) {
-            if (isset($result[$cookieName])) continue;
-
             $isControlPanelCookie = $this->isControlPanelCookie($cookieName);
             $databaseCookie = $this->getCookieDataFromDatabase($cookieName, 'en');
             $isAutomated = $databaseCookie ? true : false;
             // Cookies in the database use the * wildcard for generated strings so we show this instead of the full name
             $wildCardName = $databaseCookie ? $databaseCookie['cookie']['name'] : $cookieName;
+
+            if (isset($result[$wildCardName])) continue;
 
             if ($this->isCookieBlacklisted($wildCardName)) continue;
 
