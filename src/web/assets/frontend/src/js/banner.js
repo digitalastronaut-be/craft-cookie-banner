@@ -122,7 +122,7 @@ class CookieBanner extends HTMLElement {
 
 		session = await session.json();
 
-		const response = await fetch(`actions/cookie-banner/consent-records/create`, {
+		const response = await fetch(`/actions/cookie-banner/consent-records/create`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
