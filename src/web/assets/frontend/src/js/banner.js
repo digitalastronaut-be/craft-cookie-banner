@@ -214,7 +214,6 @@ class CookieBanner extends HTMLElement {
 
 		this.refuseAllButton = this.querySelector("[data-refuse-all-button]");
 		this.determinePreferencesButton = this.querySelector("[data-determine-preferences-button]");
-		this.determinePreferencesLink = this.querySelector("[data-determine-preferences-link]");
 		this.acceptSelectedButton = this.querySelector("[data-accept-selected-button]");
 		this.acceptAllButton = this.querySelector("[data-accept-all-button]");
 
