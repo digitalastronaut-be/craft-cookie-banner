@@ -1,5 +1,9 @@
 # Release Notes for Cookie banner
 
+## 1.0.20-beta - 2026-11-22
+
+- Fixed anchor missing href attribute
+
 ## 1.0.19-beta - 2026-11-06
 
 - Changelog formatting bug
