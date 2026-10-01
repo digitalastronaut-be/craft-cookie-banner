@@ -1,6 +1,7 @@
 import { defineConfig } from "vitepress";
 
 export default defineConfig({
+	base: "/cookie-banner/",
 	title: "Craft Cookie Banner",
 	description: "An inituitive and GDPR compliant cookie banner for Craft CMS",
 	themeConfig: {
@@ -25,6 +26,7 @@ export default defineConfig({
 					{ text: "Cookie & vendor management", link: "/plugin/cookie-and-vendor-management" },
 					{ text: "Consent records", link: "/plugin/consent-records" },
 					{ text: "Appearance and styling", link: "/plugin/appearance-and-styling" },
+					{ text: "Developer integration", link: "/plugin/developer-integration" },
 				],
 			},
 			{
